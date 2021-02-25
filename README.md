@@ -1,71 +1,33 @@
 # Litegram
 
-Simple, flexible, modular library for Telegram Bot Api.
+Simple, flexible, modular library based on events for Telegram Bot Api.
 
-# Use Cases
+## Installation
 
-1. Like a simple notification from your app:
-   
-```php
-// Auth once and use bot() anywhere without token in your application;
-bot('1234567890:BOT_TOKEN');
-bot()->sendMessage('%chatId%', 'Hello World!');
+```bash
+$ composer require chipslays/litegram
 ```
 
-2. Like a simple webhook bot without modules:
-   
+## Example
+
+Pretty simple Echo Bot:
+
 ```php
-$bot = bot('1234567890:BOT_TOKEN');
+require 'vendor/autoload.php';
 
-$bot->on('message.photo', function () {
-    reply('Wow, nice photo!');
-});
+$bot = bot('1234567890:BOT_TOKEN')->webhook();
 
-$bot->command('ban {user} {time?}', function ($user, $time = null) {
-    echo "Banned: {$user}, time: " . $time ?? strtotime('+7 days');
-});
-
-$bot->hear('My name is {name}', function ($name) {
-    reply("Hello {$name}!");
-});
-
-$bot->callback('callbackEvent', function () {
-    notify("Wow, this is notification?");
-});
-
-$bot->query('{query}', function ($query) {
-    // handle inline query
+$bot->hear('{text}', function ($text) {
+    reply($text);
 });
 
 $bot->run();
 ```
 
-3. Like a power combine with pre built modules:
-   
-```php
-use Litegram\Modules\Logger;
-use Litegram\Modules\Cache;
-use Litegram\Modules\Store;
-use Litegram\Modules\Database;
-use Litegram\Modules\Localization;
-use Litegram\Modules\State;
-use Litegram\Modules\User;
-use Litegram\Modules\Update;
+More examples you can see [`here`](https://github.com/chipslays/litegram/tree/master/examples).
 
-$bot = bot('1234567890:BOT_TOKEN', require 'config.php');
+## Documentation
+Documentation can be found [`here`](https://github.com/chipslays/litegram/tree/master/docs).
 
-$bot->addModule(Logger::class)
-    ->addModule(Cache::class)
-    ->addModule(Database::class)
-    ->addModule(Store::class)
-    ->addModule(State::class)
-    ->addModule(Localization::class)
-    ->addModule(User::class)
-    ->addModule(Update::class);
-
-$bot->on('message.photo', function () {
-    reply('Wow, nice photo!');
-});
-
-$bot->run();
-```
+## License
+Released under the MIT public license. See the enclosed [`LICENSE`](https://github.com/chipslays/litegram/tree/master/LICENSE.md) for details.
