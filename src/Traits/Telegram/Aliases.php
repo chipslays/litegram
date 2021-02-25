@@ -2,6 +2,8 @@
 
 namespace Litegram\Traits\Telegram;
 
+use Chipslays\Collection\Collection;
+
 trait Aliases
 {
     public function sendReply($chatId, $messageId, $text = '', $keyboard = null, $extra = [])
@@ -67,14 +69,14 @@ trait Aliases
         return !is_null($response) ? $response->get('ok') : false;
     }
 
-    public function getFileUrl($fileId) 
+    public function getFileUrl($fileId)
     {
         $response = $this->getFile($fileId);
         return $response->get('ok') ? 'https://api.telegram.org/file/bot' . $this->config('bot.token') . '/' . $response->get('result.file_path') : null;
     }
 
     public function saveFile($fileId, $savePath = null): string
-    {   
+    {
         $fileUrl = $this->getFileUrl($fileId);
 
         $extension = '';
@@ -124,24 +126,39 @@ trait Aliases
     public function editCallbackMessage(string $text, $keyboard = null, $extra = [])
     {
         return $this->editMessageText(
-            $this->update('callback_query.message.message_id'), 
-            $this->update('callback_query.from.id'), 
-            $text, 
-            $keyboard, 
+            $this->update('callback_query.message.message_id'),
+            $this->update('callback_query.from.id'),
+            $text,
+            $keyboard,
             $extra
         );
     }
-    
-    public function print($text)
+
+    /**
+     * @param mixed $text
+     * @param string|int|null $userId
+     * @return Collection
+     */
+    public function print($data, $userId = null)
     {
-        return $this->say(print_r($text, true));
+        return $this->api('sendMessage', [
+            'chat_id' => $userId ?? $this->defaultIdForReply,
+            'text' => print_r($data, true),
+            'parse_mode' => 'html',
+        ]);
     }
-    
-    public function json($data)
+
+    /**
+     * @param array|string|int $data
+     * @param string|int|null $userId
+     * @return Collection
+     */
+    public function json($data, $userId = null)
     {
-        return $this->replyMessage(
-            '<code>' . json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</code>', 
-            ['parse_mode' => 'html']
-        );
+        return $this->api('sendMessage', [
+            'chat_id' => $userId ?? $this->defaultIdForReply,
+            'text' => '<code>' . json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</code>',
+            'parse_mode' => 'html',
+        ]);
     }
 }

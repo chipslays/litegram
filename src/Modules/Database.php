@@ -28,9 +28,9 @@ class Database extends Capsule
      */
     public function boot(): void
     {
-        
+
         $config = Bot::getInstance()->config();
-        
+
         if (!$config->get('modules.database.enable')) {
             return;
         }

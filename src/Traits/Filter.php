@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 namespace Litegram\Traits;
 
 trait Filter
 {
-   /**
+    /**
      * Выполнить функцию если все ключи существуют
      *
      * @param string|array $filters

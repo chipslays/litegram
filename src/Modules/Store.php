@@ -45,14 +45,14 @@ class Store extends Module
         }
 
         self::$driver = self::$config->get('modules.store.driver');
-        
+
         switch (self::$driver) {
             case 'file':
                 self::$dir = rtrim(self::$config->get('modules.store.file.dir'), '\/');
                 break;
             case 'database':
                 break;
-            
+
             default:
                 break;
         }
@@ -69,11 +69,11 @@ class Store extends Module
                 break;
 
             case 'database':
-                self::has($origName) 
-                    ? Database::table('store')->where('name', $name)->update(['name' => $name, 'value' => base64_encode(serialize($value))]) 
+                self::has($origName)
+                    ? Database::table('store')->where('name', $name)->update(['name' => $name, 'value' => base64_encode(serialize($value))])
                     : Database::table('store')->insert(['name' => $name, 'value' => base64_encode(serialize($value))]);
                 break;
-            
+
             default:
                 self::$data[$name] = $value;
                 break;
@@ -89,11 +89,11 @@ class Store extends Module
             case 'file':
                 return self::has($origName) ? unserialize(file_get_contents(self::$dir . "/{$name}")) : $default;
                 break;
-            
+
             case 'database':
                 return self::has($origName) ? unserialize(base64_decode(Database::table('store')->select('value')->where('name', $name)->first()->value)) : $default;
                 break;
-            
+
             default:
                 return self::has($origName) ? Arr::get(self::$data, $name, $default) : $default;
                 break;
@@ -108,11 +108,11 @@ class Store extends Module
             case 'file':
                 return file_exists(self::$dir . "/{$name}");
                 break;
-            
+
             case 'database':
                 return Database::table('store')->where('name', $name)->exists();
                 break;
-            
+
             default:
                 return Arr::has(self::$data, $name);
                 break;

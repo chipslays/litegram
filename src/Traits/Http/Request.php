@@ -101,7 +101,7 @@ trait Request
         }
 
         $data = @gzinflate(base64_decode($data));
-        
+
         if (!$data) {
             return;
         }

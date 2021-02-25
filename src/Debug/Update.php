@@ -127,7 +127,7 @@ class Update
                 }
             },
             "chat_instance": "56656092177350901239",
-            "data": "adsadas_123"
+            "data": "K0ktLokvzsgvj6+oKquqACIA"
         }
     }';
 }

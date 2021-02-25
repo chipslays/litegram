@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 namespace Litegram\Traits\Telegram;
 
 use Litegram\Modules\User;
 
-trait Events 
+trait Events
 {
     /**
      * @var boolean
@@ -74,7 +74,7 @@ trait Events
         }
 
         foreach ($this->modules as $alias) {
-            
+
             if (!method_exists($this->$alias, 'afterRun')) {
                 continue;
             }

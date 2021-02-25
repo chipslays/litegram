@@ -12,6 +12,7 @@ use Litegram\Traits\Middleware;
 use Container\Container;
 use Chipslays\Collection\Collection;
 use Chipslays\Event\EventTrait as BaseEvent;
+use Litegram\Modules\User;
 
 define('BOT_DEFAULT_SORT_VALUE', 500);
 
@@ -301,5 +302,23 @@ class Bot extends Container
     public function getCommandTags()
     {
         return $this->commandTags;
+    }
+
+    /**
+     * Сравнение пароля Администратора (условная авторизация).
+     * Если $password корректный, вернет True, иначе False.
+     *
+     * @param string $password
+     * @return bool
+     */
+    public function admin($password): bool
+    {
+        if (!User::isAdmin()) {
+            return false;
+        }
+
+        $username = $this->update('*.from.username');
+        $userId = $this->update('*.from.id');
+        return $password == $this->config("admin.list.{$username}", $this->config("admin.list.{$userId}", false));
     }
 }

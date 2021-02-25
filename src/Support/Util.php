@@ -338,7 +338,7 @@ class Util
         return $textParsed;
     }
 
-    public static function decodeInlineKeyboard($keyboard) 
+    public static function decodeInlineKeyboard($keyboard)
     {
         foreach ($keyboard as &$item) {
             $item = array_map(function ($value) {
@@ -361,19 +361,19 @@ class Util
     public static function fetch($url)
     {
         $result = [];
-        
+
         $html = file_get_contents($url);
-        
+
         preg_match('/<meta property="og:image" content="(.*?)">/', $html, $image);
         preg_match('/<meta property="og:title" content="(.*?)">/', $html, $title);
         preg_match('/<div class="tgme_page_description" dir="auto">(.*?)<\/div>/', $html, $description);
         preg_match('/<div class="tgme_page_extra">(.*?)<\/div>/', $html, $membersInfo);
         preg_match('/<title>Telegram: Contact @(.*?)<\/title>/', $html, $username);
         preg_match('/<a class="tgme_action_button_new" href="(.*?)">/', $html, $action);
-        
+
         $members = explode(',', $membersInfo[1] ?? null)[0];
         $online = array_map('trim', explode(',', $membersInfo[1] ?? null))[1];
-        
+
         $result['image'] = $image[1] ?? null;
         $result['title'] = $title[1] ?? null;
         $result['description'] = [
@@ -392,7 +392,7 @@ class Util
         $result['username'] = $username[1] ?? null;
         $result['action'] = $action[1] ?? null;
         $result['link'] = 'https://t.me/' . $username[1] ?? null;
-        
+
         $result['type'] = null;
         if (strpos($html, 'Send Message') !== false) {
             $result['type'] = 'user';
@@ -409,7 +409,19 @@ class Util
         if (strpos($html, 'Send Message') !== false && (strtolower(substr($result['username'], -4)) == "_bot" || strtolower(substr($result['username'], -3)) == "bot")) {
             $result['type'] = 'bot';
         }
-        
+
         return $result;
+    }
+
+    /**
+     * Ждать определенное время (поддерживает миллисекунды).
+     *
+     * @param integer|float $seconds
+     * @return boolean
+     */
+    public static function wait($seconds = 1)
+    {
+        usleep(round($seconds * 1000000));
+        return;
     }
 }
