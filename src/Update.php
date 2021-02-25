@@ -1,9 +1,24 @@
 <?php
 
-namespace Litegram\Modules;
+namespace Litegram;
 
+use Litegram\Modules\Module;
 use Chipslays\Collection\Collection;
 
+/**
+ * @method static mixed get(string $key, $default = null, string $separator = '.')
+ * @method static Collection set(string $key, $value = null, string $separator = '.')
+ * @method static boolean has(string $key, string $separator = '.')
+ * @method static self each(callable $callback)
+ * @method static self map(callable $callback)
+ * @method static self mapWithKeys(callable $callback)
+ * @method static self filter(callable $callback = null)
+ * @method static self where($key, $operator = null, $value = null)
+ * @method static array all()
+ * @method static array toArray()
+ * @method static string toJson($flags = JSON_PRETTY_PRINT)
+ * @method static \stdClass toObject()
+ */
 class Update extends Module
 {
     /**
@@ -24,14 +39,27 @@ class Update extends Module
      */
     public static function boot(): void
     {
-        if (!self::$config->get('modules.update.enable')) {
-            return;
-        }
     }
 
     public static function isMessage(): bool
     {
         return self::$update->has('message');
+    }
+
+    public function __call($method, $params)
+    {
+        if (method_exists(self::$update, $method)) {
+            return call_user_func_array([self::$update, $method], $params);
+        }
+        throw new \Exception("Method `{$method}` not exists in Update module.");
+    }
+
+    public static function __callStatic($method, $params)
+    {
+        if (method_exists(self::$update, $method)) {
+            return call_user_func_array([self::$update, $method], $params);
+        }
+        throw new \Exception("Method `{$method}` not exists in Update module.");
     }
 
     /**

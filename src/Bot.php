@@ -99,6 +99,8 @@ class Bot extends Container
             }
         }
 
+        $this->addModule(Update::class);
+
         $this->defaultIdForReply = $this->update('*.chat.id', $this->update('*.from.id'));
 
         $this->decodeCallback();
@@ -271,8 +273,7 @@ class Bot extends Container
     {
         set_time_limit($timeLimit);
         ignore_user_abort(true);
-
-        $response =  json_encode(['ok']);
+        $response = json_encode(['ok']);
 
         header('Connection: close');
         header('Content-Length: ' . strlen($response));

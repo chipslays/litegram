@@ -2,7 +2,7 @@
 
 namespace Litegram\Modules;
 
-use Litegram\Modules\Update;
+use Litegram\Update;
 use Litegram\Modules\Database;
 use Chipslays\Collection\Collection;
 
