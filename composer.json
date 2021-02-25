@@ -1,0 +1,19 @@
+{
+    "name": "litegram/litegram",
+    "description": "Simple, flexible, modular library for Telegram Bot Api.",
+    "keywords": ["telegram", "bot", "api"],
+    "type": "library",
+    "license": "MIT",
+    "require": {
+        "chipslays/collection": "^1.0",
+        "chipslays/event": "^1.0",
+        "chipslays/php-container": "^0.0.3",
+        "illuminate/database": "^8.29"
+    },
+    "autoload": {
+        "psr-4": {
+            "Litegram\\": "src/"
+        },
+        "files": ["helpers.php"]
+    }
+}
