@@ -1,5 +1,5 @@
 {
-    "name": "litegram/litegram",
+    "name": "chipslays/litegram",
     "description": "Simple, flexible, modular library for Telegram Bot Api.",
     "keywords": ["telegram", "bot", "api"],
     "type": "library",
