@@ -58,7 +58,7 @@ class Store extends Module
         }
     }
 
-    public static function set(string $name, $value)
+    public static function set(string $name, $value = null)
     {
         $origName = $name;
         $name = md5($name);

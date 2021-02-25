@@ -82,6 +82,10 @@ class Bot extends Container
         $this->config = new Collection(array_merge($this->config, (array) $config));
         $this->config->set('bot.token', $token);
 
+        if ($timezone = $this->config('bot.timezone')) {
+            date_default_timezone_set($timezone);
+        }
+
         return $this;
     }
 

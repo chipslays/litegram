@@ -10,6 +10,7 @@ use Litegram\Modules\Cache;
 use Litegram\Modules\Store;
 use Litegram\Modules\Database;
 use Litegram\Modules\Localization;
+use Litegram\Modules\Session;
 use Litegram\Modules\State;
 use Litegram\Modules\User;
 
@@ -255,6 +256,16 @@ if (!function_exists('logger')) {
     }
 }
 
+if (!function_exists('session')) {
+    /**
+     * @return \Telegram\Modules\Session
+     */
+    function session()
+    {
+        return new Session;
+    }
+}
+
 if (!function_exists('db')) {
     /**
      * @return \Illuminate\Database\Query\Builder|\Illuminate\Database\Capsule\Manager
@@ -323,4 +334,3 @@ if (!function_exists('debug_json')) {
         return Debug::json($data);
     }
 }
-

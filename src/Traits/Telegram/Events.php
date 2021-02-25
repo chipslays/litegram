@@ -18,6 +18,16 @@ trait Events
      */
     private $defaultAnswers = [];
 
+    /**
+     * @var array
+     */
+    private $beforeCallbacks = [];
+
+    /**
+     * @var array
+     */
+    private $afterCallbacks = [];
+
     private function canContinueEvent(): bool
     {
         if ($this->canContinueEvent === false) {
@@ -65,6 +75,12 @@ trait Events
             call_user_func_array([$this->$alias, 'beforeRun'], []);
         }
 
+        if ($this->beforeCallbacks !== []) {
+            foreach ($this->beforeCallbacks as $callback) {
+                $this->callController($callback);
+            }
+        }
+
         if (!$this->runAllEvents()) {
             $this->executeDefaultAnswers();
         }
@@ -73,12 +89,40 @@ trait Events
             $this->sayGoodbyeTelegramAndContinueEvent(120);
         }
 
+        if ($this->afterCallbacks !== []) {
+            foreach ($this->afterCallbacks as $callback) {
+                $this->callController($callback);
+            }
+        }
+
         foreach ($this->modules as $alias) {
             if (!method_exists($this->$alias, 'afterRun')) {
                 continue;
             }
             call_user_func_array([$this->$alias, 'afterRun'], []);
         }
+    }
+
+     /**
+     * Add to before run (possible use multiple times)
+     *
+     * @param callable|string $callback
+     * @return void
+     */
+    public function onBeforeRun($callback) 
+    {
+        $this->beforeCallbacks[] = $callback;
+    }
+
+    /**
+     * Add to after run (possible use multiple times)
+     *
+     * @param callable|string $callback
+     * @return void
+     */
+    public function onAfterRun($callback) 
+    {
+        $this->afterCallbacks[] = $callback;
     }
 
     /**
