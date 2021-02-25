@@ -13,6 +13,7 @@ use Litegram\Modules\Localization;
 use Litegram\Modules\Session;
 use Litegram\Modules\State;
 use Litegram\Modules\User;
+use Litegram\Update;
 
 if (!function_exists('bot')) {
     /**
@@ -155,7 +156,7 @@ if (!function_exists('update')) {
      */
     function update($key = null, $default = null)
     {
-        return Bot::getInstance()->update()->get($key, $default);
+        return $key ? Update::get($key, $default) : new Update;
     }
 }
 
