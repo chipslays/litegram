@@ -49,6 +49,9 @@ class User extends Module
         // если юзер существует, получаем данные и пропускаем остальное
         if (self::exists(self::$currentUserId)) {
             self::$userData = (array) self::getDataById(self::$currentUserId);
+
+            self::diffBotVersion();
+
             return;
         }
 
@@ -113,6 +116,10 @@ class User extends Module
      */
     public static function afterRun(): void
     {
+        if (!self::$config->get('modules.user.enable')) {
+            return;
+        }
+
         if (!self::$userData['active']) {
             self::update([
                 'active' => 1,
@@ -240,5 +247,18 @@ class User extends Module
             return true;
         }
         return false;
+    }
+
+    private static function diffBotVersion(): void
+    {
+        $userVersion = (string) self::get('version');
+        $currentVersion = (string) self::$config->get('bot.version');
+
+        self::$newVersion = $userVersion !== $currentVersion;
+
+        if (self::$newVersion) {
+            self::update(['version' => $currentVersion]);
+            self::$userData['version'] = $currentVersion;
+        }
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Litegram\Traits\Telegram;
 
+use Litegram\Modules\User;
+
 trait Events 
 {
     /**
@@ -281,5 +283,78 @@ trait Events
         }
 
         return $this->on('message', $func, $sort);
+    }
+
+    /**
+     * @return void
+     */
+    public function onFlood($func, $sort = BOT_DEFAULT_SORT_VALUE)
+    {
+        if (!User::isFlood()) {
+            return;
+        }
+
+        $this->events[$sort][] = [
+            'func' => $func,
+            'args' => [User::getFloodTime()],
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    public function onAdmin($func, $sort = BOT_DEFAULT_SORT_VALUE)
+    {
+        if (!User::isAdmin()) {
+            return;
+        }
+
+        $this->events[$sort][] = [
+            'func' => $func,
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    public function onFirstTime($func, $sort = BOT_DEFAULT_SORT_VALUE)
+    {
+        if (!User::firstTime()) {
+            return;
+        }
+
+        $this->events[$sort][] = [
+            'func' => $func,
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    public function onBanned($func, $sort = BOT_DEFAULT_SORT_VALUE)
+    {
+        if (!User::isBanned()) {
+            return;
+        }
+
+        $this->events[$sort][] = [
+            'func' => $func,
+            'args' => [User::get('ban_date_from'), User::get('ban_date_to'), User::get('ban_comment')], // from, to, comment
+        ];
+    }
+
+    /**
+     * @return void
+     */
+    public function onNewVersion($func, $sort = BOT_DEFAULT_SORT_VALUE)
+    {
+        if (!User::newVersion()) {
+            return;
+        }
+
+        $this->events[$sort][] = [
+            'func' => $func,
+            'args' => [User::get('version'), $this->config('bot.version')], // old version, new version
+        ];
     }
 }
