@@ -7,12 +7,12 @@ use Litegram\Traits\Telegram\Methods;
 use Litegram\Traits\Telegram\Replies;
 use Litegram\Traits\Telegram\Aliases as TelegramAliases;
 use Litegram\Traits\Telegram\Events;
+use Litegram\Traits\Filter;
 use Litegram\Traits\Middleware;
-
+use Litegram\Modules\User;
 use Container\Container;
 use Chipslays\Collection\Collection;
 use Chipslays\Event\EventTrait as BaseEvent;
-use Litegram\Modules\User;
 
 define('BOT_DEFAULT_SORT_VALUE', 500);
 
@@ -25,6 +25,7 @@ class Bot extends Container
     use Methods;
     use Replies;
     use TelegramAliases;
+    use Filter;
     use Middleware;
     use Events, BaseEvent {
         Events::on insteadof BaseEvent;
