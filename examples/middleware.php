@@ -1,15 +1,13 @@
 <?php 
 
-use Litegram\Bot;
-
 require __DIR__ . 'vendor/autoload.php';
 
 $bot = bot('1234567890:BOT_TOKEN')->webhook();
 
 $bot->addMiddleware('test', function ($next) {
-    // Before
+    // Do something berfore
     $next();
-    // After
+    // Do something after
 });
 
 $bot->middleware('test', function () use ($bot) {
@@ -17,7 +15,6 @@ $bot->middleware('test', function () use ($bot) {
         say('middleware passed');
     });
 });
-
 
 // Return True for pass, False for prevent next chain
 $bot->addMiddleware('simple', fn() => true);
