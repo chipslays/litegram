@@ -42,6 +42,9 @@ class Bot extends Container
      */
     private $config = [];
 
+    /**
+     * @var array
+     */
     private $modules = [];
 
     /**
@@ -113,7 +116,10 @@ class Bot extends Container
         return $this;
     }
 
-    public function hasUpdate()
+    /**
+     * @return boolean
+     */
+    public function hasUpdate(): bool
     {
         return $this->data !== null;
     }
@@ -232,6 +238,11 @@ class Bot extends Container
         }
     }
 
+    /**
+     * @param callable|string $fn
+     * @param array $params
+     * @return void
+     */
     public function callController($fn, $params = [])
     {
         if (is_callable($fn)) {
