@@ -63,6 +63,11 @@ trait Middleware
         }
     }
 
+    /**
+     * @param string $name
+     * @param callable $func
+     * @return void
+     */
     public function addMiddleware(string $name, $func): void
     {
         $this->middlewares[$name] = $func;
