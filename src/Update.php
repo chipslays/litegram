@@ -41,6 +41,9 @@ class Update extends Module
     {
     }
 
+    /**
+     * @return boolean
+     */
     public static function isMessage(): bool
     {
         return self::$update->has('message');
@@ -109,11 +112,17 @@ class Update extends Module
         return new Collection(self::$update->get('edited_channel_post'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isInlineQuery(): bool
     {
         return self::$update->has('inline_query');
     }
 
+    /**
+     * @return boolean
+     */
     public static function isInline(): bool
     {
         return self::isInlineQuery();
@@ -127,6 +136,9 @@ class Update extends Module
         return new Collection(self::$update->get('inline_query'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isChosenInlineResult(): bool
     {
         return self::$update->has('chosen_inline_result');
@@ -140,11 +152,17 @@ class Update extends Module
         return new Collection(self::$update->get('chosen_inline_result'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isCallbackQuery(): bool
     {
         return self::$update->has('callback_query');
     }
 
+    /**
+     * @return boolean
+     */
     public static function isCallback(): bool
     {
         return self::isCallbackQuery();
@@ -171,6 +189,9 @@ class Update extends Module
         return new Collection(self::$update->get('shipping_query'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isPreCheckoutQuery(): bool
     {
         return self::$update->has('pre_checkout_query');
@@ -184,6 +205,9 @@ class Update extends Module
         return new Collection(self::$update->get('pre_checkout_query'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isPoll(): bool
     {
         return self::$update->has('poll');
@@ -197,6 +221,9 @@ class Update extends Module
         return new Collection(self::$update->get('poll'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isPollAnswer(): bool
     {
         return self::$update->has('poll_answer');
@@ -210,6 +237,9 @@ class Update extends Module
         return new Collection(self::$update->get('poll_answer'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isCommand(): bool
     {
         if (!self::isMessage() && !self::isEditedMessage()) {
@@ -231,11 +261,17 @@ class Update extends Module
         return self::$update->get('*.text');
     }
 
+    /**
+     * @return boolean
+     */
     public static function isBot(): bool
     {
         return self::$update->has('*.from.is_bot');
     }
 
+    /**
+     * @return boolean
+     */
     public static function isSticker(): bool
     {
         return self::$update->has('*.sticker');
@@ -248,7 +284,10 @@ class Update extends Module
     {
         return new Collection(self::$update->get('*.sticker'));
     }
-
+    
+    /**
+     * @return boolean
+     */
     public static function isVoice(): bool
     {
         return self::$update->has('*.voice');
@@ -262,6 +301,9 @@ class Update extends Module
         return new Collection(self::$update->get('*.voice'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isAnimation(): bool
     {
         return self::$update->has('*.animation');
@@ -275,6 +317,9 @@ class Update extends Module
         return new Collection(self::$update->get('*.animation'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isDocument(): bool
     {
         return self::$update->has('*.document');
@@ -288,6 +333,9 @@ class Update extends Module
         return new Collection(self::$update->get('*.document'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isAudio(): bool
     {
         return self::$update->has('*.audio');
@@ -301,6 +349,9 @@ class Update extends Module
         return new Collection(self::$update->get('*.audio'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isPhoto(): bool
     {
         return self::$update->has('*.photo');
@@ -314,6 +365,9 @@ class Update extends Module
         return new Collection(self::$update->get('*.photo'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isVideo(): bool
     {
         return self::$update->has('*.video');
@@ -327,6 +381,9 @@ class Update extends Module
         return new Collection(self::$update->get('*.video'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isVideoNote(): bool
     {
         return self::$update->has('*.video_note');
@@ -340,6 +397,9 @@ class Update extends Module
         return new Collection(self::$update->get('*.video_note'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isContact(): bool
     {
         return self::$update->has('*.contact');
@@ -353,6 +413,9 @@ class Update extends Module
         return new Collection(self::$update->get('*.contact'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isLocation(): bool
     {
         return self::$update->has('*.location');
@@ -366,6 +429,9 @@ class Update extends Module
         return new Collection(self::$update->get('*.location'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isVenue(): bool
     {
         return self::$update->has('*.venue');
@@ -379,6 +445,9 @@ class Update extends Module
         return new Collection(self::$update->get('*.venue'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isDice(): bool
     {
         return self::$update->has('*.dice');
@@ -392,6 +461,9 @@ class Update extends Module
         return new Collection(self::$update->get('*.dice'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isNewChatMembers(): bool
     {
         return self::$update->has('*.new_chat_members');
@@ -405,6 +477,9 @@ class Update extends Module
         return new Collection(self::$update->get('*.new_chat_members'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isLeftChatMember(): bool
     {
         return self::$update->has('*.left_chat_member');
@@ -418,6 +493,9 @@ class Update extends Module
         return new Collection(self::$update->get('*.left_chat_member'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isNewChatTitle(): bool
     {
         return self::$update->has('*.new_chat_title');
@@ -431,6 +509,9 @@ class Update extends Module
         return self::$update->get('*.new_chat_title');
     }
 
+    /**
+     * @return boolean
+     */
     public static function isNewChatPhoto(): bool
     {
         return self::$update->has('*.new_chat_photo');
@@ -444,16 +525,25 @@ class Update extends Module
         return new Collection(self::$update->get('*.new_chat_photo'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isDeleteChatPhoto(): bool
     {
         return self::$update->has('*.delete_chat_photo');
     }
 
+    /**
+     * @return boolean
+     */
     public static function isChannelChatCreated(): bool
     {
         return self::$update->has('*.channel_chat_created');
     }
 
+    /**
+     * @return boolean
+     */
     public static function isMigrateToChatId(): bool
     {
         return self::$update->has('*.migrate_to_chat_id');
@@ -467,6 +557,9 @@ class Update extends Module
         return self::$update->get('*.migrate_to_chat_id');
     }
 
+    /**
+     * @return boolean
+     */
     public static function isMigrateFromChatId(): bool
     {
         return self::$update->has('*.migrate_from_chat_id');
@@ -480,6 +573,9 @@ class Update extends Module
         return self::$update->get('*.migrate_from_chat_id');
     }
 
+    /**
+     * @return boolean
+     */
     public static function isPinnedMessage(): bool
     {
         return self::$update->has('*.pinned_message');
@@ -493,6 +589,9 @@ class Update extends Module
         return new Collection(self::$update->get('*.pinned_message'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isInvoice(): bool
     {
         return self::$update->has('*.invoice');
@@ -506,6 +605,9 @@ class Update extends Module
         return new Collection(self::$update->get('*.invoice'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isSucessfulPayment(): bool
     {
         return self::$update->has('*.successful_payment');
@@ -519,6 +621,9 @@ class Update extends Module
         return new Collection(self::$update->get('*.successful_payment'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isConnectedWebsite(): bool
     {
         return self::$update->has('*.connected_website');
@@ -532,6 +637,9 @@ class Update extends Module
         return self::$update->get('*.connected_website');
     }
 
+    /**
+     * @return boolean
+     */
     public static function isPassportData(): bool
     {
         return self::$update->has('*.passport_data');
@@ -545,6 +653,9 @@ class Update extends Module
         return new Collection(self::$update->get('*.passport_data'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isReplyMarkup(): bool
     {
         return self::$update->has('*.reply_markup');
@@ -558,6 +669,9 @@ class Update extends Module
         return new Collection(self::$update->get('*.reply_markup'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isReply(): bool
     {
         return self::$update->has('*.reply_to_message');
@@ -587,6 +701,9 @@ class Update extends Module
         return new Collection(self::$update->get('*.chat'));
     }
 
+    /**
+     * @return boolean
+     */
     public static function isCaption(): bool
     {
         return self::$update->has('*.caption');
@@ -680,26 +797,41 @@ class Update extends Module
         return self::$update->get('inline_query.id');
     }
 
+    /**
+     * @return boolean
+     */
     public static function isForward(): bool
     {
         return self::$update->has('*.forward_date') || self::$update->has('*.forward_from');
     }
 
+    /**
+     * @return boolean
+     */
     public static function isSuperGroup(): bool
     {
         return self::$update->get('*.chat.type') == 'supergroup';
     }
 
+    /**
+     * @return boolean
+     */
     public static function isGroup(): bool
     {
         return self::$update->get('*.chat.type') == 'group';
     }
 
+    /**
+     * @return boolean
+     */
     public static function isChannel(): bool
     {
         return self::$update->get('*.chat.type') == 'channel';
     }
 
+    /**
+     * @return boolean
+     */
     public static function isPrivate(): bool
     {
         return self::$update->get('*.chat.type') == 'private';
