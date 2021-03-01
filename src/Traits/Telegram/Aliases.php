@@ -3,6 +3,7 @@
 namespace Litegram\Traits\Telegram;
 
 use Chipslays\Collection\Collection;
+use Litegram\Support\Util;
 
 trait Aliases
 {
@@ -75,7 +76,12 @@ trait Aliases
         return $response->get('ok') ? 'https://api.telegram.org/file/bot' . $this->config('bot.token') . '/' . $response->get('result.file_path') : null;
     }
 
-    public function saveFile($fileId, $savePath = null): string
+    /**
+     * @param string $fileId
+     * @param string $savePath
+     * @return string Base name of saved file
+     */
+    public function download($fileId, $savePath): string
     {
         $fileUrl = $this->getFileUrl($fileId);
 
@@ -96,11 +102,6 @@ trait Aliases
         return basename($savePath);
     }
 
-    public function download($fileId, $path = '')
-    {
-        $this->saveFile($fileId, $path);
-    }
-
     /**
      * Меняющееся сообщение с задержкой.
      * 
@@ -118,11 +119,19 @@ trait Aliases
             } else {
                 $this->editMessageText($messageId, $this->update('*.chat.id'), $element);
             }
-            $this->wait($delay);
+            Util::wait($delay);
         }
         return true;
     }
 
+    /**
+     * Edit source message received from callback.
+     * 
+     * @param string $text
+     * @param string $keyboard
+     * @param array $extra
+     * @return void
+     */
     public function editCallbackMessage(string $text, $keyboard = null, $extra = [])
     {
         return $this->editMessageText(
