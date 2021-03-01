@@ -9,6 +9,7 @@ use Litegram\Traits\Telegram\Aliases as TelegramAliases;
 use Litegram\Traits\Telegram\Events;
 use Litegram\Traits\Filter;
 use Litegram\Traits\Middleware;
+use Litegram\Traits\State as StateTrait;
 use Litegram\Modules\User;
 use Container\Container;
 use Chipslays\Collection\Collection;
@@ -27,6 +28,7 @@ class Bot extends Container
     use TelegramAliases;
     use Filter;
     use Middleware;
+    use StateTrait;
     use Events, BaseEvent {
         Events::on insteadof BaseEvent;
         Events::run insteadof BaseEvent;
