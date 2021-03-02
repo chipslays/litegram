@@ -3,6 +3,7 @@
 namespace Litegram\Traits\Telegram;
 
 use Litegram\Modules\User;
+use Litegram\Update;
 
 trait Events
 {
@@ -208,7 +209,7 @@ trait Events
      */
     public function onCommand($data, $func, $sort = BOT_DEFAULT_SORT_VALUE)
     {
-        if ($this->isMessage() && $this->isCommand()) {
+        if (Update::isMessage() && Update::isCommand()) {
             return $this->preventNextStep();
         }
 
@@ -251,7 +252,7 @@ trait Events
      */
     public function onCallback($data, $func, $sort = BOT_DEFAULT_SORT_VALUE)
     {
-        if (!$this->isCallbackQuery()) {
+        if (!Update::isCallbackQuery()) {
             return $this->preventNextStep();
         }
 
@@ -287,7 +288,7 @@ trait Events
      */
     public function onInline($data, $func, $sort = BOT_DEFAULT_SORT_VALUE)
     {
-        if (!$this->isInlineQuery()) {
+        if (!Update::isInlineQuery()) {
             return $this->preventNextStep();
         }
 
