@@ -7,13 +7,12 @@ use Litegram\Traits\Telegram\Methods;
 use Litegram\Traits\Telegram\Replies;
 use Litegram\Traits\Telegram\Aliases as TelegramAliases;
 use Litegram\Traits\Telegram\Events;
-use Litegram\Traits\Filter;
 use Litegram\Traits\Middleware;
-use Litegram\Traits\State as StateTrait;
-use Litegram\Modules\User;
+
 use Container\Container;
 use Chipslays\Collection\Collection;
 use Chipslays\Event\EventTrait as BaseEvent;
+use Litegram\Modules\User;
 
 define('BOT_DEFAULT_SORT_VALUE', 500);
 
@@ -26,9 +25,7 @@ class Bot extends Container
     use Methods;
     use Replies;
     use TelegramAliases;
-    use Filter;
     use Middleware;
-    use StateTrait;
     use Events, BaseEvent {
         Events::on insteadof BaseEvent;
         Events::run insteadof BaseEvent;
@@ -44,9 +41,6 @@ class Bot extends Container
      */
     private $config = [];
 
-    /**
-     * @var array
-     */
     private $modules = [];
 
     /**
@@ -118,10 +112,7 @@ class Bot extends Container
         return $this;
     }
 
-    /**
-     * @return boolean
-     */
-    public function hasUpdate(): bool
+    public function hasUpdate()
     {
         return $this->data !== null;
     }
@@ -240,11 +231,6 @@ class Bot extends Container
         }
     }
 
-    /**
-     * @param callable|string $fn
-     * @param array $params
-     * @return void
-     */
     public function callController($fn, $params = [])
     {
         if (is_callable($fn)) {
