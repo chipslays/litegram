@@ -22,12 +22,12 @@ class Localization extends Module
     /**
      * @var string
      */
-    private static $language;
+    public static $language;
 
     /**
      * @var string
      */
-    private static $default;
+    public static $default;
 
     /**
      * @var string
@@ -52,9 +52,14 @@ class Localization extends Module
         self::$path = rtrim(self::$config->get('modules.localization.dir'), '\/');
         self::$data = new Collection([]);
 
-        $language = $language ?: self::$update->get('*.from.language_code');
-
-        self::load($language);
+        if (self::$config->get('modules.user.enable')) {
+            self::$language = User::get('lang', self::$default);
+        } else {
+            self::$language = $language ?: self::$update->get('*.from.language_code');
+        }
+        
+        
+        self::load(self::$language);
     }
 
     /**
@@ -62,11 +67,13 @@ class Localization extends Module
      * @param string|null $default
      * @return void
      */
-    public static function load(string $language, ?string $default = null): void
+    public static function load(string $language, ?string $default = null, $path = null): void
     {
+        $path = $path ?? self::$path;
+
         self::$language = $language;
 
-        $file = self::$path . '/' . $language . '.php';
+        $file = $path . '/' . $language . '.php';
 
         if (file_exists($file)) {
             self::$data->set($language, array_merge(self::$data->get($language, []), require $file));
@@ -77,7 +84,7 @@ class Localization extends Module
 
         self::$language = $default;
 
-        $file = self::$path . '/' . $default . '.php';
+        $file = $path . '/' . $default . '.php';
 
         if (file_exists($file)) {
             self::$data->set($default, array_merge(self::$data->get($default, []), require $file));

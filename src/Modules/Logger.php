@@ -74,7 +74,7 @@ class Logger extends Module
 
         $date = date("d.m.Y, H:i:s");
         $data = is_array($data) ? json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : trim($data);
-        $log = "[{$date}] [{$type}]\n{$data}";
+        $log = "[{$date}] [".bot()->getExecutedTime(6)."] [{$type}]\n{$data}";
 
         $filename = date("d-m-Y") . "_{$postfix}.log";
 

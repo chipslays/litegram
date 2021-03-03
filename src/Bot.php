@@ -201,7 +201,7 @@ class Bot extends Container
         $this->defaultIdForReply = $this->update('*.chat.id', $this->update('*.from.id'));
 
         $this->decodeCallback();
-
+        
         return $this;
     }
 

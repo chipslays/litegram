@@ -80,6 +80,8 @@ trait Events
             call_user_func_array([$this->$alias, 'beforeRun'], []);
         }
 
+        $this->loadComponents();
+
         if ($this->beforeCallbacks !== []) {
             foreach ($this->beforeCallbacks as $callback) {
                 $this->callController($callback);

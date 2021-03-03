@@ -108,7 +108,7 @@ class User extends Module
 
         Database::table('users')->insert($data);
 
-        self::$userData = self::getDataById(self::$currentUserId);
+        self::$userData = (array) self::getDataById(self::$currentUserId);
     }
 
     /**
