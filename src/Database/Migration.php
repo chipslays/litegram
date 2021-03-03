@@ -2,7 +2,7 @@
 
 namespace Litegram\Database;
 
-use Litegram\Bot;
+use Litegram\Modules\Database;
 
 class Migration
 {
@@ -14,7 +14,7 @@ class Migration
      */
     public static function up()
     {
-        $schema = Bot::getInstance()->db->schema();
+        $schema = Database::schema();
 
         if (!$schema->hasTable('users')) {
             $schema->create('users', function ($table) {
@@ -84,7 +84,7 @@ class Migration
      */
     public static function down()
     {
-        $schema = Bot::getInstance()->db->schema();
+        $schema = Database::schema();
 
         $schema->dropIfExists('users');
         $schema->dropIfExists('store');
