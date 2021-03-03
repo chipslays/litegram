@@ -69,6 +69,10 @@ trait Events
      */
     public function run()
     {
+        if (php_sapi_name() !== 'cli') {
+            $this->sayGoodbyeTelegramAndContinueEvent(120);
+        }
+
         foreach ($this->modules as $alias) {
             if (!method_exists($this->$alias, 'beforeRun')) {
                 continue;
@@ -84,10 +88,6 @@ trait Events
 
         if (!$this->runAllEvents()) {
             $this->executeDefaultAnswers();
-        }
-
-        if (php_sapi_name() !== 'cli') {
-            $this->sayGoodbyeTelegramAndContinueEvent(120);
         }
 
         if ($this->afterCallbacks !== []) {
@@ -209,7 +209,7 @@ trait Events
      */
     public function onCommand($data, $func, $sort = BOT_DEFAULT_SORT_VALUE)
     {
-        if (Update::isMessage() && Update::isCommand()) {
+        if (!Update::isMessage() && !Update::isCommand()) {
             return $this->preventNextStep();
         }
 
@@ -219,11 +219,10 @@ trait Events
                 return ['message.text' => $item];
             } else {
                 // передан текст на отлов как "команда"
-                return ['message.text' => mb_substr($this->getCommand(), 0, 1, 'utf-8') . $item];
+                return ['message.text' => mb_substr(Update::getCommand(), 0, 1, 'utf-8') . $item];
             }
         }, (array) $data);
-
-
+        
         return $this->on($data, $func, $sort);
     }
 
