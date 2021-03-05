@@ -9,7 +9,7 @@ trait Aliases
 {
     public function sendReply($chatId, $messageId, $text = '', $keyboard = null, $extra = [])
     {
-        return $this->request('sendMessage', $this->buildRequestParams([
+        return $this->api('sendMessage', $this->buildRequestParams([
             'chat_id' => $chatId,
             'text' => $text,
             'reply_to_message_id' => $messageId,
@@ -38,7 +38,7 @@ trait Aliases
 
     public function notify($text = '', $showAlert = false, $extra = [])
     {
-        return $this->request('answerCallbackQuery', $this->buildRequestParams([
+        return $this->api('answerCallbackQuery', $this->buildRequestParams([
             'callback_query_id' => $this->update('callback_query.id'),
             'text' => $text,
             'show_alert' => $showAlert,
@@ -47,7 +47,7 @@ trait Aliases
 
     public function action($action = 'typing', $extra = [])
     {
-        return $this->request('sendChatAction', $this->buildRequestParams([
+        return $this->api('sendChatAction', $this->buildRequestParams([
             'chat_id' => $this->defaultIdForReply,
             'action' => $action,
         ], null, $extra));
@@ -62,7 +62,7 @@ trait Aliases
 
     public function isActive($chatId, $action = 'typing', $extra = [])
     {
-        $response = $this->request('sendChatAction', $this->buildRequestParams([
+        $response = $this->api('sendChatAction', $this->buildRequestParams([
             'chat_id' => $chatId,
             'action' => $action,
         ], null, $extra));
