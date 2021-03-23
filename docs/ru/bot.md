@@ -72,3 +72,6 @@ $token|yes|-|string
 return|
 ---|
 `Litegram\Bot::class`
+
+
+Документация в процессе наполнения...
