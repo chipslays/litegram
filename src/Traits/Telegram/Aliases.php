@@ -143,6 +143,17 @@ trait Aliases
         );
     }
 
+    public function editCallbackCaption(string $text, $keyboard = null, $extra = [])
+    {
+        return $this->editMessageCaption(
+            $this->update('callback_query.message.message_id'),
+            $this->update('callback_query.from.id'),
+            $text,
+            $keyboard,
+            $extra
+        );
+    }
+
     /**
      * @param mixed $text
      * @param string|int|null $userId

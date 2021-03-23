@@ -125,6 +125,10 @@ class User extends Module
                 'active' => 1,
             ]);
         }
+
+        self::update([
+            'last_message' => time(),
+        ]);
     }
 
     /**
