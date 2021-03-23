@@ -67,6 +67,7 @@ return [
         ],
         'localization' => [
             'enable' => true,
+            'driver' => 'php', // php, serizalize
             'default' => 'en',
             'dir' => __DIR__ . '/localization',
         ],
