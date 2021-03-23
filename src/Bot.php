@@ -109,6 +109,7 @@ class Bot extends Container
             ],
             'localization' => [
                 'enable' => false,
+                'driver' => 'php', // php, serizalize
                 'default' => 'en',
                 'dir' => __DIR__ . '/localization',
             ],
