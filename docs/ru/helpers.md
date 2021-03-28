@@ -1,6 +1,6 @@
 # Helpers
 
-List of available helpers:
+Список всех доступных функций:
 
 ```php
 bot(string $token = null, array $config = null)
@@ -30,14 +30,4 @@ bot_json($data, $userId = null)
 wait($seconds = 1)
 debug_print($data)
 debug_json($data)
-
-
-
-
-
-
-
-
-
-
 ```
