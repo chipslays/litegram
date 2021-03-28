@@ -265,7 +265,7 @@ class Bot extends Container
     /**
      * Add module to Bot instance.
      * @param string $class
-     * @param array $params
+     * @param array $params Boot params
      * @return static
      */
     public function addModule($class, array $params = [])
@@ -418,7 +418,7 @@ class Bot extends Container
      * @param string $password
      * @return bool
      */
-    public function admin($password): bool
+    public function checkAdminPassword($password): bool
     {
         if (!User::isAdmin()) {
             return false;

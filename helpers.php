@@ -201,7 +201,7 @@ if (!function_exists('util')) {
     /**
      * @return \Telegram\Support\Util
      */
-    function helper()
+    function util()
     {
         return new Util;
     }
