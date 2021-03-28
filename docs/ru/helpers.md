@@ -3,7 +3,7 @@
 Список всех доступных функций:
 
 ```php
-bot(string $token = null, array $config = null)
+bot($token = null, $config = [])
 keyboard($keyboard = false, $oneTime = false, $resize = true, $selective = false)
 keyboard_hide($selective = false)
 keyboard_add($keyboards = [])
