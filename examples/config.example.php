@@ -8,6 +8,7 @@ return [
         'username' => 'MyTelegram_bot',
         'version' => '1.0.0',
         'timezone' => 'UTC',
+        'timelimit' => 120,
     ],
     'telegram' => [
         'parse_mode' => 'html',

@@ -20,13 +20,13 @@ if (!function_exists('bot')) {
      * Если передать параметры будет вызван метод Bot::auth().
      * Пустые параметры возвращают объект Bot.
      *
-     * @param string|null $token
+     * @param string|array $token
      * @param array|null $config
      * @return Bot
      */
-    function bot(string $token = null, array $config = null)
+    function bot($token = null, $config = [])
     {
-        return $token === null && $config === null ? Bot::getInstance() : Bot::getInstance()->auth($token, $config);
+        return $token === null && $config === [] ? Bot::getInstance() : Bot::getInstance()->auth($token, $config);
     }
 }
 

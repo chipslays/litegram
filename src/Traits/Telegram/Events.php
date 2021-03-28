@@ -70,7 +70,7 @@ trait Events
     public function run()
     {
         if (php_sapi_name() !== 'cli') {
-            $this->sayGoodbyeTelegramAndContinueEvent(120);
+            $this->sayGoodbyeTelegramAndContinueEvent($this->config('bot.timelimit', 120));
         }
 
         foreach ($this->modules as $alias) {

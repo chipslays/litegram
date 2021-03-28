@@ -50,6 +50,7 @@ class Bot extends Container
             'username' => 'MyTelegram_bot',
             'version' => '1.0.0',
             'timezone' => 'UTC',
+            'timelimit' => 120,
         ],
         'telegram' => [
             'parse_mode' => 'html',
@@ -159,19 +160,24 @@ class Bot extends Container
     }
 
     /**
-     * @param string|null $token
-     * @param array $config
+     * @param string|array $token
+     * @param array|null $config
      * @return static
      */
-    public function auth(?string $token, ?array $config)
+    public function auth($token = null, $config = [])
     {
         $this->startTime = microtime(true);
-
-        if (!$token) {
-            throw new \Exception("Missed requred parameter `token`");
+        
+        if (is_array($token)) {
+            $this->token = $token['bot']['token'] ?? null;
+            $config = $token;
+        } else {
+            $this->token = $token;
         }
 
-        $this->token = $token;
+        if (!$this->token) {
+            throw new \Exception("Missed requred parameter `token`");
+        }
 
         $this->config = new Collection(array_merge($this->config, (array) $config));
         $this->config->set('bot.token', $token);
