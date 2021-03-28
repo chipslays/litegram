@@ -339,10 +339,7 @@ trait Events
             return;
         }
 
-        $this->events[$sort][] = [
-            'func' => $func,
-            'args' => [User::getFloodTime()],
-        ];
+        $this->addEvent(true, [$func, User::getFloodTime()], $sort);
     }
 
     /**
@@ -354,9 +351,7 @@ trait Events
             return;
         }
 
-        $this->events[$sort][] = [
-            'func' => $func,
-        ];
+        $this->addEvent(true, $func, $sort);
     }
 
     /**
@@ -368,9 +363,7 @@ trait Events
             return;
         }
 
-        $this->events[$sort][] = [
-            'func' => $func,
-        ];
+        $this->addEvent(true, $func, $sort);
     }
 
     /**
@@ -382,10 +375,7 @@ trait Events
             return;
         }
 
-        $this->events[$sort][] = [
-            'func' => $func,
-            'args' => [User::get('ban_date_from'), User::get('ban_date_to'), User::get('ban_comment')], // from, to, comment
-        ];
+        $this->addEvent(true, [$func, User::get('ban_date_from'), User::get('ban_date_to'), User::get('ban_comment')], $sort);
     }
 
     /**
@@ -397,9 +387,6 @@ trait Events
             return;
         }
 
-        $this->events[$sort][] = [
-            'func' => $func,
-            'args' => [User::get('version'), $this->config('bot.version')], // old version, new version
-        ];
+        $this->addEvent(true, [$func, User::get('version'), $this->config('bot.version')], $sort); // old version, new version
     }
 }
