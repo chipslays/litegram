@@ -1,7 +1,7 @@
 <?php 
 
 // More examples for on() method see here:
-// https://github.com/chipslays/event
+// https://github.com/chipslays/event#usage
 
 require __DIR__ . '/../vendor/autoload.php';
 
