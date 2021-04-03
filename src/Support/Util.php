@@ -170,6 +170,14 @@ class Util
         return $code;
     }
 
+    /**
+     * AAAA -> AAAB -> AAAC -> etc.
+     * Инкрементируется с маленькой буквы до больной
+     *
+     * @param string $string
+     * @param boolean $position
+     * @return void
+     */
     public static function incrementAphanumeric($string, $position = false)
     {
         if (false === $position) {
@@ -338,6 +346,12 @@ class Util
         return $textParsed;
     }
 
+    /**
+     * Раскодирует inline-клавиатуру (safe_calback)
+     *
+     * @param array $keyboard
+     * @return void
+     */
     public static function decodeInlineKeyboard($keyboard)
     {
         foreach ($keyboard as &$item) {
@@ -358,7 +372,7 @@ class Util
      * @param string $url
      * @return array
      */
-    public static function fetch($url)
+    public static function fetchTelegramLink($url)
     {
         $result = [];
 
@@ -423,5 +437,29 @@ class Util
     {
         usleep(round($seconds * 1000000));
         return;
+    }
+
+    /**
+     * Высчитывает дистанцию между двух позиций.
+     *
+     * @param float $lat1
+     * @param float $lon1
+     * @param float $lat2
+     * @param float $lon2
+     * @return float
+     */
+    function distance($lat1, $lon1, $lat2, $lon2) {
+
+        $radius_earth = 6371; // Радиус Земли
+    
+        $lat1 = deg2rad($lat1);
+        $lon1 = deg2rad($lon1);
+        $lat2 = deg2rad($lat2);
+        $lon2 = deg2rad($lon2);
+    
+        $d = 2 * $radius_earth * asin(sqrt(sin(($lat2 - $lat1) / 2) ** 2 + cos($lat1) * cos($lat2) * sin(($lon2 - $lon1) / 2) ** 2));
+    
+        return round($d, 2);
+    
     }
 }

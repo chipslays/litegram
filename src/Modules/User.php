@@ -123,12 +123,13 @@ class User extends Module
         if (!self::$userData['active']) {
             self::update([
                 'active' => 1,
+                'last_message' => time(),
+            ]);
+        } else {
+            self::update([
+                'last_message' => time(),
             ]);
         }
-
-        self::update([
-            'last_message' => time(),
-        ]);
     }
 
     /**

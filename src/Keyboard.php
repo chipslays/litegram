@@ -12,6 +12,9 @@ class Keyboard
     /**
      * Универсальный конструктор клавиатуры.
      * Автоматически определяет обычная клавиатура или инлайн.
+     * Может залупонькаться на ключ text, например для кнопки запроса гео или контакта. 
+     * В этом случае лучше юзать markup метод который именно для обычной клавы.
+     * TODO: сделать тру универсал и учесть эту херню выше.
      *
      * @param array|string $keyboard Массив с клавиатурой или ключ ранее добалвенной клавиатуры
      * @param boolean $oneTime True - показать один раз, False - не прятать клавиатуру после нажатия
@@ -47,6 +50,31 @@ class Keyboard
     }
 
     /**
+     * Обычная клавиатура.
+     *
+     * @param array|string $keyboard
+     * @param boolean $oneTime
+     * @param boolean $resize
+     * @param boolean $selective
+     * @return void
+     */
+    public static function markup($keyboard, bool $oneTime = false, bool $resize = true, bool $selective = false)
+    {
+        if (!is_array($keyboard)) {
+            $keyboard = self::$keyboards[$keyboard];
+        }
+
+        $markup = [
+            'keyboard' => $keyboard,
+            'resize_keyboard' => $resize,
+            'one_time_keyboard' => $oneTime,
+            'selective' => $selective,
+        ];
+
+        return json_encode($markup);
+    }
+
+    /**
      * Спрятать клавиатуру.
      *
      * @param boolean $selective True - персольная клавиатура для юзера, False - для всех юзеров
@@ -64,7 +92,7 @@ class Keyboard
     }
 
     /**
-     * Возвращает пригодную для отправки инлайн-клавиатуру.
+     * Инлайн клавиатура.
      *
      * @param string|array $keyboard Массив с клавиатурой или ключ ранее добалвенной клавиатуры
      * @return string
