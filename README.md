@@ -4,9 +4,34 @@ Simple, flexible, modular library based on events for Telegram Bot Api.
 
 ## Installation
 
+### Library
+Install as simple library:
+
 ```bash
 $ composer require chipslays/litegram
 ```
+
+### Project
+
+Create ready for use skeleton project (framework?🤔):
+
+```bash
+composer create-project chipslays/litegram-skeleton MySuperDuperBot
+```
+
+Now, in `/MySuperDuperBot/config` folder edit the configs.
+
+Finally type in Terminal:
+
+```bash
+$ php lite webhook:set
+```
+
+```bash
+$ php lite migration:set
+```
+
+🎉 Congratulation, bot project was set up.
 
 ## Example
 
