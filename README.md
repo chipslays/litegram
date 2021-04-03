@@ -28,7 +28,7 @@ $ php lite webhook:set
 ```
 
 ```bash
-$ php lite migration:set
+$ php lite migration:up
 ```
 
 🎉 Congratulation, bot project was set up.
