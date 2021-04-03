@@ -16,7 +16,7 @@ $ composer require chipslays/litegram
 Create ready for use skeleton project (framework?🤔):
 
 ```bash
-composer create-project chipslays/litegram-skeleton MySuperDuperBot
+$ composer create-project chipslays/litegram-skeleton MySuperDuperBot
 ```
 
 Now, in `/MySuperDuperBot/config` folder edit the configs.
