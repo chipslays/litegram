@@ -335,3 +335,18 @@ if (!function_exists('debug_json')) {
         return Debug::json($data);
     }
 }
+
+
+if (!function_exists('random_code')) {
+    /**
+     * Генерирует случайную строку.
+     *
+     * @param integer $lenght
+     * @param array $chars
+     * @return string
+     */
+    function random_code(int $lenght = 6, array $chars = null)
+    {
+        return Util::getRandomCode($lenght, $chars);
+    }
+}
