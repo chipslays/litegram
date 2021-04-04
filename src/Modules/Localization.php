@@ -55,7 +55,7 @@ class Localization extends Module
         if (self::$config->get('modules.user.enable')) {
             self::$language = User::get('lang', self::$default);
         } else {
-            self::$language = $language ?: self::$update->get('*.from.language_code');
+            self::$language = $language ?: self::$update->get('*.from.language_code', self::$default);
         }
         
         self::load(self::$language);
