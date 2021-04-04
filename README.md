@@ -1,4 +1,4 @@
-# WIP: Litegram
+# Litegram
 
 Simple, flexible, modular library based on events for Telegram Bot Api.
 
