@@ -198,9 +198,14 @@ class Bot extends Container
         if ($update) {
             $this->setEventData($update);
         } else {
-            if ($input = file_get_contents('php://input')) {
+            $input = file_get_contents('php://input');
+            if ($input && $input !== '') {
                 $this->setEventData($input);
             }
+        }
+     
+        if (!$this->hasUpdate()) {
+            return $this;
         }
 
         $this->addModule(Update::class);
@@ -217,7 +222,7 @@ class Bot extends Container
      */
     public function hasUpdate(): bool
     {
-        return $this->data !== null;
+        return $this->data !== [];
     }
 
     /**

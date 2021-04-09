@@ -62,8 +62,8 @@ class Logger extends Module
 
     /**
      * @param string|array $data
-     * @param string $type
-     * @param string $postfix
+     * @param string $type Log type
+     * @param string $postfix File postfix
      * @return void
      */
     public static function put($data = false, $type = 'auto', $postfix = 'bot'): void
