@@ -19,6 +19,10 @@ Create ready for use skeleton project (framework?🤔):
 $ composer create-project chipslays/litegram-skeleton MySuperDuperBot
 ```
 
+Or deploy to [Heroku](https://heroku.com):
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/chipslays/litegram-skeleton)
+
 Now, in `/MySuperDuperBot/config` folder edit the configs.
 
 Finally type in Terminal:
