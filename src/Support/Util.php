@@ -2,6 +2,9 @@
 
 namespace Litegram\Support;
 
+use Litegram\Bot;
+use Litegram\Update;
+
 /**
  * Вспомогательные функции
  */
@@ -449,17 +452,48 @@ class Util
      * @return float
      */
     function distance($lat1, $lon1, $lat2, $lon2) {
-
-        $radius_earth = 6371; // Радиус Земли
+        $earthRadius = 6371; // Радиус Земли
     
         $lat1 = deg2rad($lat1);
         $lon1 = deg2rad($lon1);
         $lat2 = deg2rad($lat2);
         $lon2 = deg2rad($lon2);
     
-        $d = 2 * $radius_earth * asin(sqrt(sin(($lat2 - $lat1) / 2) ** 2 + cos($lat1) * cos($lat2) * sin(($lon2 - $lon1) / 2) ** 2));
+        $d = 2 * $earthRadius * asin(sqrt(sin(($lat2 - $lat1) / 2) ** 2 + cos($lat1) * cos($lat2) * sin(($lon2 - $lon1) / 2) ** 2));
     
         return round($d, 2);
-    
+    }
+
+    /**
+     * Change keyboard button in inline keyboard.
+     * Default inline from: callback_query.message.reply_markup.inline_keyboard
+     * 
+     * @param array $old ['needleKey' => 'needleValue'] (strpos method)
+     * @param array $new New array inline button
+     * @param array|null $inline Force inline keyboard
+     * @return array Changed inline keyboard
+     */
+    public static function changeInlineButton(array $old, array $new, ?array $inline = null) {
+        if (!$inline) {
+            if (Bot::getInstance()->config('telegram.safe_callback')) {
+                $inline = self::decodeInlineKeyboard(Update::get('callback_query.message.reply_markup.inline_keyboard'));
+            } else {
+                $inline = Update::get('callback_query.message.reply_markup.inline_keyboard');
+            }
+        }
+       
+        $needleKey = key($old);
+        $needleValue = array_shift($old);
+
+        foreach ($inline as &$row) {
+            foreach ($row as &$btn) {
+                if (strpos($btn[$needleKey], $needleValue) !== false) {
+                    $btn = $new;
+                    break;
+                }
+            }
+        }
+
+        return $inline;
     }
 }
