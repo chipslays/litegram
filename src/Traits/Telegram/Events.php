@@ -157,7 +157,7 @@ trait Events
         foreach ($this->defaultAnswers as $answer) {
             foreach ($answer['data'] as $key) {
                 if ($this->update()->has($key)) {
-                    $this->callFunction($answer['func']);
+                    $this->callController($answer['func']);
                     return;
                 }
             }
