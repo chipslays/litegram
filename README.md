@@ -68,7 +68,7 @@ bot()->sendMessage($chatId, 'User on checkout page...');
 **Or... Maybe you needed powerful framework?**
 
 ```php
-$bot = bot('1234567890:BOT_TOKEN')->webhook();
+$bot = bot($config)->webhook();
 
 $bot->addModule(Litegram\Modules\Logger::class)
     ->addModule(Litegram\Modules\Cache::class)
