@@ -8,7 +8,7 @@ require __DIR__ . '/../vendor/autoload.php';
 $bot = bot('1234567890:BOT_TOKEN')->webhook();
 
 $bot->on('message.text', function () use ($bot) {
-    // universal method executor
+    // universal executor for all Telegram methods
     $bot->api('sendMessage', [
         'chat_id' => update('message.from.id'),
         'text' => 'Hello!',
