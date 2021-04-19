@@ -37,7 +37,7 @@ $ php lite migration:up
 
 🎉 Congratulation, bot project was set up.
 
-## Example
+## Examples
 
 Pretty simple Echo Bot:
 
@@ -59,6 +59,7 @@ Auth once and use anywhere in your project.
 
 ```php
 // bootstrap.php
+require 'vendor/autoload.php';
 bot('1234567890:BOT_TOKEN');
 
 // payment.php
@@ -68,6 +69,8 @@ bot()->sendMessage($chatId, 'User on checkout page...');
 **Or... Maybe you needed powerful framework?**
 
 ```php
+require 'vendor/autoload.php';
+
 $bot = bot($config)->webhook();
 
 $bot->addModule(Litegram\Modules\Logger::class)
