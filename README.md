@@ -82,7 +82,7 @@ $bot->addModule(Litegram\Modules\Logger::class)
     ->addModule(Litegram\Modules\Localization::class)
     ->addModule(Litegram\Modules\Statistics::class)
     ->addModule(Litegram\Modules\Session::class);
-    
+
 // do something...
 
 $bot->run();
