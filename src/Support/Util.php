@@ -62,11 +62,11 @@ class Util
 
     /**
      * Плюрализация (Русский, Украинский?, Белорусский?).
-     * 
-     * Например: plural(10, ['арбуз', 'арбуза', 'арбузов']) 
+     *
+     * Например: plural(10, ['арбуз', 'арбуза', 'арбузов'])
      * Вернет: арбузов
      *
-     * @param string|int $n 
+     * @param string|int $n
      * @param array $forms
      * @return string
      */
@@ -388,8 +388,8 @@ class Util
         preg_match('/<title>Telegram: Contact @(.*?)<\/title>/', $html, $username);
         preg_match('/<a class="tgme_action_button_new" href="(.*?)">/', $html, $action);
 
-        $members = explode(',', $membersInfo[1] ?? null)[0];
-        $online = array_map('trim', explode(',', $membersInfo[1] ?? null))[1];
+        $members = explode(',', $membersInfo[1] ?? null)[0] ?? null;
+        $online = array_map('trim', explode(',', $membersInfo[1] ?? null))[1] ?? null;
 
         $result['image'] = $image[1] ?? null;
         $result['title'] = $title[1] ?? null;
@@ -453,21 +453,21 @@ class Util
      */
     function distance($lat1, $lon1, $lat2, $lon2) {
         $earthRadius = 6371; // Радиус Земли
-    
+
         $lat1 = deg2rad($lat1);
         $lon1 = deg2rad($lon1);
         $lat2 = deg2rad($lat2);
         $lon2 = deg2rad($lon2);
-    
+
         $d = 2 * $earthRadius * asin(sqrt(sin(($lat2 - $lat1) / 2) ** 2 + cos($lat1) * cos($lat2) * sin(($lon2 - $lon1) / 2) ** 2));
-    
+
         return round($d, 2);
     }
 
     /**
      * Change keyboard button in inline keyboard.
      * Default inline from: callback_query.message.reply_markup.inline_keyboard
-     * 
+     *
      * @param array $old ['needleKey' => 'needleValue'] (strpos method)
      * @param array $new New array inline button
      * @param array|null $inline Force inline keyboard
@@ -481,7 +481,7 @@ class Util
                 $inline = Update::get('callback_query.message.reply_markup.inline_keyboard');
             }
         }
-       
+
         $needleKey = key($old);
         $needleValue = array_shift($old);
 
