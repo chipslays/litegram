@@ -19,6 +19,10 @@ Create ready for use skeleton project (framework?🤔):
 $ composer create-project chipslays/litegram-skeleton MySuperDuperBot
 ```
 
+Or deploy to [Heroku](https://heroku.com):
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/chipslays/litegram-skeleton)
+
 Now, in `/MySuperDuperBot/config` folder edit the configs.
 
 Finally type in Terminal:
@@ -33,7 +37,7 @@ $ php lite migration:up
 
 🎉 Congratulation, bot project was set up.
 
-## Example
+## Examples
 
 Pretty simple Echo Bot:
 
@@ -55,6 +59,7 @@ Auth once and use anywhere in your project.
 
 ```php
 // bootstrap.php
+require 'vendor/autoload.php';
 bot('1234567890:BOT_TOKEN');
 
 // payment.php
@@ -64,7 +69,9 @@ bot()->sendMessage($chatId, 'User on checkout page...');
 **Or... Maybe you needed powerful framework?**
 
 ```php
-$bot = bot('1234567890:BOT_TOKEN')->webhook();
+require 'vendor/autoload.php';
+
+$bot = bot($config)->webhook();
 
 $bot->addModule(Litegram\Modules\Logger::class)
     ->addModule(Litegram\Modules\Cache::class)
