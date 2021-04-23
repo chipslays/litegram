@@ -325,6 +325,8 @@ class Bot
     }
 
     /**
+     * Call anonymous function or class string (className@doSomething)
+     *
      * @param callable|string $fn
      * @param array $parameters
      * @return void
@@ -389,11 +391,24 @@ class Bot
         return $this;
     }
 
+    /**
+     * Skip only run events and defaults answers,
+     * but `berforeRun`, `afterRun` & `beforeCallbacks`, `afterCallbacks`
+     * methods will be executed.
+     *
+     * @param boolean $status
+     * @return void
+     */
     public function skip(bool $status)
     {
         $this->skipRunEvents = $status;
     }
 
+    /**
+     * Will there be skipped run events?
+     *
+     * @return void
+     */
     public function skipped()
     {
         return $this->skipRunEvents;
