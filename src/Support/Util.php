@@ -277,7 +277,7 @@ class Util
         return htmlspecialchars($text);
     }
 
-    private static function mbStringToArray($string, $encoding = 'UTF-8')
+    public static function mbStringToArray($string, $encoding = 'UTF-8')
     {
         $array = [];
         $strlen = mb_strlen($string, $encoding);
@@ -289,7 +289,7 @@ class Util
         return $array;
     }
 
-    private static function parseTagOpen($textToParse, $entity, $oTag)
+    public static function parseTagOpen($textToParse, $entity, $oTag)
     {
         $i = 0;
         $textParsed = '';
@@ -309,7 +309,7 @@ class Util
         return $textParsed;
     }
 
-    private static function parseTagClose($textToParse, $entity, $cTag)
+    public static function parseTagClose($textToParse, $entity, $cTag)
     {
         $i = 0;
         $textParsed = '';
@@ -329,7 +329,7 @@ class Util
         return $textParsed;
     }
 
-    private static function htmlEscape($textToParse)
+    public static function htmlEscape($textToParse)
     {
         $i = 0;
         $textParsed = '';
@@ -370,7 +370,9 @@ class Util
 
     /**
      * WIP: Разбирает страницу t.me/username и возвращает массив с данными.
+     *
      * @todo оптимизировать/доделать стикеры и темы
+     *
      * @param string $url
      * @return array
      */
