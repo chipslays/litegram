@@ -450,7 +450,8 @@ class Util
      * @param float $lon2
      * @return float
      */
-    function distance($lat1, $lon1, $lat2, $lon2) {
+    function distance($lat1, $lon1, $lat2, $lon2)
+    {
         $earthRadius = 6371; // Радиус Земли
 
         $lat1 = deg2rad($lat1);
@@ -458,9 +459,9 @@ class Util
         $lat2 = deg2rad($lat2);
         $lon2 = deg2rad($lon2);
 
-        $d = 2 * $earthRadius * asin(sqrt(sin(($lat2 - $lat1) / 2) ** 2 + cos($lat1) * cos($lat2) * sin(($lon2 - $lon1) / 2) ** 2));
+        $distance = 2 * $earthRadius * asin(sqrt(sin(($lat2 - $lat1) / 2) ** 2 + cos($lat1) * cos($lat2) * sin(($lon2 - $lon1) / 2) ** 2));
 
-        return round($d, 2);
+        return round($distance, 2);
     }
 
     /**
@@ -472,7 +473,8 @@ class Util
      * @param array|null $inline Force inline keyboard
      * @return array Changed inline keyboard
      */
-    public static function changeInlineButton(array $old, array $new, ?array $inline = null) {
+    public static function changeInlineButton(array $old, array $new, ?array $inline = null)
+    {
         if (!$inline) {
             if (Bot::getInstance()->config('telegram.safe_callback')) {
                 $inline = self::decodeInlineKeyboard(Update::get('callback_query.message.reply_markup.inline_keyboard'));
