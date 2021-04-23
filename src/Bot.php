@@ -377,14 +377,15 @@ class Bot
      *
      * @param string $current
      * @param string|null $next
-     * @param callable|string $func
+     * @param callable|string $func Return `false` for prevent next step.
      * @return Bot
      */
     public function chain(string $current, ?string $next, $func)
     {
         if (Session::get('__chain') == $current && !$this->skipped()) {
-            Session::set('__chain', $next);
-            $this->call($func);
+            if ($this->call($func) !== false) {
+                Session::set('__chain', $next);
+            }
             $this->skip(true);
         }
 
