@@ -64,7 +64,7 @@ trait Events
             call_user_func_array([$this->$alias, 'beforeRun'], []);
         }
 
-        // $this->loadComponents();
+        $this->loadComponents();
 
         if ($this->beforeCallbacks !== []) {
             foreach ($this->beforeCallbacks as $callback) {
