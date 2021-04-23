@@ -10,6 +10,7 @@ use Litegram\Traits\Http\Request;
 use Litegram\Traits\Filter;
 use Litegram\Traits\State;
 use Litegram\Traits\Middleware;
+use Litegram\Traits\Components;
 use Litegram\Traits\Telegram\Aliases;
 use Litegram\Traits\Telegram\Methods;
 use Litegram\Traits\Telegram\Replies;
@@ -27,6 +28,7 @@ class Bot
     use State;
     use Filter;
     use Middleware;
+    use Components;
 
     /**
      * @var array
@@ -157,6 +159,41 @@ class Bot
      * @var int
      */
     private $__startAt;
+
+    /**
+     * @var array
+     */
+    protected static $mapped = [];
+
+    public static function map(string $method, $func) : void
+    {
+        if (method_exists(self::class, $method) || array_key_exists($method, self::$mapped)) {
+            throw new \Exception("Cannot override an existing `{$method}` method.");
+        }
+
+        self::$mapped[$method] = $func;
+    }
+
+    public static function mapOnce(string $method, $func) : void
+    {
+        if (method_exists(self::class, $method) || array_key_exists($method, self::$mapped)) {
+            throw new \Exception("Cannot override an existing `{$method}` method.");
+        }
+
+        self::$mapped[$method] = self::getInstance()->call($func);
+    }
+
+    public function __call($method, $args)
+    {
+        $fn = self::$mapped[$method];
+        return is_callable($fn) || class_exists($fn) ? $this->call($fn, $args) : $fn;
+    }
+
+    public static function __callStatic($method, $args)
+    {
+        $fn = self::$mapped[$method];
+        return is_callable($fn) || class_exists($fn) ? self::getInstance()->call($fn, $args) : $fn;
+    }
 
     protected function __construct()
     {
