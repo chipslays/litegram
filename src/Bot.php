@@ -317,6 +317,12 @@ class Bot
      */
     public function addModule($module, array $parameters = [])
     {
+        foreach ($module::$depends as $needModule) {
+            if (!$this->isModuleExists($needModule)) {
+                throw new \Exception("Please, add `{$needModule}` module before add `{$module}` module.");
+            }
+        }
+
         $class = new $module;
         if (method_exists($class, 'boot')) {
             call_user_func_array([$class, 'boot'], $parameters);
@@ -336,6 +342,26 @@ class Bot
         $this->modules[] = $alias;
 
         return $this;
+    }
+
+    public function isModuleExists($module)
+    {
+        return in_array($module, $this->modules);
+    }
+
+    /**
+     * Call module like $bot->module('db')->table(...)
+     *
+     * @param string $name
+     * @return object
+     */
+    public function module(string $alias)
+    {
+        if (!in_array($alias, $this->modules)) {
+            throw new \Exception("Module `{$alias}` not exists.");
+        }
+
+        return $this->$alias;
     }
 
     /**

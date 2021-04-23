@@ -16,8 +16,7 @@ class Util
      * Например: shuffle('Сегодня {{лето|осень|зима|весна}}')
      * Вернет: случайное слово из фигурных скобок, например, "осень".
      *
-     * @param [type] $message
-     *
+     * @param string $message
      * @return string
      */
     public static function shuffle(string $message): string
@@ -118,13 +117,13 @@ class Util
      * @param boolean $shuffle
      * @return mixed
      */
-    public static function random(array $arr, bool $shuffle = true)
+    public static function random(array $array, bool $shuffle = true)
     {
         if ($shuffle) {
-            shuffle($arr);
+            shuffle($array);
         }
 
-        return $arr[array_rand($arr)];
+        return $array[array_rand($array)];
     }
 
     /**

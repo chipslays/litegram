@@ -20,7 +20,7 @@ trait Aliases
     {
         return $this->sendMessage(
             $this->defaultIdForReply,
-            $text,
+            Util::shuffle($text),
             $keyboard,
             $extra
         );
@@ -30,7 +30,7 @@ trait Aliases
     {
         return $this->sendMessage(
             $this->defaultIdForReply,
-            $text,
+            Util::shuffle($text),
             $keyboard,
             array_merge($extra, ['reply_to_message_id' => $this->update('*.message_id')])
         );
@@ -40,7 +40,7 @@ trait Aliases
     {
         return $this->method('answerCallbackQuery', $this->buildRequestParams([
             'callback_query_id' => $this->update('callback_query.id'),
-            'text' => $text,
+            'text' => Util::shuffle($text),
             'show_alert' => $showAlert,
         ], null, $extra));
     }
@@ -155,6 +155,8 @@ trait Aliases
     }
 
     /**
+     * Send `print_r` message.
+     *
      * @param mixed $text
      * @param string|int|null $userId
      * @return Collection
@@ -163,12 +165,30 @@ trait Aliases
     {
         return $this->method('sendMessage', [
             'chat_id' => $userId ?? $this->defaultIdForReply,
-            'text' => print_r($data, true),
+            'text' => '<code>' . print_r($data, true) . '</code>',
             'parse_mode' => 'html',
         ]);
     }
 
     /**
+     * Send `var_export` message.
+     *
+     * @param mixed $text
+     * @param string|int|null $userId
+     * @return Collection
+     */
+    public function dump($data, $userId = null)
+    {
+        return $this->method('sendMessage', [
+            'chat_id' => $userId ?? $this->defaultIdForReply,
+            'text' => '<code>' . var_export($data, true) . '</code>',
+            'parse_mode' => 'html',
+        ]);
+    }
+
+    /**
+     * Send `json` message.
+     *
      * @param array|string|int $data
      * @param string|int|null $userId
      * @return Collection
