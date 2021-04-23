@@ -56,15 +56,17 @@ class Localization extends Module
     /**
      * @param string $language
      * @param string|null $default
+     * @param string|null $path Path to where located lang files.
+     * @param string|null $driver Force driver for skip by config. (php, serialize)
      * @return void
      */
-    public static function load(string $language, ?string $default = null, $path = null): void
+    public static function load(string $language, ?string $default = null, $path = null, $driver = null): void
     {
         $path = $path ?? self::$path;
 
         self::$language = $language;
 
-        $driver = self::$config->get('modules.localization.driver', 'php');
+        $driver = $driver ?? self::$config->get('modules.localization.driver', 'php');
         switch ($driver) {
             case 'php':
                 $file = $path . '/' . $language . '.php';

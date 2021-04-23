@@ -17,6 +17,13 @@ class Database extends Capsule
     public static $alias = 'database';
 
     /**
+     * Array with aliases of modules that should already be loaded.
+     *
+     * @var array
+     */
+    public static $depends = [];
+
+    /**
      * @return void
      */
     public function boot(): void

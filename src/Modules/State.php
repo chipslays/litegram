@@ -35,7 +35,15 @@ class State extends Module
             return;
         }
 
-        self::$currentUserId = self::$update->get('*.from.id');
+        if (self::$config->get('modules.user.enable') && !self::$bot->isModuleExists('user')) {
+            throw new \Exception("Config `modules.user.enable=true`, but `user` module not loaded. Please load `user` module before `state`.");
+        }
+
+        if (self::$config->get('modules.user.enable')) {
+            self::$currentUserId = User::get('user_id');
+        } else {
+            self::$currentUserId = self::$update->get('*.from.id');
+        }
 
         $state = self::get();
         self::$name = $state['name'] ?? null;
@@ -57,7 +65,6 @@ class State extends Module
 
     public static function set($name = null, $data = null): void
     {
-        var_dump($name, $data);
         self::setById(self::$currentUserId, $name, $data);
     }
 

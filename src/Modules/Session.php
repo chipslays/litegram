@@ -30,7 +30,16 @@ class Session extends Module
             return;
         }
 
-        self::$userId = (string) self::$update->get('*.from.id');
+        if (self::$config->get('modules.user.enable') && !self::$bot->isModuleExists('user')) {
+
+            throw new \Exception("Config `modules.user.enable=true`, but `user` module not loaded. Please load `user` module before `session`.");
+        }
+
+        if (self::$config->get('modules.user.enable')) {
+            self::$userId = User::get('user_id');
+        } else {
+            self::$userId = (string) self::$update->get('*.from.id');
+        }
     }
 
     /**

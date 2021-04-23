@@ -2,14 +2,18 @@
 
 namespace Litegram;
 
-use Litegram\Support\Collection;
-use Litegram\Traits\Http\Request;
+use Litegram\Modules\Session;
 use Litegram\Traits\Events;
+use Litegram\Traits\Modules;
+use Litegram\Traits\Webhook;
+use Litegram\Traits\Http\Request;
+use Litegram\Traits\Filter;
+use Litegram\Traits\State;
+use Litegram\Traits\Middleware;
 use Litegram\Traits\Telegram\Aliases;
 use Litegram\Traits\Telegram\Methods;
 use Litegram\Traits\Telegram\Replies;
-
-define('LITEGRAM_DEFAULT_EVENT_SORT', 500);
+use Litegram\Support\Collection;
 
 class Bot
 {
@@ -18,6 +22,11 @@ class Bot
     use Methods;
     use Aliases;
     use Replies;
+    use Modules;
+    use Webhook;
+    use State;
+    use Filter;
+    use Middleware;
 
     /**
      * @var array
@@ -92,6 +101,9 @@ class Bot
                     'dir' => __DIR__ . '/storage/store',
                 ],
             ],
+            'session' => [
+                'enable' => true,
+            ],
             'user' => [
                 'enable' => false,
                 'flood_time' => 1,
@@ -101,7 +113,7 @@ class Bot
             ],
             'localization' => [
                 'enable' => false,
-                'driver' => 'php', // php, serizalize
+                'driver' => 'php', // php, serialize
                 'default' => 'en',
                 'dir' => __DIR__ . '/localization',
             ],
@@ -125,8 +137,7 @@ class Bot
     ];
 
     /**
-     * Contains '*.chat.id' or '*.from.id' if '*.chat.id' not exists
-     * and NULL if '*.from.id' not exists.
+     * Contains '*.chat.id' or '*.from.id' from Telegram update.
      *
      * @var int|null
      */
@@ -140,12 +151,12 @@ class Bot
     /**
      * @var array
      */
-    private $modules = [];
+    private $defaultAnswers = [];
 
     /**
-     * @var array
+     * @var int
      */
-    private $defaultAnswers = [];
+    private $__startAt;
 
     protected function __construct()
     {
@@ -183,6 +194,8 @@ class Bot
      */
     public function auth($token, array $config = [])
     {
+        $this->__startAt = microtime(true);
+
         if (is_array($token)) {
             $this->token = $token['bot']['token'] ?? null;
             $config = $token;
@@ -193,40 +206,6 @@ class Bot
         $this->config = new Collection(array_merge($this->config, $config));
 
         date_default_timezone_set($this->config('bot.timezone'));
-
-        return $this;
-    }
-
-    /**
-     * Handle update from Telegram or set force update fro somethere.
-     *
-     * @param array|string|\stdClass|\Chipslays\Collection\Collection $update
-     * @return Bot
-     * @throws \Exception
-     */
-    public function webhook($update = null)
-    {
-        if ($update) {
-            $this->setEventData($update);
-        } else {
-            $input = file_get_contents('php://input');
-            if ($input && $input !== '') {
-                $this->setEventData($input);
-            }
-        }
-
-        if (!$this->hasUpdate()) {
-            return $this;
-        }
-
-        $this->defaultIdForReply = $this->update('*.chat.id', $this->update('*.from.id'));
-
-        $this->addModule(Update::class);
-
-        // Отпускаем Telegram, чтобы он не ждал и не блокировал остальные запросы.
-        if (php_sapi_name() !== 'cli') {
-            $this->finishRequest($this->config('bot.timelimit', 1800));
-        }
 
         return $this;
     }
@@ -294,6 +273,30 @@ class Bot
     }
 
     /**
+     * Декодирует входящий параметр data у callback_query
+     *
+     * @return void
+     */
+    private function decodeCallback()
+    {
+        if (!$this->config('telegram.safe_callback')) {
+            return;
+        }
+
+        if (!$data = $this->update('callback_query.data')) {
+            return;
+        }
+
+        $data = @gzinflate(base64_decode($data));
+
+        if (!$data) {
+            return;
+        }
+
+        $this->update()->set('callback_query.data', $data);
+    }
+
+    /**
      * Установить символы с которых сообщение будет считаться командой
      * По умолчанию ['/', '.', '!']
      *
@@ -311,57 +314,14 @@ class Bot
     }
 
     /**
-     * @param string $class
-     * @param array $parameters Parameters for `boot` method.
-     * @return static
-     */
-    public function addModule($module, array $parameters = [])
-    {
-        foreach ($module::$depends as $needModule) {
-            if (!$this->isModuleExists($needModule)) {
-                throw new \Exception("Please, add `{$needModule}` module before add `{$module}` module.");
-            }
-        }
-
-        $class = new $module;
-        if (method_exists($class, 'boot')) {
-            call_user_func_array([$class, 'boot'], $parameters);
-        }
-
-        if (!property_exists($class, 'alias')) {
-            throw new \Exception("Missed required `alias` property in module {$module}", 1);
-        }
-
-        $alias = $class::$alias;
-
-        if (property_exists($this, $alias) || in_array($alias, $this->modules)) {
-            throw new \Exception("Cannot overide exists property `{$alias}`.");
-        }
-
-        $this->$alias = $class;
-        $this->modules[] = $alias;
-
-        return $this;
-    }
-
-    public function isModuleExists($module)
-    {
-        return in_array($module, $this->modules);
-    }
-
-    /**
-     * Call module like $bot->module('db')->table(...)
+     * Получить время выполнения скрипта.
      *
-     * @param string $name
-     * @return object
+     * @param integer $lenght
+     * @return int|float
      */
-    public function module(string $alias)
+    public function getExecutionTime(int $lenght = 6)
     {
-        if (!in_array($alias, $this->modules)) {
-            throw new \Exception("Module `{$alias}` not exists.");
-        }
-
-        return $this->$alias;
+        return round(microtime(true) - $this->__startAt, $lenght);
     }
 
     /**
@@ -392,5 +352,50 @@ class Bot
                 // nothing...
             }
         }
+    }
+
+    /**
+     * Set current chain name.
+     *
+     * @param string|null $name
+     * @return void
+     * @throws \Exception
+     */
+    public function setChain(?string $name)
+    {
+        if (!$this->isModuleExists('session')) {
+            throw new \Exception("Please add `session` module before start chain.");
+        }
+
+        Session::set('__chain', $name);
+    }
+
+    /**
+     * Chain dialog flow.
+     *
+     * @param string $current
+     * @param string|null $next
+     * @param callable|string $func
+     * @return Bot
+     */
+    public function chain(string $current, ?string $next, $func)
+    {
+        if (Session::get('__chain') == $current && !$this->skipped()) {
+            Session::set('__chain', $next);
+            $this->call($func);
+            $this->skip(true);
+        }
+
+        return $this;
+    }
+
+    public function skip(bool $status)
+    {
+        $this->skipRunEvents = $status;
+    }
+
+    public function skipped()
+    {
+        return $this->skipRunEvents;
     }
 }

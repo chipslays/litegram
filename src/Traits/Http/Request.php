@@ -76,9 +76,7 @@ trait Request
             $parameters['reply_markup'] = is_array($keyboard) ? $this->keyboard($keyboard) : $keyboard;
         }
 
-        // TODO: сделать метод конфиг
-        // $parameters['parse_mode'] = $this->config('telegram.parse_mode', 'html');
-        $parameters['parse_mode'] = 'html';
+        $parameters['parse_mode'] = $this->config('telegram.parse_mode', 'html');
 
         if (!empty($parameters['text'])) {
             $parameters['text'] = implode("\n", array_map('trim', explode("\n", $parameters['text'])));

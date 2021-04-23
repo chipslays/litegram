@@ -495,4 +495,9 @@ class Util
 
         return $inline;
     }
+
+    public static function trimArray($array, $func = 'strlen')
+    {
+        return array_filter($array, $func);
+    }
 }

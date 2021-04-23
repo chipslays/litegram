@@ -2,6 +2,8 @@
 
 namespace Litegram\Traits\Telegram;
 
+use Litegram\Support\Util;
+
 trait Methods
 {
     public function setWebhook($url = null, $extra = [])
@@ -51,6 +53,17 @@ trait Methods
         ]);
     }
 
+    /**
+     * Use this method to send text messages.
+     *
+     * On success, the sent Message is returned.
+     *
+     * @param int|string $chatId
+     * @param string $text
+     * @param string|null $keyboard
+     * @param array $extra
+     * @return Collection
+     */
     public function sendMessage($chatId, $text, $keyboard = null, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -258,6 +271,107 @@ trait Methods
         ]);
     }
 
+    /**
+     * Use this method to create an additional invite link for a chat.
+     *
+     * The bot must be an administrator in the chat for this to work
+     * and must have the appropriate admin rights.
+     *
+     * The link can be revoked using the method revokeChatInviteLink.
+     *
+     * Returns the new invite link as ChatInviteLink object.
+     *
+     * @param int|string    $chatId Unique identifier for the target chat or username of
+     *                      the target channel (in the format @channelusername)
+     * @param integer|null  $expireDate Point in time (Unix timestamp) when the link will expire
+     * @param integer|null  $memberLimit Maximum number of users that can be members
+     *                      of the chat simultaneously after joining the chat via
+     *                      this invite link; 1-99999
+     * @return Collection
+     */
+    public function createChatInviteLink($chatId, ?int $expireDate = null, ?int $memberLimit = null)
+    {
+        $parameters = [
+            'chat_id' => $chatId,
+            'expire_date' => $expireDate,
+            'member_limit' => $memberLimit,
+        ];
+
+        $parameters = Util::trimArray($parameters);
+
+        return $this->method(__FUNCTION__, $parameters);
+    }
+
+    /**
+     * Use this method to edit a non-primary invite link created by the bot.
+     *
+     * The bot must be an administrator in the chat for this to work and
+     * must have the appropriate admin rights.
+     *
+     * Returns the edited invite link as a ChatInviteLink object.
+     *
+     * @param int|string    $chatId Unique identifier for the target chat or username
+     *                      of the target channel (in the format @channelusername)
+     * @param string        $inviteLink The invite link to edit.
+     * @param integer|null  $expireDate Point in time (Unix timestamp) when the link will expire
+     * @param integer|null  $memberLimit Maximum number of users that can be members
+     *                      of the chat simultaneously after joining the chat via
+     *                      this invite link; 1-99999
+     * @return Collection
+     */
+    public function editChatInviteLink($chatId, string $inviteLink, ?int $expireDate = null, ?int $memberLimit = null)
+    {
+        $parameters = [
+            'chat_id' => $chatId,
+            'invite_link' => $inviteLink,
+            'expire_date' => $expireDate,
+            'member_limit' => $memberLimit,
+        ];
+
+        $parameters = Util::trimArray($parameters);
+
+        return $this->method(__FUNCTION__, $parameters);
+    }
+
+    /**
+     * Use this method to revoke an invite link created by the bot.
+     *
+     * If the primary link is revoked, a new link is automatically generated.
+     *
+     * The bot must be an administrator in the chat for this to work and
+     * must have the appropriate admin rights.
+     *
+     * Returns the revoked invite link as ChatInviteLink object.
+     *
+     * @param int|string    $chatId Unique identifier for the target chat or username
+     *                      of the target channel (in the format @channelusername)
+     * @param string        $inviteLink The invite link to revoke.
+
+     * @return Collection
+     */
+    public function revokeChatInviteLink($chatId, string $inviteLink)
+    {
+        return $this->method(__FUNCTION__, [
+            'chat_id' => $chatId,
+            'invite_link' => $inviteLink,
+        ]);
+    }
+
+    /**
+     * Use this method to set a new profile photo for the chat.
+     *
+     * Photos can't be changed for private chats.
+     *
+     * The bot must be an administrator in the chat for this
+     * to work and must have the appropriate admin rights.
+     *
+     * Returns True on success.
+     *
+     * @param int|string    $chatId Unique identifier for the target chat or username
+     *                      of the target channel (in the format @channelusername)
+     * @param \CURLFile     $photo
+     * @return Collection
+     */
     public function setChatPhoto($chatId, $photo)
     {
         return $this->method(__FUNCTION__, [

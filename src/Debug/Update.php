@@ -48,7 +48,7 @@ class Update
                 "type": "private"
             },
             "date": 1605891721,
-            "text": "/version"
+            "text": "/form"
         }
     }';
 
