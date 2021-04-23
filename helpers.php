@@ -392,4 +392,16 @@ if (!function_exists('chain')) {
     }
 }
 
+if (!function_exists('on')) {
+    /**
+     * @param array|string $event
+     * @param callable|string|array $callback
+     * @param integer $sort
+     * @return Bot
+     */
+    function on($event, $callback, int $sort = LITEGRAM_DEFAULT_EVENT_SORT) {
+        return Bot::getInstance()->on($event, $callback, $sort);
+    }
+}
+
 
