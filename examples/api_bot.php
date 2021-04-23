@@ -23,7 +23,7 @@ $bot->hear('hello', function () {
     say('Hello!');
 });
 
-$bot->hear(['hello', 'holla'], function () {
+$bot->hear(['hello', '/^holla$/i'], function () {
     say('Hello!');
 });
 
