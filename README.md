@@ -11,7 +11,7 @@ Install as simple library:
 $ composer require chipslays/litegram
 ```
 
-### Project
+### [Litegram Skeleton](https://github.com/chipslays/litegram-skeleton)
 
 Create ready for use skeleton project (framework?🤔):
 
