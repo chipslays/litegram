@@ -56,6 +56,22 @@ class Session extends Module
     }
 
     /**
+     * Add to session data as array `key => value`.
+     *
+     * @param string $name
+     * @param string|int $key
+     * @param mixed $value
+     * @return void
+     */
+    public static function add(string $name, $key, $value): void
+    {
+        $name = self::$userId . '_' . md5($name);
+        $data = Store::get($name, []);
+        $data[$key] = $value;
+        Store::set($name, $data);
+    }
+
+    /**
      * Get value from session of current user.
      *
      * @param string $name
