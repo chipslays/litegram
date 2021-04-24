@@ -50,7 +50,7 @@ $bot->addModule(Session::class);
 
 // handle for start chain
 $bot->command('form', function () {
-    echo 'Whats ur name?';
+    say('Whats ur name?');
 
     // start chain conversation
     chain('name');
@@ -59,8 +59,8 @@ $bot->command('form', function () {
 
 // we wait `name`, after set `email`
 $bot->chain('name', 'phone', function () {
-    $name = update('message.text');
-    echo "Ok, cool name! Now send me ur phone.";
+    say('Ok, cool name! Now send me ur phone.');
+    Session::add('form_data', 'name', update('message.text'));
 });
 
 // we wait `phone`, after set `email`
@@ -68,14 +68,16 @@ $bot->chain('phone', 'email', function () {
     $phone = update('message.text');
 
     if ($phone !== 'not valid phone') {
-        echo "ur phone not valid";
+        say('ur phone not valid');
 
         // tip: return `false` for prevent next step.
         // we return `false`, next step `email` not will be set
         return false;
     }
 
-    echo "We save ur phone, now send me ur email.";
+    say('We save ur phone, now send me ur email.');
+
+    Session::add('form_data', 'phone', $phone);
 });
 
 // set next `false` or `null` for finish chain conversation
@@ -87,7 +89,10 @@ $bot->chain('email', false, function () {
         return false;
     }
 
-    echo "Thanks for submit ur data!";
+    say('Thanks for submit ur data!');
+
+    Session::add('form_data', 'email', $email);
+    bot_json(Session::get('form'));
 });
 
 $bot->run();
