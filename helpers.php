@@ -5,6 +5,7 @@ use Litegram\Update;
 use Litegram\Keyboard;
 use Litegram\Debug\Debug;
 use Litegram\Support\Util;
+use Litegram\Support\Validate;
 use Litegram\Support\Collection;
 use Litegram\Modules\User;
 use Litegram\Modules\Cache;
@@ -401,6 +402,56 @@ if (!function_exists('on')) {
      */
     function on($event, $callback, int $sort = LITEGRAM_DEFAULT_EVENT_SORT) {
         return Bot::getInstance()->on($event, $callback, $sort);
+    }
+}
+
+if (!function_exists('is')) {
+    /**
+     * This is short alias for `Validate` class.
+     *
+     * Use cases:
+     *
+     * `is()->email()->validate('example@email.com')`
+     *
+     * `is('email')->validate('example@email.com')`
+     *
+     * `is('contains', 'crab')->validate('chips with crab flavor')`
+     *
+     * `is()->contains('crab')->validate('chips with crab flavor')`
+     *
+     * @see https://respect-validation.readthedocs.io/en/latest/
+     *
+     * @param string|null $method
+     * @param string|array|null $arguments
+     * @return Validate
+     */
+    function is(?string $rule = null, $arguments = null) {
+        return $rule
+            ? Validate::create()->__call($rule, (array) $arguments)
+            : Validate::create();
+    }
+}
+
+if (!function_exists('validate')) {
+    /**
+     * Simple direct validate.
+     *
+     * Use cases:
+     *
+     * `validate('email', 'example@email.com')`
+     *
+     * `validate('contains', 'crab, 'chips with crab flavor')`
+     *
+     * @param string $rule
+     * @param array|string $data
+     * @return bool
+     */
+    function validate(string $rule, $value1, $value2 = null) {
+        if ($value2 !== null) {
+            return Validate::create()->__call($rule, (array) $value1)->validate($value2);
+        } else {
+            return Validate::create()->__call($rule, [])->validate($value1);
+        }
     }
 }
 
