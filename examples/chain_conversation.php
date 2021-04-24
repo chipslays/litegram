@@ -48,6 +48,12 @@ $bot->webhook();
 $bot->addModule(Store::class);
 $bot->addModule(Session::class);
 
+// handle for cancel form
+$bot->command('cancel', function () {
+    say('Form was canceled.');
+    chain(false);
+});
+
 // handle for start chain
 $bot->command('form', function () {
     say('Whats ur name?');
@@ -59,40 +65,43 @@ $bot->command('form', function () {
 
 // we wait `name`, after set `email`
 $bot->chain('name', 'phone', function () {
-    say('Ok, cool name! Now send me ur phone.');
-    Session::add('form_data', 'name', update('message.text'));
-});
-
-// we wait `phone`, after set `email`
-$bot->chain('phone', 'email', function () {
-    $phone = update('message.text');
-
-    if ($phone !== 'not valid phone') {
-        say('ur phone not valid');
+    $validator = is()->alnum()->noWhitespace()->length(1, 15);
+    if (!$validator->validate($name = update('message.text'))) {
+        reply('❌ Oops, not valid name!');
 
         // tip: return `false` for prevent next step.
         // we return `false`, next step `email` not will be set
         return false;
     }
 
-    say('We save ur phone, now send me ur email.');
+    say('✅ Ok, cool name! Now send me ur phone.');
+    Session::add('form_data', 'name', $name);
+}, ['message.text' => '/cancel']);
 
-    Session::add('form_data', 'phone', $phone);
-});
-
-// set next `false` or `null` for finish chain conversation
-$bot->chain('email', false, function () {
-    $email = update('message.text');
-
-    if ($email !== 'not valid email') {
-        echo "ur email not valid";
+// we wait `phone`, after set `email`
+$bot->chain('phone', 'email', function () {
+    if (!validate('phone', $phone = update('message.text'))) {
+        say('❌ Oops, not valid phone!');
         return false;
     }
 
-    say('Thanks for submit ur data!');
+    say('✅ We save ur phone, now send me ur email.');
+
+    Session::add('form_data', 'phone', $phone);
+}, ['message.text' => '/cancel']);
+
+// set next `false` or `null` for finish chain conversation
+$bot->chain('email', false, function () {
+    if (!validate('email', $email = update('message.text'))) {
+        say('❌ Oops, not valid email!');
+        return false;
+    }
+
+    say('🎉 Thanks for submit ur data!');
 
     Session::add('form_data', 'email', $email);
-    bot_json(Session::get('form'));
-});
+
+    bot_json(Session::get('form_data'));
+}, ['message.text' => '/cancel']);
 
 $bot->run();
