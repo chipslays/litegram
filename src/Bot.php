@@ -151,11 +151,6 @@ class Bot
     private $commandTags = ['/', '.', '!'];
 
     /**
-     * @var array
-     */
-    private $defaultAnswers = [];
-
-    /**
      * @var int
      */
     private $__startAt;
