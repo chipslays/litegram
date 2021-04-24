@@ -60,6 +60,14 @@ trait Aliases
         return $this->sendDice($this->defaultIdForReply, $emoji, $keyboard, $extra);
     }
 
+    /**
+     * Check user blocked bot or not.
+     *
+     * @param int|string $chatId
+     * @param string $action
+     * @param array $extra
+     * @return boolean
+     */
     public function isActive($chatId, $action = 'typing', $extra = [])
     {
         $response = $this->method('sendChatAction', $this->buildRequestParams([
@@ -70,16 +78,25 @@ trait Aliases
         return !is_null($response) ? $response->get('ok') : false;
     }
 
-    public function getFileUrl($fileId)
+    /**
+     * Build `api.telegram.org/file/bot123/file_123` url
+     *
+     * @param string|null $fileId
+     * @return Collection
+     */
+    public function getFileUrl(string $fileId)
     {
         $response = $this->getFile($fileId);
-        return $response->get('ok') ? 'https://api.telegram.org/file/bot' . $this->config('bot.token') . '/' . $response->get('result.file_path') : null;
+        return $response->get('ok')
+            ? 'https://api.telegram.org/file/bot' . $this->config('bot.token') . '/' . $response->get('result.file_path')
+            : null;
     }
 
     /**
+     * Download file by `file_id`.
      * @param string $fileId
      * @param string $savePath
-     * @return string Base name of saved file
+     * @return string Full path to saved file
      */
     public function download($fileId, $savePath): string
     {
@@ -99,7 +116,7 @@ trait Aliases
 
         file_put_contents($savePath, file_get_contents($fileUrl));
 
-        return basename($savePath);
+        return $savePath;
     }
 
     /**
@@ -128,9 +145,9 @@ trait Aliases
      * Edit source message received from callback.
      *
      * @param string $text
-     * @param string $keyboard
+     * @param string|null $keyboard
      * @param array $extra
-     * @return void
+     * @return Collection
      */
     public function editCallbackMessage(string $text, $keyboard = null, $extra = [])
     {
@@ -143,6 +160,14 @@ trait Aliases
         );
     }
 
+    /**
+     * Edit source message with photo received from callback.
+     *
+     * @param string $text
+     * @param string|null $keyboard
+     * @param array $extra
+     * @return Collection
+     */
     public function editCallbackCaption(string $text, $keyboard = null, $extra = [])
     {
         return $this->editMessageCaption(
