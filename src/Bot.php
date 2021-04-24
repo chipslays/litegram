@@ -392,7 +392,7 @@ class Bot
      * Set current chain name.
      *
      * @param string|null $name
-     * @return void
+     * @return Bot
      * @throws \Exception
      */
     public function setChain(?string $name)
@@ -402,6 +402,8 @@ class Bot
         }
 
         Session::set('__chain', $name);
+
+        return $this;
     }
 
     /**
@@ -409,7 +411,7 @@ class Bot
      *
      * @param string $current
      * @param string|null $next
-     * @param callable|string $func Return `false` for prevent next step.
+     * @param callable|string $func Function must return `false` for prevent `$next` step.
      * @param array $excepts Array of `path=value` for skip chain. E.g. `['message.text' => '/cancel']`.
      * @return Bot
      */

@@ -384,7 +384,7 @@ if (!function_exists('chain')) {
      * Set current chain name.
      *
      * @param string|null $name
-     * @return void
+     * @return Bot
      * @throws \Exception
      */
     function chain(?string $name) {
