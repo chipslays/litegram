@@ -425,7 +425,11 @@ class Bot
 
         if (Session::get('__chain') == $current && !$this->skipped()) {
             if ($this->call($func) !== false) {
-                Session::set('__chain', $next);
+                if ($next === null || $next === false) {
+                    Session::delete('__chain');
+                } else {
+                    Session::set('__chain', $next);
+                }
             }
             $this->skip(true);
         }
