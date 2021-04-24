@@ -410,10 +410,19 @@ class Bot
      * @param string $current
      * @param string|null $next
      * @param callable|string $func Return `false` for prevent next step.
+     * @param array $excepts Array of `path=value` for skip chain. E.g. `['message.text' => '/cancel']`.
      * @return Bot
      */
-    public function chain(string $current, ?string $next, $func)
+    public function chain(string $current, ?string $next, $func, array $excepts = [])
     {
+        if ($excepts !== []) {
+            foreach ($excepts as $path => $value) {
+                if (Update::get($path) == $value) {
+                    return $this;
+                }
+            }
+        }
+
         if (Session::get('__chain') == $current && !$this->skipped()) {
             if ($this->call($func) !== false) {
                 Session::set('__chain', $next);
