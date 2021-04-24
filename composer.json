@@ -12,7 +12,8 @@
         "chipslays/collection": "^1.0",
         "chipslays/event": "^1.0",
         "illuminate/database": "^8.29",
-        "respect/validation": "^2.2"
+        "respect/validation": "^2.2",
+        "wamania/php-stemmer": "2.0"
     },
     "autoload": {
         "psr-4": {
