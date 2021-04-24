@@ -4,12 +4,18 @@ namespace Litegram\Support;
 
 use Litegram\Bot;
 use Litegram\Update;
+use Wamania\Snowball\StemmerManager;
 
 /**
  * Вспомогательные функции
  */
 class Util
 {
+    /**
+     * @var \Wamania\Snowball\StemmerManager
+     */
+    private static $stemmer;
+
     /**
      * Перемешивает текст в {{двойных фигурных скобках}}.
      *
@@ -503,5 +509,20 @@ class Util
     public static function trimArray($array, $func = 'strlen')
     {
         return array_filter($array, $func);
+    }
+
+    /**
+     * Snowball stemmer (https://snowballstem.org)
+     *
+     * @see https://github.com/wamania/php-stemmer
+     *
+     * @param string $word
+     * @param string $isoCode Use ISO_639 (2 or 3 letters) or language name in english
+     * @return void
+     */
+    public static function stem(string $word, string $isoCode)
+    {
+        self::$stemmer = self::$stemmer ?? new StemmerManager;
+        return self::$stemmer->stem($word, $isoCode);
     }
 }
