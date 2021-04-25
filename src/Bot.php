@@ -84,6 +84,14 @@ class Bot
                     'charset'   => 'utf8mb4',
                     'collation' => 'utf8mb4_unicode_ci',
                 ],
+                'pgsql' => [
+                    'host'      => 'localhost',
+                    'database'  => 'telegram_test',
+                    'username'  => 'pgsql',
+                    'password'  => 'pgsql',
+                    'charset'   => 'utf8mb4',
+                    'collation' => 'utf8mb4_unicode_ci',
+                ],
             ],
             'cache' => [
                 'enable' => false,
