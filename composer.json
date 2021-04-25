@@ -1,16 +1,23 @@
 {
     "name": "chipslays/litegram",
     "description": "Simple, flexible, modular library for Telegram Bot Api.",
+    "type": "library",
+    "license": "MIT",
     "keywords": [
         "telegram",
         "bot",
         "api"
     ],
-    "type": "library",
-    "license": "MIT",
+    "authors": [
+        {
+            "name": "Chipslays",
+            "email": "hello@chipslays.ru"
+        }
+    ],
     "require": {
-        "chipslays/collection": "^1.0",
         "chipslays/event": "^1.0",
+        "chipslays/sauce": "^1.0",
+        "chipslays/collection": "^1.0",
         "illuminate/database": "^8.29",
         "respect/validation": "^2.2",
         "wamania/php-stemmer": "2.0"
