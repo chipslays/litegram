@@ -15,6 +15,9 @@ use Litegram\Traits\Telegram\Aliases;
 use Litegram\Traits\Telegram\Methods;
 use Litegram\Traits\Telegram\Replies;
 use Litegram\Support\Collection;
+use Sauce\Traits\Call;
+use Sauce\Traits\Mappable;
+use Sauce\Traits\Singleton;
 
 class Bot
 {
@@ -29,11 +32,9 @@ class Bot
     use Filter;
     use Middleware;
     use Components;
-
-    /**
-     * @var array
-     */
-    private static $instances = [];
+    use Singleton;
+    use Mappable;
+    use Call;
 
     /**
      *
@@ -138,6 +139,10 @@ class Bot
         ],
     ];
 
+    protected function __construct()
+    {
+    }
+
     /**
      * Contains '*.chat.id' or '*.from.id' from Telegram update.
      *
@@ -154,70 +159,6 @@ class Bot
      * @var int
      */
     private $__startAt;
-
-    /**
-     * @var array
-     */
-    protected static $mapped = [];
-
-    public static function map(string $method, $func) : void
-    {
-        if (method_exists(self::class, $method) || array_key_exists($method, self::$mapped)) {
-            throw new \Exception("Cannot override an existing `{$method}` method.");
-        }
-
-        self::$mapped[$method] = $func;
-    }
-
-    public static function mapOnce(string $method, $func) : void
-    {
-        if (method_exists(self::class, $method) || array_key_exists($method, self::$mapped)) {
-            throw new \Exception("Cannot override an existing `{$method}` method.");
-        }
-
-        self::$mapped[$method] = self::getInstance()->call($func);
-    }
-
-    public function __call($method, $args)
-    {
-        $fn = self::$mapped[$method];
-        return is_callable($fn) || class_exists($fn) ? $this->call($fn, $args) : $fn;
-    }
-
-    public static function __callStatic($method, $args)
-    {
-        $fn = self::$mapped[$method];
-        return is_callable($fn) || class_exists($fn) ? self::getInstance()->call($fn, $args) : $fn;
-    }
-
-    protected function __construct()
-    {
-    }
-
-    protected function __clone()
-    {
-    }
-
-    public function __wakeup()
-    {
-    }
-
-    private function __sleep()
-    {
-    }
-
-    /**
-     * @return Bot
-     */
-    public static function getInstance(): Bot
-    {
-        $cls = static::class;
-        if (!isset(self::$instances[$cls])) {
-            self::$instances[$cls] = new static();
-        }
-
-        return self::$instances[$cls];
-    }
 
     /**
      * @param string|array $token
@@ -360,32 +301,12 @@ class Bot
      * Call anonymous function or class string (className@doSomething)
      *
      * @param callable|string $fn
-     * @param array $parameters
+     * @param array|string $parameters
      * @return void
      */
     public function call($fn, $parameters = [])
     {
-        if (is_callable($fn)) {
-            return call_user_func_array($fn, $parameters);
-        } elseif (stripos($fn, '@') !== false) {
-            [$controller, $method] = explode('@', $fn);
-
-            try {
-                $reflectedMethod = new \ReflectionMethod($controller, $method);
-                if ($reflectedMethod->isPublic() && (!$reflectedMethod->isAbstract())) {
-                    if ($reflectedMethod->isStatic()) {
-                        return forward_static_call_array(array($controller, $method), $parameters);
-                    } else {
-                        if (is_string($controller)) {
-                            $controller = new $controller();
-                        }
-                        return call_user_func_array(array($controller, $method), $parameters);
-                    }
-                }
-            } catch (\ReflectionException $reflectionException) {
-                // nothing...
-            }
-        }
+        $this->__call_function($fn, (array) $parameters);
     }
 
     /**
