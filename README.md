@@ -2,6 +2,22 @@
 
 Simple, flexible, modular library based on events for Telegram Bot Api.
 
+## Features
+* Events based;
+* Database (Laravel);
+* Support Cache (Redis, Memcached);
+* Middlewares;
+* Localization;
+* States;
+* Sessions;
+* Store (Flat files, Database);
+* Collect Statistics;
+* Manage users;
+* Modules and Components;
+* Talk (Chain Conversation);
+* Validation;
+* Stemming;
+
 ## Installation
 
 ### Library
