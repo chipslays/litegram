@@ -347,14 +347,7 @@ class Bot
     public function chain(string $current, ?string $next, $func, array $excepts = [])
     {
         if ($excepts !== []) {
-            // foreach ($excepts as $values) {
-            //     foreach((array) $values as $path => $value) {
-            //         if (Update::get($path) == $value) {
-            //             return $this;
-            //         }
-            //     }
-            // }
-            if ($this->has($excepts, Update::toArray())) {
+            if ($this->in($excepts, Update::toArray())) {
                 return true;
             }
         }
@@ -383,9 +376,16 @@ class Bot
         return Session::get('__chain');
     }
 
-    public function has($needles, $haystack)
+    /**
+     * Like 'on' method, but returns `bool` if items in array $hasystack.
+     *
+     * @param string|array $needles
+     * @param array $haystack
+     * @return bool
+     */
+    public function in($needles, array $haystack = [])
     {
-        $haystack = new Collection($haystack);
+        $haystack = $haystack ? new Collection($haystack) : $this->update();
 
         foreach ($needles as $item) {
             foreach ((array) $item as $key => $value) {
