@@ -105,6 +105,8 @@ class User extends Module
             'version' => self::$config->get('bot.version'), // последняя версия бота с которой взаимодействовал юзер
         ];
 
+        $data = array_merge($data, self::$config->get('modules.user.data', []));
+
         Database::table('users')->insert($data);
 
         self::$userData = (array) self::getDataById(self::$currentUserId);

@@ -76,7 +76,7 @@ class Session extends Module
      *
      * @param string $name
      * @param mixed $default
-     * @return void
+     * @return mixed
      */
     public static function get(string $name, $default = null)
     {

@@ -310,11 +310,11 @@ class Bot
      *
      * @param callable|string $fn
      * @param array|string $parameters
-     * @return void
+     * @return mixed
      */
     public function call($fn, $parameters = [])
     {
-        $this->__call_function($fn, (array) $parameters);
+        return $this->__call_function($fn, (array) $parameters);
     }
 
     /**
@@ -347,10 +347,15 @@ class Bot
     public function chain(string $current, ?string $next, $func, array $excepts = [])
     {
         if ($excepts !== []) {
-            foreach ($excepts as $path => $value) {
-                if (Update::get($path) == $value) {
-                    return $this;
-                }
+            // foreach ($excepts as $values) {
+            //     foreach((array) $values as $path => $value) {
+            //         if (Update::get($path) == $value) {
+            //             return $this;
+            //         }
+            //     }
+            // }
+            if ($this->has($excepts, Update::toArray())) {
+                return true;
             }
         }
 
@@ -366,6 +371,92 @@ class Bot
         }
 
         return $this;
+    }
+
+    /**
+     * Get current name of chain.
+     *
+     * @return string|int
+     */
+    public function currentChain()
+    {
+        return Session::get('__chain');
+    }
+
+    public function has($needles, $haystack)
+    {
+        $haystack = new Collection($haystack);
+
+        foreach ($needles as $item) {
+            foreach ((array) $item as $key => $value) {
+                /**
+                 * Force execute event
+                 * on(true, ..., ...)
+                 */
+                if ($value === true) {
+                    return true;
+                    break;
+                }
+
+                /**
+                 * [['key' => 'value'], ...]
+                 */
+                if (is_array($value)) {
+                    $key = key($value);
+                    $value = $value[$key];
+                }
+
+                /**
+                 * ['key'] or 'key'
+                 */
+                if (is_numeric($key) && $haystack->has($value)) {
+                    return true;
+                    break;
+                }
+
+                /**
+                 * Get value by key, if not exists then skip iteration.
+                 * ['key' => 'value']
+                 */
+                if (!$received = $haystack->get($key)) {
+                    continue;
+                }
+
+                /**
+                 * ['key' => 'value']
+                 */
+                if ($received == $value) {
+                    return true;
+                    break;
+                }
+
+                /**
+                 * ['key' => 'my name is {name}']
+                 *
+                 * command(?: (.*?))?(?: (.*?))?$
+                 *
+                 * {text} - required text
+                 * {:text?} - optional text
+                 */
+                $value = preg_replace('~.?{:(.*?)\?}~', '(?: (.*?))?', $value);
+                $pattern = '~^' . preg_replace('/{(.*?)}/', '(.*?)', $value) . '$~';
+
+                if (@preg_match_all($pattern, $received, $matches)) {
+                    return true;
+                    break;
+                }
+
+                /**
+                 * ['key' => '/regex/i]
+                 */
+                if (@preg_match_all($value, $received, $matches)) {
+                    return true;
+                    break;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

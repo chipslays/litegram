@@ -50,6 +50,10 @@ trait Events
      */
     public function on($event, $callback, int $sort = LITEGRAM_DEFAULT_EVENT_SORT)
     {
+        if (!$this->canContinueEvent()) {
+            return $this;
+        }
+
         $this->addEvent($event, $callback, $sort);
 
         return $this;
