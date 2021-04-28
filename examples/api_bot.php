@@ -13,6 +13,9 @@ $bot->on('message.text', function () use ($bot) {
         'chat_id' => update('message.from.id'),
         'text' => 'Hello!',
     ]);
+
+    $bot->sendMessage(update('message.from.id'), 'Hello!');
+    $bot->replyMessage('Hello!');
 });
 
 $bot->on(['message.text' => 'hello'], function () use ($bot) {
