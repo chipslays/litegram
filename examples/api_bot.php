@@ -30,6 +30,11 @@ $bot->hear(['hello', '/^holla$/i'], function () {
     say('Hello!');
 });
 
+$bot->command('test:{id}', function ($id) {
+    notify('Just test.'); // notification in caht
+    notify('Just test.', true); // modal window
+});
+
 $bot->command('ban {user} {time?}', function ($user, $time = null) {
     echo "Banned: {$user}, time: " . $time ?? strtotime('+7 days');
 });
