@@ -1,5 +1,8 @@
 # 🍃 Litegram
 
+![Packagist Version](https://img.shields.io/packagist/v/chipslays/litegram?color=2)
+![GitHub](https://img.shields.io/github/license/chipslays/litegram?color=blue)
+
 Simple, flexible, modular library based on events for Telegram Bot Api.
 
 Litegram can be used as a regular lightweight library or as a framework with added of modules.
