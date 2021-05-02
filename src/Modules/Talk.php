@@ -80,7 +80,7 @@ class Talk extends Module
     }
 
     /**
-     * @param text $text
+     * @param string $text
      * @return array
      */
     private static function prepareText(string $text)
