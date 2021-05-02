@@ -53,7 +53,14 @@ class Store extends Module
         }
     }
 
-    public static function set(string $name, $value = null)
+    /**
+     * Set value.
+     *
+     * @param string $name
+     * @param mixed $value
+     * @return void
+     */
+    public static function set(string $name, $value = null) : void
     {
         $origName = $name;
         $name = md5($name);
@@ -75,6 +82,29 @@ class Store extends Module
         }
     }
 
+    /**
+     * Push to array new item `key => value`.
+     *
+     * @param string $name
+     * @param string|int $key
+     * @param mixed $value
+     * @return void
+     */
+    public static function push(string $name, $key, $value) : void
+    {
+        $name = md5($name);
+        $array = self::get($name, []);
+        $array[$key] = $value;
+        self::set($name, $array);
+    }
+
+    /**
+     * Get value from store data.
+     *
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
+     */
     public static function get(string $name, $default = null)
     {
         $origName = $name;
@@ -95,6 +125,43 @@ class Store extends Module
         }
     }
 
+    /**
+     * Get and delete value from store.
+     *
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
+     */
+    public static function pull(string $name, $default = null)
+    {
+        $origName = $name;
+        $name = md5($name);
+
+        switch (self::$driver) {
+            case 'file':
+                $value = self::has($origName) ? unserialize(file_get_contents(self::$dir . "/{$name}")) : $default;
+                self::delete($name);
+                return $value;
+                break;
+
+            case 'database':
+                $value = self::has($origName) ? unserialize(base64_decode(Database::table('store')->select('value')->where('name', $name)->first()->value)) : $default;
+                self::delete($name);
+                return $value;
+                break;
+
+            default:
+                $value = self::has($origName) ? Arr::get(self::$data, $name, $default) : $default;
+                self::delete($name);
+                return $value;
+                break;
+        }
+    }
+
+    /**
+     * @param string $name
+     * @return boolean
+     */
     public static function has(string $name): bool
     {
         $name = md5($name);
@@ -114,6 +181,10 @@ class Store extends Module
         }
     }
 
+    /**
+     * @param string $name
+     * @return void
+     */
     public static function delete(string $name)
     {
         $name = md5($name);

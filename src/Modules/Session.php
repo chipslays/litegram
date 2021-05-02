@@ -51,21 +51,21 @@ class Session extends Module
      */
     public static function set(string $name, $value = null): void
     {
-        $name = self::$userId . '_' . md5($name);
+        $name = self::buildName($name);
         Store::set($name, $value);
     }
 
     /**
-     * Add to session data as array `key => value`.
+     * Push to array new item `key => value`.
      *
      * @param string $name
      * @param string|int $key
      * @param mixed $value
      * @return void
      */
-    public static function add(string $name, $key, $value): void
+    public static function push(string $name, $key, $value): void
     {
-        $name = self::$userId . '_' . md5($name);
+        $name = self::buildName($name);
         $data = Store::get($name, []);
         $data[$key] = $value;
         Store::set($name, $data);
@@ -80,8 +80,21 @@ class Session extends Module
      */
     public static function get(string $name, $default = null)
     {
-        $name = self::$userId . '_' . md5($name);
+        $name = self::buildName($name);
         return Store::get($name, $default);
+    }
+
+    /**
+     * Get and delete value from session.
+     *
+     * @param string $name
+     * @param mixed $default
+     * @return mixed
+     */
+    public static function pull(string $name, $default = null)
+    {
+        $name = self::buildName($name);
+        return Store::pull($name, $default);
     }
 
     /**
@@ -90,7 +103,7 @@ class Session extends Module
      */
     public static function has(string $name): bool
     {
-        $name = self::$userId . '_' . md5($name);
+        $name = self::buildName($name);
         return Store::has($name);
     }
 
@@ -100,7 +113,12 @@ class Session extends Module
      */
     public static function delete(string $name): void
     {
-        $name = self::$userId . '_' . md5($name);
+        $name = self::buildName($name);
         Store::delete($name);
+    }
+
+    protected static function buildName($name)
+    {
+        return self::$userId . '_' . md5($name);
     }
 }
