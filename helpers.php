@@ -247,11 +247,11 @@ if (!function_exists('store')) {
 
 if (!function_exists('user')) {
     /**
-     * @return User
+     * @return \stdClass|User
      */
-    function user()
+    function user($userId = null)
     {
-        return new User;
+        return $userId ? User::getDataById($userId) : new User;
     }
 }
 
