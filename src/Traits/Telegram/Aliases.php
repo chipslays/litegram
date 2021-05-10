@@ -3,13 +3,15 @@
 namespace Litegram\Traits\Telegram;
 
 use Litegram\Bot;
-use Litegram\Support\Collection;
-use Litegram\Support\Util;
 use Litegram\Update;
+use Litegram\Support\Util;
+use Litegram\Support\Collection;
 
 trait Aliases
 {
     /**
+     * Reply to message by chat or user ID.
+     *
      * @param string|int $chatId
      * @param string|int $messageId
      * @param string $text
@@ -27,6 +29,8 @@ trait Aliases
     }
 
     /**
+     * Just send message for icoming chat or user.
+     *
      * @param string $text
      * @param string|null $keyboard
      * @param array $extra
@@ -43,6 +47,8 @@ trait Aliases
     }
 
     /**
+     * Reply to incoming message.
+     *
      * @param string $text
      * @param string|null $keyboard
      * @param array $extra
@@ -59,6 +65,10 @@ trait Aliases
     }
 
     /**
+     * Send notification or alert.
+     *
+     * Works only for callback.
+     *
      * @param string $text
      * @param boolean $showAlert
      * @param array $extra
@@ -74,6 +84,8 @@ trait Aliases
     }
 
     /**
+     * Send caht action: typing and etc...
+     *
      * @param string $action
      * @param array $extra
      * @return Bot
@@ -89,6 +101,8 @@ trait Aliases
     }
 
     /**
+     * Send dice and other emojis.
+     *
      * @param string $emoji
      * @param string|null $keyboard
      * @param array $extra
