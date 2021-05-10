@@ -52,6 +52,30 @@ class Update
         }
     }';
 
+    public const START = '{
+        "update_id": 31348350,
+        "message": {
+            "message_id": 44414,
+            "from": {
+                "id": 436432850,
+                "is_bot": false,
+                "first_name": "чипсы",
+                "last_name": "лейс",
+                "username": "chipslays",
+                "language_code": "en"
+            },
+            "chat": {
+                "id": 436432850,
+                "first_name": "чипсы",
+                "last_name": "лейс",
+                "username": "chipslays",
+                "type": "private"
+            },
+            "date": 1605891721,
+            "text": "/start"
+        }
+    }';
+
     public const CALLBACK_QUERY = '{
         "update_id": 163399206,
         "callback_query": {
