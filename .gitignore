@@ -7,4 +7,5 @@ examples/storage/store/*
 examples/bot.php
 examples/config.php
 .phpdoc
+phpdoc
 phpdoc.phar
