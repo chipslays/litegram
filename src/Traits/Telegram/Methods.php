@@ -3,9 +3,15 @@
 namespace Litegram\Traits\Telegram;
 
 use Litegram\Support\Util;
+use Litegram\Support\Collection;
 
 trait Methods
 {
+    /**
+     * @param string $url
+     * @param array $extra
+     * @return Collection
+     */
     public function setWebhook($url = null, $extra = [])
     {
         if (!$url) {
@@ -15,6 +21,10 @@ trait Methods
         return $this->method(__FUNCTION__, array_merge(['url' => $url, 'max_connections' => 100], $extra));
     }
 
+    /**
+     * @param boolean $dropPendingUpdates
+     * @return Collection
+     */
     public function deleteWebhook($dropPendingUpdates = false)
     {
         return $this->method(__FUNCTION__, [
@@ -22,21 +32,36 @@ trait Methods
         ]);
     }
 
+    /**
+     * @return Collection
+     */
     public function getWebhookInfo()
     {
         return $this->method(__FUNCTION__);
     }
 
+    /**
+     * @return Collection
+     */
     public function logOut()
     {
         return $this->method(__FUNCTION__);
     }
 
+    /**
+     * @return Collection
+     */
     public function close()
     {
         return $this->method(__FUNCTION__);
     }
 
+    /**
+     * @param integer $offset
+     * @param integer $limit
+     * @param array $extra
+     * @return Collection
+     */
     public function getUpdates($offset = 0, $limit = 100, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -45,6 +70,11 @@ trait Methods
         ], null, $extra));
     }
 
+    /**
+     * @param string|int $chatId
+     * @param string $action
+     * @return Collection
+     */
     public function sendChatAction($chatId, $action = 'typing')
     {
         return $this->method(__FUNCTION__, [
@@ -72,6 +102,13 @@ trait Methods
         ], $keyboard, $extra));
     }
 
+    /**
+     * @param string|int $chatId
+     * @param string|int $fromChatId
+     * @param string|int $messageId
+     * @param array $extra
+     * @return Collection
+     */
     public function forwardMessage($chatId, $fromChatId, $messageId, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -81,6 +118,13 @@ trait Methods
         ], null, $extra));
     }
 
+    /**
+     * @param string|int $chatId
+     * @param string|int $fromChatId
+     * @param string|int $messageId
+     * @param array $extra
+     * @return Collection
+     */
     public function copyMessage($chatId, $fromChatId, $messageId, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -90,11 +134,18 @@ trait Methods
         ], null, $extra));
     }
 
+    /**
+     * @return Collection
+     */
     public function getMe()
     {
         return $this->method(__FUNCTION__);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function sendPhoto($chatId, $photo, $caption = '', $keyboard = null, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -104,6 +155,10 @@ trait Methods
         ], $keyboard, $extra), true);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function sendAudio($chatId, $audio, $caption = '', $keyboard = null, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -113,6 +168,10 @@ trait Methods
         ], $keyboard, $extra), true);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function sendDocument($chatId, $document, $caption = '', $keyboard = null, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -122,6 +181,10 @@ trait Methods
         ], $keyboard, $extra), true);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function sendAnimation($chatId, $animation, $caption = '', $keyboard = null, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -131,6 +194,10 @@ trait Methods
         ], $keyboard, $extra), true);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function sendVideo($chatId, $video, $caption = '', $keyboard = null, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -140,6 +207,10 @@ trait Methods
         ], $keyboard, $extra), true);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function sendVideoNote($chatId, $videoNote, $keyboard = null, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -148,6 +219,10 @@ trait Methods
         ], $keyboard, $extra), true);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function sendSticker($chatId, $sticker, $keyboard = null, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -156,6 +231,10 @@ trait Methods
         ], $keyboard, $extra), true);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function sendVoice($chatId, $voice, $caption = '', $keyboard = null, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -165,6 +244,10 @@ trait Methods
         ], $keyboard, $extra), true);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function sendMediaGroup($chatId, array $media, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -173,6 +256,10 @@ trait Methods
         ], null, $extra), true);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function sendLocation($chatId, $latitude, $longitude, $keyboard = null, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -182,6 +269,10 @@ trait Methods
         ], $keyboard, $extra));
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function sendDice($chatId, $emoji = '🎲', $keyboard = null, $extra = [])
     {
         $emoji = str_ireplace(['dice', 'кубик'], '🎲', $emoji);
@@ -196,6 +287,10 @@ trait Methods
         ], $keyboard, $extra));
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function getUserProfilePhotos($userId, $offset = 0, $limit = 100)
     {
         return $this->method(__FUNCTION__, [
@@ -205,6 +300,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function getFile($fileId)
     {
         return $this->method(__FUNCTION__, [
@@ -212,6 +311,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function kickChatMember($chatId, $userId, $untilDate)
     {
         return $this->method(__FUNCTION__, [
@@ -221,6 +324,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function unbanChatMember($chatId, $userId)
     {
         return $this->method(__FUNCTION__, [
@@ -229,6 +336,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function restrictChatMember($chatId, $userId, $permissions, $untilDate = false)
     {
         return $this->method(__FUNCTION__, [
@@ -239,6 +350,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function promoteChatMember($chatId, $userId, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -247,6 +362,10 @@ trait Methods
         ], null, $extra));
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function setChatAdministratorCustomTitle($chatId, $userId, string $title = '')
     {
         return $this->method(__FUNCTION__, [
@@ -256,6 +375,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function setChatPermissions($chatId, $permissions)
     {
         return $this->method(__FUNCTION__, [
@@ -264,6 +387,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function exportChatInviteLink($chatId)
     {
         return $this->method(__FUNCTION__, [
@@ -380,6 +507,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function deleteChatPhoto($chatId)
     {
         return $this->method(__FUNCTION__, [
@@ -387,6 +518,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function setChatTitle($chatId, string $title = '')
     {
         return $this->method(__FUNCTION__, [
@@ -395,6 +530,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function setChatDescription($chatId, string $description = '')
     {
         return $this->method(__FUNCTION__, [
@@ -403,6 +542,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function pinChatMessage($chatId, $messageId, $disableNotification = false)
     {
         return $this->method(__FUNCTION__, [
@@ -412,6 +555,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function unpinChatMessage($chatId, $messageId)
     {
         return $this->method(__FUNCTION__, [
@@ -420,6 +567,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function unpinAllChatMessages($chatId)
     {
         return $this->method(__FUNCTION__, [
@@ -427,6 +578,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function leaveChat($chatId)
     {
         return $this->method(__FUNCTION__, [
@@ -434,6 +589,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function getChat($chatId)
     {
         return $this->method(__FUNCTION__, [
@@ -441,6 +600,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function getChatAdministrators($chatId)
     {
         return $this->method(__FUNCTION__, [
@@ -448,6 +611,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function getChatMembersCount($chatId)
     {
         return $this->method(__FUNCTION__, [
@@ -455,6 +622,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function getChatMember($chatId, $userId)
     {
         return $this->method(__FUNCTION__, [
@@ -463,6 +634,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function setChatStickerSet($chatId, $stickerSetName)
     {
         return $this->method(__FUNCTION__, [
@@ -471,6 +646,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function deleteChatStickerSet($chatId)
     {
         return $this->method(__FUNCTION__, [
@@ -478,6 +657,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function editMessageText($messageId, $chatId, $text = '', $keyboard = null, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -487,6 +670,10 @@ trait Methods
         ], $keyboard, $extra));
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function editMessageCaption($messageId, $chatId, $caption = '', $keyboard = null, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -496,6 +683,10 @@ trait Methods
         ], $keyboard, $extra));
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function editMessageMedia($messageId, $chatId, $media, $keyboard = null, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -505,6 +696,10 @@ trait Methods
         ], $keyboard, $extra));
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function editMessageReplyMarkup($messageId, $chatId, $keyboard = null, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -513,6 +708,10 @@ trait Methods
         ], $keyboard, $extra));
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function deleteMessage($messageId, $chatId)
     {
         return $this->method(__FUNCTION__, [
@@ -521,6 +720,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function getStickerSet($name)
     {
         return $this->method(__FUNCTION__, [
@@ -528,6 +731,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function deleteStickerFromSet($sticker)
     {
         return $this->method(__FUNCTION__, [
@@ -535,6 +742,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function uploadStickerFile($userId, $pngSticker)
     {
         return $this->method(__FUNCTION__, [
@@ -543,6 +754,10 @@ trait Methods
         ], true);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function createNewStickerSet($userId, $name, $title, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -552,6 +767,10 @@ trait Methods
         ], null, $extra), isset($extra['tgs_sticker']));
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function addStickerToSet($userId, $name, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -560,6 +779,10 @@ trait Methods
         ], null, $extra), isset($extra['tgs_sticker']));
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function sendGame($chatId, $gameShortName, $keyboard = null, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
@@ -568,11 +791,19 @@ trait Methods
         ], $keyboard, $extra));
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function answerCallbackQuery($extra = [])
     {
         return $this->method(__FUNCTION__, $extra);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function answerInlineQuery(array $results = [], $extra = [])
     {
         return $this->method(__FUNCTION__, array_merge([
@@ -581,6 +812,10 @@ trait Methods
         ], $extra));
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function setMyCommands($commands)
     {
         return $this->method(__FUNCTION__, [
@@ -588,6 +823,10 @@ trait Methods
         ]);
     }
 
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function getMyCommands()
     {
         return $this->method(__FUNCTION__);
