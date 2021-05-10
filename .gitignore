@@ -6,3 +6,5 @@ examples/storage/store/*
 !examples/storage/store/.gitkeep
 examples/bot.php
 examples/config.php
+.phpdoc
+phpdoc.phar
