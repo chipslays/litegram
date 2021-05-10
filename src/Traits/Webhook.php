@@ -34,7 +34,9 @@ trait Webhook
 
         $this->defaultIdForReply = $this->update('*.chat.id', $this->update('*.from.id'));
 
-        $this->addModule(Update::class);
+        if (!$this->isModuleExists('update')) {
+            $this->addModule(Update::class);
+        }
 
         // Отпускаем Telegram, чтобы он не ждал и не блокировал остальные запросы.
         if (php_sapi_name() !== 'cli') {
