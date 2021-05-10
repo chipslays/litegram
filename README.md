@@ -94,15 +94,15 @@ require 'vendor/autoload.php';
 
 $bot = bot($config)->webhook();
 
-$bot->addModule(Database::class)
-    ->addModule(Store::class)
-    ->addModule(User::class)
-    ->addModule(Session::class)
-    ->addModule(State::class)
-    ->addModule(Localization::class)
-    ->addModule(Statistics::class)
-    ->addModule(Logger::class)
-    ->addModule(Talk::class);
+$bot->addModule(Litegram\Modules\Database::class)
+    ->addModule(Litegram\Modules\Store::class)
+    ->addModule(Litegram\Modules\User::class)
+    ->addModule(Litegram\Modules\Session::class)
+    ->addModule(Litegram\Modules\State::class)
+    ->addModule(Litegram\Modules\Localization::class)
+    ->addModule(Litegram\Modules\Statistics::class)
+    ->addModule(Litegram\Modules\Logger::class)
+    ->addModule(Litegram\Modules\Talk::class);
 
 // Do something...
 
