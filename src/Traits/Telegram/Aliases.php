@@ -2,12 +2,21 @@
 
 namespace Litegram\Traits\Telegram;
 
+use Litegram\Bot;
 use Litegram\Support\Collection;
 use Litegram\Support\Util;
 use Litegram\Update;
 
 trait Aliases
 {
+    /**
+     * @param string|int $chatId
+     * @param string|int $messageId
+     * @param string $text
+     * @param string|null $keyboard
+     * @param array $extra
+     * @return Collection
+     */
     public function sendReply($chatId, $messageId, $text = '', $keyboard = null, $extra = [])
     {
         return $this->method('sendMessage', $this->buildRequestParams([
@@ -17,6 +26,12 @@ trait Aliases
         ], $keyboard, $extra));
     }
 
+    /**
+     * @param string $text
+     * @param string|null $keyboard
+     * @param array $extra
+     * @return Collection
+     */
     public function say($text, $keyboard = null, $extra = [])
     {
         return $this->sendMessage(
@@ -27,6 +42,12 @@ trait Aliases
         );
     }
 
+    /**
+     * @param string $text
+     * @param string|null $keyboard
+     * @param array $extra
+     * @return Collection
+     */
     public function reply($text, $keyboard = null, $extra = [])
     {
         return $this->sendMessage(
@@ -37,6 +58,12 @@ trait Aliases
         );
     }
 
+    /**
+     * @param string $text
+     * @param boolean $showAlert
+     * @param array $extra
+     * @return Collection
+     */
     public function notify($text = '', $showAlert = false, $extra = [])
     {
         return $this->method('answerCallbackQuery', $this->buildRequestParams([
@@ -46,6 +73,11 @@ trait Aliases
         ], null, $extra));
     }
 
+    /**
+     * @param string $action
+     * @param array $extra
+     * @return Bot
+     */
     public function action($action = 'typing', $extra = [])
     {
         return $this->method('sendChatAction', $this->buildRequestParams([
@@ -56,6 +88,12 @@ trait Aliases
         return $this;
     }
 
+    /**
+     * @param string $emoji
+     * @param string|null $keyboard
+     * @param array $extra
+     * @return Collection
+     */
     public function dice($emoji = '🎲', $keyboard = null, $extra = [])
     {
         return $this->sendDice($this->defaultIdForReply, $emoji, $keyboard, $extra);
