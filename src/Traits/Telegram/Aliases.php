@@ -4,6 +4,7 @@ namespace Litegram\Traits\Telegram;
 
 use Litegram\Support\Collection;
 use Litegram\Support\Util;
+use Litegram\Update;
 
 trait Aliases
 {
@@ -142,7 +143,7 @@ trait Aliases
     }
 
     /**
-     * Edit source message received from callback.
+     * Auto detect caption or text callback.
      *
      * @param string $text
      * @param string|null $keyboard
@@ -150,6 +151,36 @@ trait Aliases
      * @return Collection
      */
     public function editCallbackMessage(string $text, $keyboard = null, $extra = [])
+    {
+        if (Update::isCaption()) {
+            return $this->editMessageCaption(
+                $this->update('callback_query.message.message_id'),
+                $this->update('callback_query.from.id'),
+                $text,
+                $keyboard,
+                $extra
+            );
+        } else {
+            return $this->editMessageText(
+                $this->update('callback_query.message.message_id'),
+                $this->update('callback_query.from.id'),
+                $text,
+                $keyboard,
+                $extra
+            );
+        }
+
+    }
+
+    /**
+     * Edit source message received from callback.
+     *
+     * @param string $text
+     * @param string|null $keyboard
+     * @param array $extra
+     * @return Collection
+     */
+    public function editCallbackText(string $text, $keyboard = null, $extra = [])
     {
         return $this->editMessageText(
             $this->update('callback_query.message.message_id'),

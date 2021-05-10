@@ -165,11 +165,11 @@ trait Methods
         ], $keyboard, $extra), true);
     }
 
-    public function sendMediaGroup($chatId, $media, $extra = [])
+    public function sendMediaGroup($chatId, array $media, $extra = [])
     {
         return $this->method(__FUNCTION__, $this->buildRequestParams([
             'chat_id' => $chatId,
-            'media' => $media,
+            'media' => json_encode($media),
         ], null, $extra), true);
     }
 
