@@ -74,6 +74,19 @@ class Migration
                 $table->string('file_id', 255)->nullable();
             });
         }
+
+        if (!$schema->hasTable('mailing')) {
+            $schema->create('mailing', function ($table) {
+                $table->id();
+                $table->bigInteger('date');
+                $table->text('text')->nullable();
+                $table->string('lang', 12);
+                $table->string('status', 32);
+                $table->string('type', 48);
+                $table->text('file')->nullable();
+                $table->string('report')->nullable();
+            });
+        }
     }
 
     /**
@@ -90,5 +103,6 @@ class Migration
         $schema->dropIfExists('stats_users');
         $schema->dropIfExists('stats_messages');
         $schema->dropIfExists('messages');
+        $schema->dropIfExists('mailing');
     }
 }
