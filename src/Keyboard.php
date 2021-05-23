@@ -24,6 +24,10 @@ class Keyboard
      */
     public static function show($keyboard, bool $oneTime = false, bool $resize = true, bool $selective = false)
     {
+        if ($keyboard === false) {
+            return self::hide();
+        }
+
         if (!is_array($keyboard)) {
             $keyboard = self::$keyboards[$keyboard];
         }
