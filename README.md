@@ -24,6 +24,10 @@ Litegram can be used as a regular lightweight library or as a framework with add
 * Validation;
 * Stemming;
 
+## [VS Code Extension](https://marketplace.visualstudio.com/items?itemName=chipslays.litegram-snippets)
+
+Install [Litegram Snippets](https://marketplace.visualstudio.com/items?itemName=chipslays.litegram-snippets) extension for VS Code to increase productivity.
+
 ## Installation
 
 ### Library
