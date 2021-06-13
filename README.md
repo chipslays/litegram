@@ -37,7 +37,7 @@ Install as simple library:
 $ composer require chipslays/litegram
 ```
 
-### [Litegram Skeleton](https://github.com/chipslays/litegram-skeleton)
+### [Litegram Skeleton](https://github.com/chipslays/litegram-skeleton) (Now Private and Not Available 🙄)
 
 Create ready for use skeleton project (framework?🤔):
 
