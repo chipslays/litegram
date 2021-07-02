@@ -114,10 +114,10 @@ $bot->addModule(Litegram\Modules\Database::class)
 $bot->run();
 ```
 
-More examples you can see [`here`](https://github.com/chipslays/litegram/tree/master/examples).
+More examples you can see [`here`](https://github.com/chipslays/litegram/tree/v2.x.x/examples).
 
 ## Documentation
-Documentation can be found [`here`](https://github.com/chipslays/litegram/tree/master/docs).
+Documentation can be found [`here`](https://github.com/chipslays/litegram/tree/v2.x.x/docs).
 
 ## License
 Released under the MIT public license. See the enclosed [`LICENSE`](https://github.com/chipslays/litegram/tree/master/LICENSE.md) for details.
