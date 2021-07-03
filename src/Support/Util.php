@@ -184,7 +184,7 @@ class Util
      *
      * @param string $string
      * @param boolean $position
-     * @return void
+     * @return string
      */
     public static function incrementAphanumeric($string, $position = false)
     {
@@ -524,5 +524,19 @@ class Util
     {
         self::$stemmer = self::$stemmer ?? new StemmerManager;
         return self::$stemmer->stem($word, $isoCode);
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Model|object $user
+     * @return string
+     */
+    public static function mentionByUser($user)
+    {
+        return '<a href="tg://user?id=' . $user->user_id . '">' . $user->fullname . '</a>';
+    }
+
+    public static function mention($name, $id)
+    {
+        return '<a href="tg://user?id=' . $id . '">' . $name . '</a>';
     }
 }
