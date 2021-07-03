@@ -24,6 +24,10 @@ Litegram can be used as a regular lightweight library or as a framework with add
 * Validation;
 * Stemming;
 
+## [VS Code Extension](https://marketplace.visualstudio.com/items?itemName=chipslays.litegram-snippets)
+
+Install [Litegram Snippets](https://marketplace.visualstudio.com/items?itemName=chipslays.litegram-snippets) extension for VS Code to increase productivity.
+
 ## Installation
 
 ### Library
@@ -33,7 +37,7 @@ Install as simple library:
 $ composer require chipslays/litegram
 ```
 
-### [Litegram Skeleton](https://github.com/chipslays/litegram-skeleton)
+### [Litegram Skeleton](https://github.com/chipslays/litegram-skeleton) (Now Private and Not Available 🙄)
 
 Create ready for use skeleton project (framework?🤔):
 
@@ -110,10 +114,10 @@ $bot->addModule(Litegram\Modules\Database::class)
 $bot->run();
 ```
 
-More examples you can see [`here`](https://github.com/chipslays/litegram/tree/master/examples).
+More examples you can see [`here`](https://github.com/chipslays/litegram/tree/v2.x.x/examples).
 
 ## Documentation
-Documentation can be found [`here`](https://github.com/chipslays/litegram/tree/master/docs).
+Documentation can be found [`here`](https://github.com/chipslays/litegram/tree/v2.x.x/docs).
 
 ## License
 Released under the MIT public license. See the enclosed [`LICENSE`](https://github.com/chipslays/litegram/tree/master/LICENSE.md) for details.
