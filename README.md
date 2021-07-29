@@ -1,7 +1,6 @@
 # 🍃 Litegram
 
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/chipslays/litegram/tests)
-![Packagist Version](https://img.shields.io/packagist/v/chipslays/litegram?color=2)
 ![GitHub](https://img.shields.io/github/license/chipslays/litegram?color=blue)
 
 Simple, flexible, modular library based on events for Telegram Bot Api.
