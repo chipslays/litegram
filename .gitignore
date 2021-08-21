@@ -1,6 +1,8 @@
 .vscode
 vendor
 composer.lock
+examples/storage/*
+!examples/storage/.gitkeep
 examples/storage/logs/*.log
 examples/storage/store/*
 !examples/storage/store/.gitkeep
