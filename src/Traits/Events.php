@@ -60,6 +60,13 @@ trait Events
 
     public function run()
     {
+        foreach ($this->plugins as $plugin) {
+            if (!method_exists($this->$plugin, 'beforeRun')) {
+                continue;
+            }
+            call_user_func_array([$this->$plugin, 'beforeRun'], []);
+        }
+
         if ($this->beforeCallbacks !== []) {
             ksort($this->beforeCallbacks);
             $this->beforeCallbacks = call_user_func_array('array_merge', $this->beforeCallbacks);
@@ -72,6 +79,13 @@ trait Events
             if (!$this->runAllEvents()) {
                 $this->executeDefaultAnswers();
             }
+        }
+
+        foreach ($this->plugins as $plugin) {
+            if (!method_exists($this->$plugin, 'afterRun')) {
+                continue;
+            }
+            call_user_func_array([$this->$plugin, 'afterRun'], []);
         }
 
         if ($this->afterCallbacks !== []) {

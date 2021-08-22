@@ -99,6 +99,30 @@ class Bot
                     ],
                 ],
             ],
+            'localization' => [
+                'driver' => 'yaml',
+                'drivers' => [
+                    'yaml' => [
+                        'path' => '/path/to/locales/yaml',
+                    ],
+                    'json' => [
+                        'path' => '/path/to/locales/json',
+                    ],
+                ],
+                'fallback' => 'en',
+            ],
+            'logger' => [
+                'path' => '/path/to/logs',
+                'autolog' => false,
+                'pastly' => [
+                    'token' => '1627406735:rO0jr-wMn5ZleI6hiKfKQ4aJZyYFaKN5TDoWmj-5V2',
+                    'title' => 'Litegram Log',
+                    'type' => 'private',
+                    'expiration' => null,
+                    'password' => '',
+                    'syntax' => 'text',
+                ],
+            ],
         ],
     ];
 
