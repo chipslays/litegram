@@ -17,11 +17,13 @@
     "require": {
         "chipslays/event": "^1.0",
         "chipslays/sauce": "^1.0",
+        "chipslays/phrase": "^1.0",
         "chipslays/collection": "^1.0",
         "illuminate/database": "^8.29",
-        "respect/validation": "^2.2",
         "wamania/php-stemmer": "2.0",
-        "opis/closure": "^3.6"
+        "respect/validation": "^2.2",
+        "opis/closure": "^3.6",
+        "chipslays/pastly-api": "^1.1"
     },
     "autoload": {
         "psr-4": {
