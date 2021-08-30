@@ -3,11 +3,16 @@
 namespace Litegram;
 
 use Litegram\Exceptions\LitegramException;
+use Litegram\Plugins\Localization;
 use Litegram\Plugins\Session;
 use Litegram\Support\Collection;
 use Litegram\Traits\Ask;
+use Litegram\Traits\Chain;
+use Litegram\Traits\Components;
 use Litegram\Traits\Events;
+use Litegram\Traits\Filter;
 use Litegram\Traits\Http\Request;
+use Litegram\Traits\Middleware;
 use Litegram\Traits\Plugins;
 use Litegram\Traits\Telegram\Aliases;
 use Litegram\Traits\Telegram\Methods;
@@ -22,6 +27,10 @@ use stdClass;
  */
 class Bot
 {
+    use Chain;
+    use Filter;
+    use Middleware;
+    use Components;
     use Ask;
     use Plugins;
     use Aliases;
@@ -77,11 +86,12 @@ class Bot
                 'driver' => 'mysql',
                 'drivers' => [
                     'sqlite' => [
+                        'prefix' => 'litegram_',
                         'database' => 'path/to/database.sqlite',
                     ],
                     'mysql' => [
                         'host'      => 'localhost',
-                        'prefix'    => 'litegram',
+                        'prefix'    => 'litegram_',
                         'database'  => 'litegram',
                         'username'  => 'litegram',
                         'password'  => 'litegram',
@@ -90,7 +100,7 @@ class Bot
                     ],
                     'pgsql' => [
                         'host'      => 'localhost',
-                        'prefix'    => 'litegram',
+                        'prefix'    => 'litegram_',
                         'database'  => 'litegram',
                         'username'  => 'litegram',
                         'password'  => 'litegram',
@@ -122,6 +132,12 @@ class Bot
                     'password' => '',
                     'syntax' => 'text',
                 ],
+            ],
+        ],
+        'components' => [
+            'vendor.component' => [
+                'enable' => false,
+                'entrypoint' => __DIR__ . '/component.php',
             ],
         ],
     ];
@@ -255,33 +271,36 @@ class Bot
                     $this->call($callback, [$this->payload(), $this]);
                 }
 
-                // check answer for our question
-                $question = Session::pull('litegram:question');
-                if ($question && !$this->in($question['except'], $this->payload()->toArray())) {
-
-                    // callback
-                    if ($this->in($question['accept'], $this->payload()->toArray())) {
-                        if ($this->call($question['callback'], [$this->payload(), $this]) === false) {
-                            // if we not accept this answer, reqeustion
-                            Session::set('litegram:question', $question);
-                        }
-                    }
-
-                    // fallback
-                    else {
-                        $this->call($question['fallback'], [$this->payload(), $this]);
-                        Session::set('litegram:question', $question);
-                    }
-
-                    $this->skip();
-                }
-
                 $this->run();
 
                 // resets for new handle
                 $this->events = [];
                 $this->skip(false);
             }
+        }
+    }
+
+    private function checkAnswer()
+    {
+        // check answer for our question
+        $question = Session::pull('litegram:question');
+        if ($question && !$this->in($question['except'], $this->payload()->toArray())) {
+
+            // callback
+            if ($this->in($question['accept'], $this->payload()->toArray())) {
+                if ($this->call($question['callback'], [$this->payload(), $this]) === false) {
+                    // if we not accept this answer, reqeustion
+                    Session::set('litegram:question', $question);
+                }
+            }
+
+            // fallback
+            else {
+                $this->call($question['fallback'], [$this->payload(), $this]);
+                Session::set('litegram:question', $question);
+            }
+
+            $this->skip();
         }
     }
 
@@ -443,5 +462,23 @@ class Bot
         }
 
         return false;
+    }
+
+    /**
+     * @param string $text
+     * @return string
+     */
+    public function localify(string $text)
+    {
+        if (
+            mb_substr($text, 0, 2) == '{{'
+            && mb_substr($text, -2) == '}}'
+            && substr_count($text, ' ') <= 2
+        ) {
+            preg_match('~{{(.+?)}}~u', $text, $matches);
+            return Localization::get(trim($matches[1]));
+        }
+
+        return $text;
     }
 }

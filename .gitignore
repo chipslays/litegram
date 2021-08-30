@@ -3,7 +3,8 @@ vendor
 composer.lock
 examples/storage/*
 !examples/storage/.gitkeep
-examples/storage/logs/*.log
+examples/logs/*
+!examples/logs/.gitkeep
 examples/storage/store/*
 !examples/storage/store/.gitkeep
 examples/bot.php
@@ -12,3 +13,4 @@ examples/config.php
 phpdoc
 phpdoc.phar
 test.php
+component.php

@@ -98,7 +98,7 @@ trait Methods
     {
         return $this->api(__FUNCTION__, $this->buildRequestParams([
             'chat_id' => $chatId,
-            'text' => $text,
+            'text' => $this->localify($text),
         ], $keyboard, $extra));
     }
 
@@ -150,7 +150,7 @@ trait Methods
     {
         return $this->api(__FUNCTION__, $this->buildRequestParams([
             'chat_id' => $chatId,
-            'caption' => $caption,
+            'caption' => $this->localify($caption),
             'photo' => $photo,
         ], $keyboard, $extra), true);
     }
@@ -163,7 +163,7 @@ trait Methods
     {
         return $this->api(__FUNCTION__, $this->buildRequestParams([
             'chat_id' => $chatId,
-            'caption' => $caption,
+            'caption' => $this->localify($caption),
             'audio' => $audio,
         ], $keyboard, $extra), true);
     }
@@ -176,7 +176,7 @@ trait Methods
     {
         return $this->api(__FUNCTION__, $this->buildRequestParams([
             'chat_id' => $chatId,
-            'caption' => $caption,
+            'caption' => $this->localify($caption),
             'document' => $document,
         ], $keyboard, $extra), true);
     }
@@ -189,7 +189,7 @@ trait Methods
     {
         return $this->api(__FUNCTION__, $this->buildRequestParams([
             'chat_id' => $chatId,
-            'caption' => $caption,
+            'caption' => $this->localify($caption),
             'animation' => $animation,
         ], $keyboard, $extra), true);
     }
@@ -202,7 +202,7 @@ trait Methods
     {
         return $this->api(__FUNCTION__, $this->buildRequestParams([
             'chat_id' => $chatId,
-            'caption' => $caption,
+            'caption' => $this->localify($caption),
             'video' => $video,
         ], $keyboard, $extra), true);
     }
@@ -239,7 +239,7 @@ trait Methods
     {
         return $this->api(__FUNCTION__, $this->buildRequestParams([
             'chat_id' => $chatId,
-            'caption' => $caption,
+            'caption' => $this->localify($caption),
             'voice' => $voice,
         ], $keyboard, $extra), true);
     }
@@ -665,7 +665,7 @@ trait Methods
         return $this->api(__FUNCTION__, $this->buildRequestParams([
             'chat_id' => $chatId,
             'message_id' => $messageId,
-            'text' => $text,
+            'text' => $this->localify($text),
         ], $keyboard, $extra));
     }
 
@@ -678,7 +678,7 @@ trait Methods
         return $this->api(__FUNCTION__, $this->buildRequestParams([
             'chat_id' => $chatId,
             'message_id' => $messageId,
-            'caption' => $caption,
+            'caption' => $this->localify($caption),
         ], $keyboard, $extra));
     }
 

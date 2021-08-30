@@ -58,7 +58,7 @@ trait Aliases
     {
         return $this->sendMessage(
             $this->defaultIdForReply,
-            Util::shuffle($text),
+            $text,
             $keyboard,
             array_merge($extra, ['reply_to_message_id' => $this->payload('*.message_id')])
         );

@@ -67,6 +67,10 @@ trait Events
             call_user_func_array([$this->$plugin, 'beforeRun'], []);
         }
 
+        $this->loadComponents();
+
+        $this->checkAnswer();
+
         if ($this->beforeCallbacks !== []) {
             ksort($this->beforeCallbacks);
             $this->beforeCallbacks = call_user_func_array('array_merge', $this->beforeCallbacks);

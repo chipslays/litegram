@@ -30,10 +30,6 @@ class Database extends Capsule
     {
         $config = Bot::getInstance()->config();
 
-        if (!$config->get('modules.database.enable')) {
-            return;
-        }
-
         $driver = $config->get('plugins.database.driver');
         $config = $config->get("plugins.database.drivers.{$driver}");
         $config['driver'] = $driver;

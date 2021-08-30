@@ -52,7 +52,7 @@ class Storage extends AbstractPlugin
                 break;
 
             case 'database':
-                if (!self::$bot->isModuleExists('database')) {
+                if (!self::$bot->isPluginExists('database')) {
                     throw new LitegramPluginException("Please, add `database` plugin before add `storage` module.");
                 }
                 break;
