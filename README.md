@@ -9,7 +9,7 @@ Simple, flexible, modular library based on events for Telegram Bot Api.
 
 Litegram can be used as a regular lightweight library or as a framework with added of plugins.
 
-## Features
+## ⭐ Features
 * Events based;
 * Support Cache (Redis, Memcached);
 * Middlewares;
@@ -25,7 +25,7 @@ Litegram can be used as a regular lightweight library or as a framework with add
 * Plugins and Components;
 * Support Webhooks & Simple long-polling;
 
-## Installation
+## 🔩 Installation
 
 ### Library
 Download library via Composer:
@@ -54,7 +54,7 @@ $ php lite migration:up
 
 🎉 Congratulation, bot project was set up.
 
-## Examples
+## 💡 Examples
 
 ```php
 require 'vendor/autoload.php';
@@ -76,12 +76,12 @@ $bot->run();
 
 More examples you can see [`here`](https://github.com/chipslays/litegram/tree/v3.x.x/examples).
 
-## Documentation
+## 📖 Documentation
 Documentation can be found [`here`](https://github.com/chipslays/litegram/tree/v3.x.x/docs).
 
-## [VS Code Extension](https://marketplace.visualstudio.com/items?itemName=chipslays.litegram-snippets)
+## [🧩 VS Code Extension](https://marketplace.visualstudio.com/items?itemName=chipslays.litegram-snippets)
 
 Install [Litegram Snippets](https://marketplace.visualstudio.com/items?itemName=chipslays.litegram-snippets) extension for VS Code to increase productivity.
 
-## License
+## 🔑 License
 Released under the MIT public license. See the enclosed [`LICENSE`](https://github.com/chipslays/litegram/tree/v3.x.x/LICENSE.md) for details.
