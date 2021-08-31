@@ -2,7 +2,7 @@
 
 namespace Litegram\Debug;
 
-class Update
+class Payloads
 {
     public const MESSAGE = '{
         "update_id": 31348350,
