@@ -31,7 +31,7 @@ class Talk extends AbstractPlugin
      */
     public static function boot($text = null): void
     {
-        self::$text = self::prepareText($text ?? self::$payload->get('message.text'));
+        self::$text = self::prepareText($text ?? self::$payload->get('message.text', ''));
     }
 
     /**

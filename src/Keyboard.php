@@ -19,13 +19,19 @@ class Keyboard
      * TODO: сделать тру универсал и учесть эту херню выше.
      *
      * @param array|string $keyboard Массив с клавиатурой или ключ ранее добалвенной клавиатуры
+     * @param string|null $placeholder Текст плейсхолдера в поле ввода
      * @param boolean $oneTime True - показать один раз, False - не прятать клавиатуру после нажатия
      * @param boolean $resize True - vаленькая клавиатура, False - большая клавиатура
      * @param boolean $selective True - персольная клавиатура для юзера, False - для всех юзеров
      * @return string
      */
-    public static function show($keyboard, bool $oneTime = false, bool $resize = true, bool $selective = false)
-    {
+    public static function show(
+        $keyboard,
+        ?string $placeholder = null,
+        bool $oneTime = false,
+        bool $resize = true,
+        bool $selective = false
+    ) {
         if ($keyboard === false) {
             return self::hide();
         }
@@ -52,6 +58,10 @@ class Keyboard
             'selective' => $selective,
         ];
 
+        if ($placeholder && trim($placeholder) !== '') {
+            $markup['input_field_placeholder'] = $placeholder;
+        }
+
         return json_encode($markup);
     }
 
@@ -59,13 +69,19 @@ class Keyboard
      * Обычная клавиатура.
      *
      * @param array|string $keyboard
+     * @param string|null $placeholder Текст плейсхолдера в поле ввода
      * @param boolean $oneTime
      * @param boolean $resize
      * @param boolean $selective
      * @return void
      */
-    public static function markup($keyboard, bool $oneTime = false, bool $resize = true, bool $selective = false)
-    {
+    public static function markup(
+        $keyboard,
+        ?string $placeholder = null,
+        bool $oneTime = false, bool
+        $resize = true, bool
+        $selective = false
+    ) {
         if (!is_array($keyboard)) {
             $keyboard = self::$keyboards[$keyboard];
         }
@@ -76,6 +92,10 @@ class Keyboard
             'one_time_keyboard' => $oneTime,
             'selective' => $selective,
         ];
+
+        if ($placeholder && trim($placeholder) !== '') {
+            $markup['input_field_placeholder'] = $placeholder;
+        }
 
         return json_encode($markup);
     }
@@ -109,6 +129,7 @@ class Keyboard
             $keyboard = self::$keyboards[$keyboard];
         }
 
+        // encode callback_data
         if (Bot::getInstance()->config('telegram.safe_callback')) {
             foreach ($keyboard as &$item) {
                 $item = array_map(function ($value) {
@@ -127,13 +148,19 @@ class Keyboard
      * Отправляет клавиатуру с запросом контакта.
      *
      * @param string $text
+     * @param string|null $placeholder Текст плейсхолдера в поле ввода
      * @param boolean $resize
      * @param boolean $oneTime
      * @param boolean $selective
      * @return string
      */
-    public static function contact(string $text = 'Contact', $resize = true, $oneTime = false, $selective = false)
-    {
+    public static function contact(
+        string $text = 'Contact',
+        ?string $placeholder = null,
+        $resize = true,
+        $oneTime = false,
+        $selective = false
+    ) {
         $keyboard = [
             [
                 'text' => $text,
@@ -148,6 +175,10 @@ class Keyboard
             'selective' => $selective,
         ];
 
+        if ($placeholder && trim($placeholder) !== '') {
+            $markup['input_field_placeholder'] = $placeholder;
+        }
+
         return json_encode($markup);
     }
 
@@ -155,13 +186,19 @@ class Keyboard
      * Отправляет клавиатуру с запросом местоположения.
      *
      * @param string $text
+     * @param string|null $placeholder Текст плейсхолдера в поле ввода
      * @param boolean $resize
      * @param boolean $oneTime
      * @param boolean $selective
      * @return string
      */
-    public static function location(string $text = 'Location', $resize = true, $oneTime = false, $selective = false)
-    {
+    public static function location(
+        string $text = 'Location',
+        ?string $placeholder = null,
+        $resize = true,
+        $oneTime = false,
+        $selective = false
+    ) {
         $keyboard = [
             [
                 'text' => $text,
@@ -175,6 +212,29 @@ class Keyboard
             'one_time_keyboard' => $oneTime,
             'selective' => $selective,
         ];
+
+        if ($placeholder && trim($placeholder) !== '') {
+            $markup['input_field_placeholder'] = $placeholder;
+        }
+
+        return json_encode($markup);
+    }
+
+    /**
+     * @param string|null $placeholder Текст плейсхолдера в поле ввода
+     * @param boolean $selective
+     * @return void
+     */
+    public static function forceReply(?string $placeholder = null, bool $selective = false)
+    {
+        $markup = [
+            'force_reply' => true,
+            'selective' => $selective,
+        ];
+
+        if ($placeholder && trim($placeholder) !== '') {
+            $markup['input_field_placeholder'] = $placeholder;
+        }
 
         return json_encode($markup);
     }

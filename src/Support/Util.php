@@ -3,7 +3,7 @@
 namespace Litegram\Support;
 
 use Litegram\Bot;
-use Litegram\Update;
+use Litegram\Payload;
 use Wamania\Snowball\StemmerManager;
 
 /**
@@ -485,9 +485,9 @@ class Util
     {
         if (!$inline) {
             if (Bot::getInstance()->config('telegram.safe_callback')) {
-                $inline = self::decodeInlineKeyboard(Update::get('callback_query.message.reply_markup.inline_keyboard'));
+                $inline = self::decodeInlineKeyboard(Payload::get('callback_query.message.reply_markup.inline_keyboard'));
             } else {
-                $inline = Update::get('callback_query.message.reply_markup.inline_keyboard');
+                $inline = Payload::get('callback_query.message.reply_markup.inline_keyboard');
             }
         }
 

@@ -227,9 +227,11 @@ class Bot
             $this->finishRequest($this->config('bot.timelimit', 1800));
         }
 
-        if (!$this->hasUpdate()) {
+        if (!$this->hasPayload()) {
             throw new LitegramException("All right, but not have payload from Telegram.", 1);
         }
+
+        $this->decodeCallback();
 
         Payload::make($this->payload()->toArray());
 
@@ -263,6 +265,8 @@ class Bot
 
                 $offset = $update['update_id'] + 1;
 
+                $this->decodeCallback();
+
                 Payload::make($this->payload()->toArray());
 
                 $this->defaultIdForReply = $this->payload('*.chat.id', $this->payload('*.from.id'));
@@ -278,6 +282,30 @@ class Bot
                 $this->skip(false);
             }
         }
+    }
+
+    /**
+     * Декодирует входящий параметр data у callback_query
+     *
+     * @return void
+     */
+    private function decodeCallback()
+    {
+        if (!$this->config('telegram.safe_callback')) {
+            return;
+        }
+
+        if (!$data = $this->payload('callback_query.data')) {
+            return;
+        }
+
+        $data = @gzinflate(base64_decode($data));
+
+        if (!$data) {
+            return;
+        }
+
+        $this->payload()->set('callback_query.data', $data);
     }
 
     private function checkAnswer()
@@ -356,11 +384,11 @@ class Bot
     }
 
     /**
-     * Is there an update from Telegram.
+     * Is there an payload from Telegram.
      *
      * @return boolean
      */
-    public function hasUpdate(): bool
+    public function hasPayload(): bool
     {
         return $this->data !== [];
     }

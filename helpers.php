@@ -1,9 +1,9 @@
 <?php
 
 use Litegram\Bot;
-use Litegram\Update;
 use Litegram\Keyboard;
 use Litegram\Debug\Debug;
+use Litegram\Payload;
 use Litegram\Support\Util;
 use Litegram\Support\Validate;
 use Litegram\Support\Collection;
@@ -47,18 +47,31 @@ if (!function_exists('method')) {
     }
 }
 
+if (!function_exists('forceReply')) {
+    /**
+     * @param string|null $placeholder Текст плейсхолдера в поле ввода
+     * @param boolean $selective
+     * @return void
+     */
+    function forceReply(?string $placeholder = null, bool $selective = false)
+    {
+        Keyboard::forceReply($placeholder, $selective);
+    }
+}
+
 if (!function_exists('keyboard')) {
     /**
      * Если передать параметры будет вызван метод Keyboard::show().
      * Пустые параметры возвращают объект Keyboard.
      *
      * @param boolean $keyboard
+     * @param string|null $placeholder Текст плейсхолдера в поле ввода
      * @param boolean $oneTime
      * @param boolean $resize
      * @param boolean $selective
      * @return string|Keyboard
      */
-    function keyboard($keyboard = false, $oneTime = false, $resize = true, $selective = false)
+    function keyboard($keyboard = false, ?string $placeholder = null, $oneTime = false, $resize = true, $selective = false)
     {
         if (!func_num_args()) {
             return new Keyboard;
@@ -165,15 +178,15 @@ if (!function_exists('dice')) {
     }
 }
 
-if (!function_exists('update')) {
+if (!function_exists('payload')) {
     /**
      * @param string $key
      * @param mixed $default
-     * @return mixed|Update
+     * @return mixed|Payload
      */
-    function update($path = null, $default = null)
+    function payload($path = null, $default = null)
     {
-        return $path ? Update::get($path, $default) : new Update;
+        return $path ? Payload::get($path, $default) : new Payload;
     }
 }
 

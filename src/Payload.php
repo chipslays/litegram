@@ -8,18 +8,12 @@ use Litegram\Support\Collection;
 class Payload
 {
     /**
-     * @var Bot
-     */
-    private static $bot = null;
-
-    /**
      * @var Collection
      */
     private static $payload;
 
     public static function make(array $payload)
     {
-        self::$bot = Bot::getInstance();
         self::$payload = new Collection($payload);
     }
 
@@ -234,7 +228,7 @@ class Payload
             return false;
         }
 
-        return in_array(mb_substr($text, 0, 1, 'utf-8'), self::$bot->getCommandTags());
+        return in_array(mb_substr($text, 0, 1, 'utf-8'), Bot::getInstance()->getCommandTags());
     }
 
     /**

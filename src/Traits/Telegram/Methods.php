@@ -315,7 +315,7 @@ trait Methods
      * @TODO
      * @return Collection
      */
-    public function kickChatMember($chatId, $userId, $untilDate)
+    public function banChatMember($chatId, $userId, $untilDate)
     {
         return $this->api(__FUNCTION__, [
             'chat_id' => $chatId,
@@ -614,7 +614,7 @@ trait Methods
      * @TODO
      * @return Collection
      */
-    public function getChatMembersCount($chatId)
+    public function getChatMemberCount($chatId)
     {
         return $this->api(__FUNCTION__, [
             'chat_id' => $chatId,
