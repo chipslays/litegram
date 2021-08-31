@@ -66,6 +66,9 @@ $bot->command('start', function () use ($bot) {
     });
 });
 
+// or
+$bot->command('start', 'BotController@startConversation');
+
 $bot->run();
 ```
 
