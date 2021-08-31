@@ -37,7 +37,7 @@ class Migration
                 $table->string('version');
                 $table->bigInteger('first_message');
                 $table->bigInteger('last_message');
-                $table->mediumText('json')->nullable();
+                $table->json('data')->nullable();
                 $table->text('note')->nullable();
             });
         }
