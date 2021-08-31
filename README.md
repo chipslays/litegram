@@ -27,7 +27,6 @@ Litegram can be used as a regular lightweight library or as a framework with add
 
 ## 🔩 Installation
 
-### Library
 Download library via Composer:
 
 ```bash
@@ -35,6 +34,8 @@ $ composer require chipslays/litegram
 ```
 
 ### Litegram Project
+
+You can use a ready-made and configured project for a quick start.
 
 1️⃣ Create project:
 
