@@ -26,7 +26,7 @@ Litegram can be used as a regular lightweight library or as a framework with add
 ## Installation
 
 ### Library
-Install as simple library:
+Download library via Composer:
 
 ```bash
 $ composer require chipslays/litegram
@@ -34,13 +34,13 @@ $ composer require chipslays/litegram
 
 ### Litegram Project
 
-Create ready for use project (framework?🤔):
+1️⃣ Create project:
 
 ```bash
 $ composer create-project chipslays/litegram-skeleton MySuperDuperBot
 ```
 
-Finally type in Terminal:
+2️⃣ Change the parameters of the configs and finally type in Terminal:
 
 ```bash
 $ php lite webhook:set
