@@ -24,12 +24,12 @@ class Migration
                 $table->string('lastname')->nullable();
                 $table->string('username')->nullable();
                 $table->string('locale')->default('en');
-                $table->string('phone');
+                $table->string('phone')->nullable();
                 $table->string('nickname')->nullable();
                 $table->string('emoji')->nullable();
                 $table->string('role')->default('user')->nullable();
                 $table->boolean('blocked')->default(0);
-                $table->boolean('banned');
+                $table->boolean('banned')->default(0);
                 $table->text('ban_comment')->nullable();
                 $table->bigInteger('ban_start')->nullable();
                 $table->bigInteger('ban_end')->nullable();
@@ -37,7 +37,7 @@ class Migration
                 $table->string('version');
                 $table->bigInteger('first_message');
                 $table->bigInteger('last_message');
-                $table->json('data')->nullable();
+                $table->json('extra')->nullable();
                 $table->text('note')->nullable();
             });
         }

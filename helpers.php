@@ -7,14 +7,13 @@ use Litegram\Debug\Debug;
 use Litegram\Support\Util;
 use Litegram\Support\Validate;
 use Litegram\Support\Collection;
-use Litegram\Modules\User;
-use Litegram\Modules\Cache;
-use Litegram\Modules\State;
-use Litegram\Modules\Store;
-use Litegram\Modules\Logger;
-use Litegram\Modules\Session;
-use Litegram\Modules\Database;
-use Litegram\Modules\Localization;
+use Litegram\Plugins\User;
+use Litegram\Plugins\Cache;
+use Litegram\Plugins\Storage;
+use Litegram\Plugins\Logger;
+use Litegram\Plugins\Session;
+use Litegram\Plugins\Database;
+use Litegram\Plugins\Localization;
 
 if (!function_exists('bot')) {
     /**
@@ -235,13 +234,13 @@ if (!function_exists('cache')) {
     }
 }
 
-if (!function_exists('store')) {
+if (!function_exists('storage')) {
     /**
-     * @return Store
+     * @return Storage
      */
-    function store()
+    function storage()
     {
-        return new Store;
+        return new Storage;
     }
 }
 
@@ -252,16 +251,6 @@ if (!function_exists('user')) {
     function user($userId = null)
     {
         return $userId ? User::getDataById($userId) : new User;
-    }
-}
-
-if (!function_exists('state')) {
-    /**
-     * @return State
-     */
-    function state()
-    {
-        return new State;
     }
 }
 

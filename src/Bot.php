@@ -161,7 +161,7 @@ class Bot
      * @param array $config Array of config
      * @return Bot
      */
-    public function make($token, array $config = null)
+    public function auth($token, array $config = null)
     {
         // auth by config as array
         if (is_array($token)) {

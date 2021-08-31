@@ -2,9 +2,9 @@
 
 namespace Litegram\Plugins;
 
-use Litegram\Payload;
-use Litegram\Plugins\Database;
 use Litegram\Plugins\AbstractPlugin;
+use Litegram\Database\Models\User as UserModel;
+use Litegram\Payload;
 use Litegram\Support\Collection;
 
 class User extends AbstractPlugin
@@ -21,18 +21,16 @@ class User extends AbstractPlugin
         'database',
     ];
 
-    /**
-     * @var int
-     */
     private static $currentUserId;
 
-    /**
-     * @return string
-     */
+    private static $user;
+
     private static $userData = [];
 
     private static $firstTime = false;
+
     private static $newVersion = false;
+
     private static $floodTime;
 
     /**
@@ -42,17 +40,22 @@ class User extends AbstractPlugin
     {
         self::$currentUserId = self::$payload->get('*.from.id');
 
-        // если юзер существует, получаем данные и пропускаем остальное
-        if (self::exists(self::$currentUserId)) {
-            self::$userData = (array) self::getDataById(self::$currentUserId);
+        self::$user = UserModel::find(self::$currentUserId);
+
+        if (self::$user) {
+            // we getting exists user
+            self::$userData = self::$user->toArray();
             self::diffBotVersion();
             return;
         }
 
-        // если юзер не существует в базе, добавляем
+        // insert new user
+        $insert = [];
+
+        // get source (deeplink)
         $source = null;
         $text = self::$payload->get('*.text');
-        if (Payload::isCommand() && $text && stripos($text, '/start') !== false) {
+        if (Payload::isCommand() && stripos($text, '/start') !== false) {
             $text = explode(' ', $text);
             if (is_array($text) && count($text) > 1) {
                 unset($text[0]);
@@ -60,22 +63,20 @@ class User extends AbstractPlugin
             }
         }
 
-        self::$firstTime = true;
-
-        // Создаем новую запись о юзере
         $from = new Collection(self::$payload->get('*.from'));
-        $firstname = $from->get('first_name', null);
-        $lastname = $from->get('last_name', null);
+        $firstname = trim($from->get('first_name', null));
+        $lastname = trim($from->get('last_name', null));
 
-        $data = [
-            // Общная информация
-            'user_id' => $from->get('id', null), // telegram id юзера
-            'active' => 1, // юзер не заблокировал бота
+        $insert = [
+            // Общая информация
+            'id' => self::$currentUserId, // telegram id юзера
+            'blocked' => 0, // юзер не заблокировал бота
             'fullname' => trim("{$firstname} {$lastname}"), // имя фамилия
             'firstname' => $firstname, // имя
             'lastname' => $lastname, // фамилия
             'username' => $from->get('username', null), // telegram юзернейм
-            'locale' => $from->get('language_code', self::$config->get('localization.default_language', 'en')), // язык
+            'photo' => null, // фото
+            'locale' => $from->get('language_code', self::$config->get('plugins.localization.fallback', 'en')), // язык
 
             // Сообщения
             'first_message' => time(), // первое сообщение (дата регистрации) (unix)
@@ -92,20 +93,23 @@ class User extends AbstractPlugin
             'role' => 'user', // группа юзера
             'nickname' => null, // никнейм (например для игровых ботов)
             'emoji' => null, // эмодзи/иконка (префикс)
+            'phone' => null, // телефон
 
             // json row
-            'extra' => '',
+            'extra' => null,
 
             // Служебное
             'note' => null, // заметка о юзере
             'version' => self::$config->get('bot.version'), // последняя версия бота с которой взаимодействовал юзер
         ];
 
-        $data = array_merge($data, self::$config->get('modules.user.data', []));
+        // merge default values from config for new user
+        $insert = array_merge($insert, self::$config->get('plugins.user.data', []));
 
-        Database::table('users')->insert($data);
+        self::$user = UserModel::firstOrCreate(['id' => self::$currentUserId], $insert);
+        self::$userData = self::$user->toArray();
 
-        self::$userData = (array) self::getDataById(self::$currentUserId);
+        self::$firstTime = true;
     }
 
     /**
@@ -113,20 +117,15 @@ class User extends AbstractPlugin
      */
     public static function afterRun(): void
     {
-        if (!self::$config->get('modules.user.enable')) {
-            return;
+        $update = array_merge([
+            'last_message' => time(),
+        ], self::getDiffUserData());
+
+        if (self::$userData['blocked']) {
+            $update['blocked'] = 0;
         }
 
-        if (!self::$userData['active']) {
-            self::update([
-                'active' => 1,
-                'last_message' => time(),
-            ]);
-        } else {
-            self::update([
-                'last_message' => time(),
-            ]);
-        }
+        self::update($update);
     }
 
     /**
@@ -136,7 +135,7 @@ class User extends AbstractPlugin
      */
     public static function updateById($userId, array $data = []): void
     {
-        Database::table('users')->where('user_id', $userId)->update($data);
+        UserModel::where('id', $userId)->update($data);
     }
 
     /**
@@ -145,7 +144,18 @@ class User extends AbstractPlugin
      */
     public static function update(array $data = []): void
     {
-        Database::table('users')->where('user_id', self::$currentUserId)->update($data);
+        UserModel::where('id', self::$currentUserId)->update($data);
+    }
+
+    /**
+     * @param string $key
+     * @param mixed $value
+     * @return void
+     */
+    public static function set($key, $value = null): void
+    {
+        self::$userData[$key] = $value;
+        self::update([$key => $value]);
     }
 
     /**
@@ -154,7 +164,7 @@ class User extends AbstractPlugin
      */
     public static function exists($userId): bool
     {
-        return Database::table('users')->where('user_id', $userId)->exists();
+        return UserModel::where('id', $userId)->exists();
     }
 
     /**
@@ -169,34 +179,10 @@ class User extends AbstractPlugin
         return isset(self::$userData[$key]) ? self::$userData[$key] : $default;
     }
 
-    /**
-     * Get user data from database by id.
-     *
-     * @param int|string $userId
-     * @return \stdClass
-     */
-    public static function getDataById($userId)
-    {
-        return Database::table('users')->where('user_id', $userId)->first();
-    }
-
-    /**
-     * @param string $key
-     * @param mixed $value
-     * @return void
-     */
-    public static function set($key, $value = null): void
-    {
-        self::$userData[$key] = $value;
-        Database::table('users')->where('user_id', self::$currentUserId)->update([$key => $value]);
-    }
-
     public static function save(): void
     {
         $userData = self::$userData;
-
         unset($userData['id']);
-
         self::update($userData);
     }
 
@@ -205,17 +191,30 @@ class User extends AbstractPlugin
         return self::get($key);
     }
 
+    /**
+     * Set localy value withou update in Model and Database.
+     */
     public function __set($key, $value)
     {
         self::$userData[$key] = $value;
     }
 
+    /**
+     * Get user data from database by id.
+     *
+     * @param int|string $userId
+     * @return \stdClass
+     */
+    public static function find($userId)
+    {
+        return UserModel::find($userId);
+    }
+
+
     public static function isFlood(): bool
     {
-        $timeout = self::$bot->config('user.flood_time');
-        $diffMessageTime = time() - self::$userData['last_message'];
-
-        $timeout = self::$bot->config('user.flood_time');
+        $timeout = self::$bot->config('plugins.user.flood_time');
+        $diffMessageTime = time() - self::$user->last_message;
 
         self::$floodTime = $timeout - $diffMessageTime;
 
@@ -239,12 +238,12 @@ class User extends AbstractPlugin
 
     public static function isBanned(): bool
     {
-        return self::$userData['banned'] == 1;
+        return self::$user->banned == 1;
     }
 
     public static function isAdmin(): bool
     {
-        $adminList = (array) self::$bot->config('admin.list', []);
+        $adminList = (array) self::$config->get('admin.list', []);
         if (array_key_exists(self::$payload->get('*.from.id'), $adminList) || array_key_exists(self::$payload->get('*.from.username'), $adminList)) {
             return true;
         }
@@ -262,5 +261,40 @@ class User extends AbstractPlugin
             self::update(['version' => $currentVersion]);
             self::$userData['version'] = $currentVersion;
         }
+    }
+
+    private static function getDiffUserData(): array
+    {
+        $from = new Collection(self::$payload->get('*.from'));
+
+        $firstname = trim($from->get('first_name', null));
+        $lastname = trim($from->get('last_name', null));
+        $username = trim($from->get('username', null));
+
+        $update = [];
+
+        if ($firstname !== self::$user->firstname) {
+            $update['firstname'] = $firstname;
+            $update['fullname'] = trim("{$firstname} {$lastname}");
+        }
+
+        if ($lastname !== self::$user->lastname) {
+            $update['lastname'] = $lastname;
+            $update['fullname'] = trim("{$firstname} {$lastname}");
+        }
+
+        if ($username !== self::$user->username) {
+            $update['username'] = $username;
+        }
+
+        return $update;
+    }
+
+    /**
+     * Retrive user model.
+     */
+    public static function model()
+    {
+        return self::$user;
     }
 }

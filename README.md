@@ -9,8 +9,6 @@ Simple, flexible, modular library based on events for Telegram Bot Api.
 
 Litegram can be used as a regular lightweight library or as a framework with added of plugins.
 
-
-
 ## Features
 * Events based;
 * Support Cache (Redis, Memcached);
