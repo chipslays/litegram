@@ -54,17 +54,30 @@ class Bot
      */
     private $config = [
         'bot' => [
-            'token' => null,
-            'parse_mode' => 'html',
+            'token' => '1234567890:BOT_TOKEN',
+            'handler' => 'https://example.com/webhook/handler.php',
+            'name' => 'Litegram',
+            'username' => 'litegram_bot',
             'timezone' => 'Europe/Samara',
-            'timelimit' => 1800,
+            'timelimit' => 120,
+            'version' => '1.0.0',
+        ],
+        'debug' => [
+            'enable' => true,
+            'developer' => '436432850',
+        ],
+        'admin' => [
+            'list' => [
+                'chipslays' => 'password',
+                '436432850' => 'password',
+            ],
         ],
         'plugins' => [
             'storage' => [
                 'driver' => null, // null - store data in RAM (useful for long-poll)
                 'drivers' => [
                     'file' => [
-                        'dir' => null,
+                        'dir' => 'path/to/storage',
                     ],
                     'database' => [],
                 ],
@@ -137,7 +150,7 @@ class Bot
         'components' => [
             'vendor.component' => [
                 'enable' => false,
-                'entrypoint' => __DIR__ . '/component.php',
+                'entrypoint' => 'components/vendor/component.php',
             ],
         ],
     ];
@@ -493,6 +506,8 @@ class Bot
     }
 
     /**
+     * Локализовать строку если содержит символы разметки локлизации.
+     *
      * @param string $text
      * @return string
      */

@@ -8,7 +8,7 @@ class Migration
 {
     /**
      * Создать таблицы.
-     * Перед использованием User, Store, Statistics плагинов с драйвером database, необходимо применить миграцию.
+     * Перед использованием плагинов User, Store, Statistics, etc., необходимо применить миграцию.
      *
      * @return void
      */
@@ -49,22 +49,6 @@ class Migration
             });
         }
 
-        if (!$schema->hasTable('stats_users')) {
-            $schema->create('stats_users', function ($table) {
-                $table->id();
-                $table->bigInteger('date')->nullable();
-                $table->integer('count')->nullable();
-            });
-        }
-
-        if (!$schema->hasTable('stats_messages')) {
-            $schema->create('stats_messages', function ($table) {
-                $table->id();
-                $table->bigInteger('date')->nullable();
-                $table->integer('count')->nullable();
-            });
-        }
-
         if (!$schema->hasTable('messages')) {
             $schema->create('messages', function ($table) {
                 $table->id();
@@ -73,6 +57,7 @@ class Migration
                 $table->string('type', 32)->nullable()->index();
                 $table->mediumText('text')->nullable();
                 $table->string('file_id', 255)->nullable();
+                $table->json('extra')->nullable();
             });
         }
 

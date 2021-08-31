@@ -2,6 +2,7 @@
 
 namespace Litegram\Plugins;
 
+use Litegram\Payload;
 use Pastly\Client;
 use Pastly\Expiration;
 use Pastly\Types\Paste;
@@ -37,11 +38,149 @@ class Logger extends AbstractPlugin
      */
     public static function afterRun(): void
     {
-        if (!self::$config->get('plugins.logger.autolog')) {
+        if (self::$config->get('plugins.logger.payload_log')) {
+            self::log(self::$payload->toArray(), 'payload', 'auto');
+        }
+
+        if (self::$config->get('plugins.logger.collect_messages')) {
+            self::collectMessages();
+        }
+    }
+
+    private static function collectMessages()
+    {
+        if (!self::$bot->hasPayload()) {
             return;
         }
 
-        self::log(self::$payload->toArray(), 'payload', 'auto');
+        $type = null;
+        $text = null;
+        $fileId = null;
+
+        if (Payload::isMessage() || Payload::isEditedMessage() || Payload::isCommand()) {
+            $type = 'message';
+            $text = Payload::get('*.text');
+        }
+
+        if (Payload::isInlineQuery()) {
+            $type = 'inline';
+            $text = Payload::get('inline_query.query');
+        }
+
+        if (Payload::isCallbackQuery()) {
+            $type = 'callback';
+            $text = Payload::get('callback_query.data');
+        }
+
+        if (Payload::isChannelPost() || Payload::isEditedChannelPost()) {
+            $type = 'post';
+            $text = Payload::get('*.text');
+        }
+
+        if (Payload::isPhoto()) {
+            $type = 'photo';
+
+            $text = Payload::get('*.caption');
+
+            $media = (array) Payload::get('*.photo');
+            $fileId = end($media)['file_id'] ?? null;
+        }
+
+        if (Payload::isAudio()) {
+            $type = 'audio';
+            $text = Payload::get('*.caption');
+
+            $media = (array) Payload::get('*.audio');
+            $fileId = $media['file_id'] ?? null;
+        }
+
+        if (Payload::isVideo()) {
+            $type = 'video';
+            $text = Payload::get('*.caption');
+
+            $media = (array) Payload::get('*.video');
+            $fileId = $media['file_id'] ?? null;
+        }
+
+        if (Payload::isVideoNote()) {
+            $type = 'videonote';
+            $text = Payload::get('*.caption');
+
+            $media = (array) Payload::get('*.video_note');
+            $fileId = $media['file_id'] ?? null;
+        }
+
+        if (Payload::isVoice()) {
+            $type = 'voice';
+            $text = Payload::get('*.caption');
+
+            $media = (array) Payload::get('*.voice');
+            $fileId = $media['file_id'] ?? null;
+        }
+
+        if (Payload::isDocument()) {
+            $type = 'document';
+            $text = Payload::get('*.caption');
+
+            $media = (array) Payload::get('*.document');
+            $fileId = $media['file_id'] ?? null;
+        }
+
+        if (Payload::isAnimation()) {
+            $type = 'gif';
+            $text = Payload::get('*.caption');
+
+            $media = (array) Payload::get('*.animation');
+            $fileId = $media['file_id'] ?? null;
+        }
+
+        if (Payload::isSticker()) {
+            $type = 'sticker';
+            $text = Payload::get('*.caption');
+
+            $media = (array) Payload::get('*.sticker');
+            $fileId = $media['file_id'] ?? null;
+        }
+
+        if (Payload::isContact()) {
+            $type = 'contact';
+            $phone = Payload::get('*.contact.phone_number');
+            $fname = Payload::get('*.contact.first_name');
+            $lname = Payload::get('*.contact.last_name');
+            $text = "{$phone} - {$fname} {$lname}";
+        }
+
+        if (Payload::isLocation()) {
+            $type = 'location';
+            $longitude = Payload::get('*.location.longitude');
+            $latitude = Payload::get('*.location.latitude');
+            $accuracy = Payload::get('*.location.horizontal_accuracy');
+            $text = "{$longitude}, {$latitude} {$accuracy}";
+        }
+
+        if (Payload::isVenue()) {
+            $type = 'venue';
+            $title = Payload::get('*.venue.title');
+            $address = Payload::get('*.venue.address');
+            $text = "{$title} - {$address}";
+        }
+
+        if (Payload::isDice()) {
+            $type = 'dice';
+            $emoji = Payload::get('*.dice.emoji');
+            $value = Payload::get('*.dice.value');
+            $text = "{$emoji}: {$value}";
+        }
+
+        $insert = [
+            'date' => time(),
+            'user_id' => self::$bot->payload('*.from.id'),
+            'type' => $type,
+            'text' => trim($text),
+            'file_id' => $fileId,
+        ];
+
+        Database::table('messages')->insert($insert);
     }
 
     /**
