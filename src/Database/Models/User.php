@@ -9,7 +9,7 @@ class User extends Model
     public $timestamps = false;
 
     protected $casts = [
-        'data' => 'array',
+        'extra' => 'array',
     ];
 
     protected $fillable = [
