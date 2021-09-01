@@ -3,6 +3,7 @@
 namespace Litegram;
 
 use Litegram\Exceptions\LitegramException;
+use Litegram\Plugins\Database;
 use Litegram\Plugins\Localization;
 use Litegram\Plugins\Session;
 use Litegram\Support\Collection;
@@ -77,7 +78,7 @@ class Bot
                 'driver' => null, // null - store data in RAM (useful for long-poll)
                 'drivers' => [
                     'file' => [
-                        'dir' => 'path/to/storage',
+                        'dir' => null,
                     ],
                     'database' => [],
                 ],
@@ -325,11 +326,12 @@ class Bot
     {
         // check answer for our question
         $question = Session::pull('litegram:question');
+
         if ($question && !$this->in($question['except'], $this->payload()->toArray())) {
 
             // callback
             if ($this->in($question['accept'], $this->payload()->toArray())) {
-                if ($this->call($question['callback'], [$this->payload(), $this]) === false) {
+                if ($this->call($question['callback'], [$this->payload()]) === false) {
                     // if we not accept this answer, reqeustion
                     Session::set('litegram:question', $question);
                 }
@@ -337,7 +339,7 @@ class Bot
 
             // fallback
             else {
-                $this->call($question['fallback'], [$this->payload(), $this]);
+                $this->call($question['fallback'], [$this->payload()]);
                 Session::set('litegram:question', $question);
             }
 
