@@ -37,7 +37,7 @@ $ composer require chipslays/litegram
 
 You can use a ready-made and configured [project](https://github.com/chipslays/litegram-project) for a quick start.
 
-See more inforamtion [here](https://github.com/chipslays/litegram-project).
+See more information [here](https://github.com/chipslays/litegram-project).
 
 1️⃣ Create project:
 
