@@ -43,12 +43,15 @@ class Storage extends AbstractPlugin
     {
         self::$driver = self::$config->get('plugins.storage.driver');
 
+        if (!self::$dir = self::$config->get('plugins.storage.drivers.file.dir')) {
+            throw new LitegramPluginException("Please, provide a storage directory [plugins.storage.drivers.file.dir], because selected driver is `file`.", 1);
+        }
+
+        self::$dir = rtrim(self::$dir, '\/');
+
         switch (self::$driver) {
             case 'file':
-                if (!self::$dir = self::$config->get('plugins.storage.drivers.file.dir')) {
-                    throw new LitegramPluginException("Please, provide a storage directory [plugins.storage.drivers.file.dir], because selected driver is `file`.", 1);
-                }
-                self::$dir = rtrim(self::$dir, '\/');
+                //
                 break;
 
             case 'database':
@@ -62,18 +65,24 @@ class Storage extends AbstractPlugin
         }
     }
 
-    public static function set(string $name, $value = null): void
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @param string|null $driver
+     * @return void
+     */
+    public static function set(string $name, $value = null, string $driver = null): void
     {
         $origName = $name;
         $name = md5($name);
 
-        switch (self::$driver) {
+        switch ($driver ?? self::$driver) {
             case 'file':
                 file_put_contents(self::$dir . "/{$name}", serialize($value));
                 break;
 
             case 'database':
-                self::has($origName)
+                self::has($origName, $driver)
                     ? Database::table('store')->where('name', $name)->update(['name' => $name, 'value' => base64_encode(serialize($value))])
                     : Database::table('store')->insert(['name' => $name, 'value' => base64_encode(serialize($value))]);
                 break;
@@ -90,14 +99,15 @@ class Storage extends AbstractPlugin
      * @param string $name
      * @param string|int $key
      * @param mixed $value
+     * @param string $driver
      * @return void
      */
-    public static function push(string $name, $key, $value): void
+    public static function push(string $name, $key, $value, string $driver = null): void
     {
         $name = md5($name);
         $array = self::get($name, []);
         $array[$key] = $value;
-        self::set($name, $array);
+        self::set($name, $array, $driver);
     }
 
     /**
@@ -105,24 +115,25 @@ class Storage extends AbstractPlugin
      *
      * @param string $name
      * @param mixed $default
+     * @param string $driver
      * @return mixed
      */
-    public static function get(string $name, $default = null)
+    public static function get(string $name, $default = null, string $driver = null)
     {
         $origName = $name;
         $name = md5($name);
 
-        switch (self::$driver) {
+        switch ($driver ?? self::$driver) {
             case 'file':
-                return self::has($origName) ? unserialize(file_get_contents(self::$dir . "/{$name}")) : $default;
+                return self::has($origName, $driver) ? unserialize(file_get_contents(self::$dir . "/{$name}")) : $default;
                 break;
 
             case 'database':
-                return self::has($origName) ? unserialize(base64_decode(Database::table('store')->select('value')->where('name', $name)->first()->value)) : $default;
+                return self::has($origName, $driver) ? unserialize(base64_decode(Database::table('store')->select('value')->where('name', $name)->first()->value)) : $default;
                 break;
 
             default:
-                return self::has($origName) ? Arr::get(self::$data, $name, $default) : $default;
+                return self::has($origName, $driver) ? Arr::get(self::$data, $name, $default) : $default;
                 break;
         }
     }
@@ -132,29 +143,30 @@ class Storage extends AbstractPlugin
      *
      * @param string $name
      * @param mixed $default
+     * @param string $driver
      * @return mixed
      */
-    public static function pull(string $name, $default = null)
+    public static function pull(string $name, $default = null, string $driver = null)
     {
         $origName = $name;
         $name = md5($name);
 
-        switch (self::$driver) {
+        switch ($driver ?? self::$driver) {
             case 'file':
-                $value = self::has($origName) ? unserialize(file_get_contents(self::$dir . "/{$name}")) : $default;
-                self::delete($origName);
+                $value = self::has($origName, $driver) ? unserialize(file_get_contents(self::$dir . "/{$name}")) : $default;
+                self::delete($origName, $driver);
                 return $value;
                 break;
 
             case 'database':
-                $value = self::has($origName) ? unserialize(base64_decode(Database::table('store')->select('value')->where('name', $name)->first()->value)) : $default;
-                self::delete($origName);
+                $value = self::has($origName, $driver) ? unserialize(base64_decode(Database::table('store')->select('value')->where('name', $name)->first()->value)) : $default;
+                self::delete($origName, $driver);
                 return $value;
                 break;
 
             default:
-                $value = self::has($origName) ? Arr::get(self::$data, $name, $default) : $default;
-                self::delete($origName);
+                $value = self::has($origName, $driver) ? Arr::get(self::$data, $name, $default) : $default;
+                self::delete($origName, $driver);
                 return $value;
                 break;
         }
@@ -162,13 +174,14 @@ class Storage extends AbstractPlugin
 
     /**
      * @param string $name
+     * @param string $driver
      * @return boolean
      */
-    public static function has(string $name): bool
+    public static function has(string $name, string $driver = null): bool
     {
         $name = md5($name);
 
-        switch (self::$driver) {
+        switch ($driver ?? self::$driver) {
             case 'file':
                 return file_exists(self::$dir . "/{$name}");
                 break;
@@ -185,13 +198,14 @@ class Storage extends AbstractPlugin
 
     /**
      * @param string $name
+     * @param string $driver
      * @return void
      */
-    public static function delete(string $name)
+    public static function delete(string $name, string $driver = null)
     {
         $name = md5($name);
 
-        switch (self::$driver) {
+        switch ($driver ?? self::$driver) {
             case 'file':
                 $file = self::$dir . "/{$name}";
                 if (file_exists($file)) {

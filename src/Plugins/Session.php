@@ -45,12 +45,13 @@ class Session extends AbstractPlugin
      *
      * @param string $name
      * @param mixed $value
+     * @param string $driver
      * @return void
      */
-    public static function set(string $name, $value = null): void
+    public static function set(string $name, $value = null, string $driver = null): void
     {
         $name = self::buildName($name);
-        Storage::set($name, $value);
+        Storage::set($name, $value, $driver);
     }
 
     /**
@@ -59,14 +60,15 @@ class Session extends AbstractPlugin
      * @param string $name
      * @param string|int $key
      * @param mixed $value
+     * @param string $driver
      * @return void
      */
-    public static function push(string $name, $key, $value): void
+    public static function push(string $name, $key, $value, string $driver = null): void
     {
         $name = self::buildName($name);
         $data = Storage::get($name, []);
         $data[$key] = $value;
-        Storage::set($name, $data);
+        Storage::set($name, $data, $driver);
     }
 
     /**
@@ -74,12 +76,13 @@ class Session extends AbstractPlugin
      *
      * @param string $name
      * @param mixed $default
+     * @param string $driver
      * @return mixed
      */
-    public static function get(string $name, $default = null)
+    public static function get(string $name, $default = null, string $driver = null)
     {
         $name = self::buildName($name);
-        return Storage::get($name, $default);
+        return Storage::get($name, $default, $driver);
     }
 
     /**
@@ -87,32 +90,35 @@ class Session extends AbstractPlugin
      *
      * @param string $name
      * @param mixed $default
+     * @param string $driver
      * @return mixed
      */
-    public static function pull(string $name, $default = null)
+    public static function pull(string $name, $default = null, string $driver = null)
     {
         $name = self::buildName($name);
-        return Storage::pull($name, $default);
+        return Storage::pull($name, $default, $driver);
     }
 
     /**
      * @param string $name
+     * @param string $driver
      * @return boolean
      */
-    public static function has(string $name): bool
+    public static function has(string $name, string $driver = null): bool
     {
         $name = self::buildName($name);
-        return Storage::has($name);
+        return Storage::has($name, $driver);
     }
 
     /**
      * @param string $name
+     * @param string $driver
      * @return void
      */
-    public static function delete(string $name): void
+    public static function delete(string $name, string $driver = null): void
     {
         $name = self::buildName($name);
-        Storage::delete($name);
+        Storage::delete($name, $driver);
     }
 
     protected static function buildName($name)
