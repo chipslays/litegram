@@ -35,22 +35,24 @@ $ composer require chipslays/litegram
 
 ### Litegram Project
 
-You can use a ready-made and configured project for a quick start.
+You can use a ready-made and configured [project](https://github.com/chipslays/litegram-project) for a quick start.
+
+See more inforamtion [here](https://github.com/chipslays/litegram-project).
 
 1️⃣ Create project:
 
 ```bash
-$ composer create-project chipslays/litegram-skeleton MySuperDuperBot
+composer create-project chipslays/litegram-project SuperDuperBot
 ```
 
 2️⃣ Change the parameters of the configs and finally type in Terminal:
 
 ```bash
-$ php lite webhook:set
+php lite webhook:set
 ```
 
 ```bash
-$ php lite migration:up
+php lite migration:up
 ```
 
 🎉 Congratulation, bot project was set up.
