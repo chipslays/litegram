@@ -42,7 +42,7 @@ class Logger extends AbstractPlugin
             self::log(self::$payload->toArray(), 'payload', 'auto');
         }
 
-        if (self::$config->get('plugins.logger.collect_messages')) {
+        if (self::$config->get('plugins.logger.collect_messages') && self::$bot->isPluginExists('database')) {
             self::collectMessages();
         }
     }
