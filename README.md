@@ -11,19 +11,17 @@ Litegram can be used as a regular lightweight library or as a framework with add
 
 ## ⭐ Features
 * Events based;
-* Support Cache (Redis, Memcached);
+* Cache (Redis, Memcached);
+* Database (based on Laravel [Database](https://laravel.com/docs/8.x/database) + [Eloquent](https://laravel.com/docs/8.x/eloquent));
 * Middlewares;
-* Localization;
-* Sessions;
-* Storage (Flat files, Database);
-* Manage users;
-* Database (Laravel);
+* Localization (based on [Phrase](https://github.com/chipslays/phrase));
+* Sessions (based on Storage plugin);
+* Storage (Flat files, Database drivers);
 * Talk (Chain Conversation);
-* Validation;
+* Validation (based on [Respect/Validation](https://respect-validation.readthedocs.io/en/2.0/));
 * Stemming;
-* Statistics;
 * Plugins and Components;
-* Support Webhooks & Simple long-polling;
+* Supports Webhooks & Simple Long-polling (not async);
 
 ## 🔩 Installation
 
