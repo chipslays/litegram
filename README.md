@@ -3,7 +3,7 @@
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/chipslays/litegram/tests)
 ![GitHub](https://img.shields.io/github/license/chipslays/litegram?color=blue)
 
-![](/.github/images/cover.png)
+
 
 Simple, flexible, modular library based on events for Telegram Bot Api.
 
