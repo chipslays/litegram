@@ -62,7 +62,7 @@ php lite migration:up
 ```php
 require 'vendor/autoload.php';
 
-$bot = bot('1234567890:BOT_TOKEN')->webhook();
+$bot = bot($config)->webhook();
 
 $bot->command('start', function () use ($bot) {
     $bot->ask('What is your name?', function () use ($bot) {
