@@ -198,7 +198,7 @@ class Logger extends AbstractPlugin
         $currentYear = date('Y');
         $currentMonth = date('F');
 
-        $path = self::$config->get('plugins.logger.path');
+        $path = rtrim(self::$config->get('plugins.logger.path'), '/\\');
         $path = "{$path}/{$currentYear}/{$currentMonth}";
 
         if (!file_exists($path)) {

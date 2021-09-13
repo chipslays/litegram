@@ -137,7 +137,7 @@ class Bot
             ],
             'logger' => [
                 'path' => '/path/to/logs',
-                'autolog' => false,
+                'payload_log' => false,
                 'pastly' => [
                     'token' => '1627406735:rO0jr-wMn5ZleI6hiKfKQ4aJZyYFaKN5TDoWmj-5V2',
                     'title' => 'Litegram Log',
