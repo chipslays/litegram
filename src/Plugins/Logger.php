@@ -2,6 +2,7 @@
 
 namespace Litegram\Plugins;
 
+use Litegram\Exceptions\LitegramPluginException;
 use Litegram\Payload;
 use Pastly\Client;
 use Pastly\Expiration;
@@ -29,8 +30,9 @@ class Logger extends AbstractPlugin
      */
     public static function boot(): void
     {
-        self::$pastly = new Client;
-        self::$token = self::$config->get('plugins.logger.pastly.token');
+        if (self::$token = self::$config->get('plugins.logger.pastly.token')) {
+            self::$pastly = new Client;
+        }
     }
 
     /**
@@ -221,6 +223,10 @@ class Logger extends AbstractPlugin
      */
     public static function upload($text, $extra = [])
     {
+        if (!self::$pastly) {
+            throw new LitegramPluginException("First configure Pastly section in config.", 1);
+        }
+
         $text = is_array($text) || is_object($text)
             ? json_encode(
                 $text,
