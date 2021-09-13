@@ -126,6 +126,10 @@ class Bot
                     ],
                 ],
             ],
+            'user' => [
+                'floot_time' => 0,
+                'data' => [],
+            ],
             'localization' => [
                 'driver' => 'yaml',
                 'drivers' => [
