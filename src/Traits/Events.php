@@ -4,6 +4,7 @@ namespace Litegram\Traits;
 
 use Litegram\Bot;
 use Litegram\Payload;
+use Litegram\Plugins\User;
 use Chipslays\Event\EventTrait;
 
 define('LITEGRAM_DEFAULT_EVENT_SORT', 500);
@@ -341,5 +342,69 @@ trait Events
         }
 
         return $this->on('message', $func, $sort);
+    }
+
+    /**
+     * @return void
+     */
+    public function onFlood($func, $sort = LITEGRAM_DEFAULT_EVENT_SORT)
+    {
+        if (!User::isFlood()) {
+            return;
+        }
+
+        $this->addEvent(true, [$func, User::getFloodTime()], $sort);
+    }
+
+    /**
+     * @return void
+     */
+    public function onAdmin($func, $sort = LITEGRAM_DEFAULT_EVENT_SORT)
+    {
+        if (!User::isAdmin()) {
+            return;
+        }
+
+        $this->addEvent(true, $func, $sort);
+    }
+
+    /**
+     * @return void
+     */
+    public function onFirstTime($func, $sort = LITEGRAM_DEFAULT_EVENT_SORT)
+    {
+        if (!User::firstTime()) {
+            return;
+        }
+
+        $this->addEvent(true, $func, $sort);
+    }
+
+    /**
+     * Callback function params: `$from`, `$to`, `$comment`.
+     *
+     * @return void
+     */
+    public function onBanned($func, $sort = LITEGRAM_DEFAULT_EVENT_SORT)
+    {
+        if (!User::isBanned()) {
+            return;
+        }
+
+        $this->addEvent(true, [$func, User::get('ban_start'), User::get('ban_end'), User::get('ban_comment')], $sort);
+    }
+
+    /**
+     * Callback function params: `$old`, `$new` version.
+     *
+     * @return void
+     */
+    public function onNewVersion($func, $sort = LITEGRAM_DEFAULT_EVENT_SORT)
+    {
+        if (!User::newVersion()) {
+            return;
+        }
+
+        $this->addEvent(true, [$func, User::get('version'), $this->config('bot.version')], $sort); // old version, new version
     }
 }
