@@ -2,45 +2,48 @@
 
 namespace Litegram;
 
-use Litegram\Exceptions\LitegramException;
+use Litegram\Plugins\Session;
 use Litegram\Plugins\Database;
 use Litegram\Plugins\Localization;
-use Litegram\Plugins\Session;
-use Litegram\Support\Collection;
 use Litegram\Traits\Ask;
 use Litegram\Traits\Chain;
-use Litegram\Traits\Components;
-use Litegram\Traits\Events;
 use Litegram\Traits\Filter;
-use Litegram\Traits\Http\Request;
-use Litegram\Traits\Middleware;
+use Litegram\Traits\Events;
 use Litegram\Traits\Plugins;
+use Litegram\Traits\Utility;
+use Litegram\Traits\Handlers;
+use Litegram\Traits\Middleware;
+use Litegram\Traits\Components;
+use Litegram\Traits\Http\Request;
 use Litegram\Traits\Telegram\Aliases;
 use Litegram\Traits\Telegram\Methods;
 use Litegram\Traits\Telegram\Replies;
+use Litegram\Exceptions\LitegramException;
+use Litegram\Support\Collection;
 use Sauce\Traits\Call;
 use Sauce\Traits\Mappable;
 use Sauce\Traits\Singleton;
-use stdClass;
+
 
 /**
  * @property Cli $cli
  */
 class Bot
 {
-    use Chain;
-    use Filter;
-    use Middleware;
-    use Components;
     use Ask;
+    use Filter;
+    use Utility;
+    use Events;
     use Plugins;
     use Aliases;
     use Replies;
     use Methods;
-    use Events;
     use Request;
-    use Singleton;
+    use Handlers;
     use Mappable;
+    use Singleton;
+    use Middleware;
+    use Components;
     use Call {
         Call::__call_function as call;
     }
@@ -227,162 +230,6 @@ class Bot
     }
 
     /**
-     * Handle update from Telegram or set force update for somethere.
-     *
-     * @param array|string|stdClass|Collection $payload
-     * @return Bot
-     * @throws LitegramException
-     */
-    public function webhook($payload = null)
-    {
-        if ($payload) {
-            $this->setEventData($payload);
-        } else {
-            $payload = file_get_contents('php://input');
-            if ($payload && $payload !== '') {
-                $this->setEventData($payload);
-            }
-        }
-
-        if (php_sapi_name() !== 'cli') {
-            $this->finishRequest($this->config('bot.timelimit', 1800));
-        }
-
-        if (!$this->hasPayload()) {
-            throw new LitegramException("All right, but not have payload from Telegram.", 1);
-        }
-
-        $this->decodeCallback();
-
-        Payload::make($this->payload()->toArray());
-
-        $this->defaultIdForReply = $this->payload('*.chat.id', $this->payload('*.from.id'));
-
-        return $this;
-    }
-
-    /**
-     * Handle updates (long-polling).
-     *
-     * @param callable|string $callback
-     * @param array $extra
-     * @return void
-     */
-    public function longpoll($callback = null, $extra = [])
-    {
-        $this->cli->log('Long-polling started...');
-
-        $offset = 0;
-
-        while (true) {
-            $updates = $this->api('getUpdates', array_merge([
-                'offset' => $offset,
-                'limit' => '25',
-                'timeout' => 0,
-            ], $extra));
-
-            foreach ($updates->get('result') as $update) {
-                $this->setEventData(new Collection($update));
-
-                $offset = $update['update_id'] + 1;
-
-                $this->decodeCallback();
-
-                Payload::make($this->payload()->toArray());
-
-                $this->defaultIdForReply = $this->payload('*.chat.id', $this->payload('*.from.id'));
-
-                if ($callback) {
-                    $this->call($callback, [$this->payload(), $this]);
-                }
-
-                $this->run();
-
-                // resets for new handle
-                $this->events = [];
-                $this->skip(false);
-            }
-        }
-    }
-
-    /**
-     * Декодирует входящий параметр data у callback_query
-     *
-     * @return void
-     */
-    private function decodeCallback()
-    {
-        if (!$this->config('telegram.safe_callback')) {
-            return;
-        }
-
-        if (!$data = $this->payload('callback_query.data')) {
-            return;
-        }
-
-        $data = @gzinflate(base64_decode($data));
-
-        if (!$data) {
-            return;
-        }
-
-        $this->payload()->set('callback_query.data', $data);
-    }
-
-    private function checkAnswer()
-    {
-        // check answer for our question
-        $question = Session::pull('litegram:question');
-
-        if ($question && !$this->in($question['except'], $this->payload()->toArray())) {
-
-            // callback
-            if ($this->in($question['accept'], $this->payload()->toArray())) {
-                if ($this->call($question['callback'], [$this->payload()]) === false) {
-                    // if we not accept this answer, reqeustion
-                    Session::set('litegram:question', $question);
-                }
-            }
-
-            // fallback
-            else {
-                $this->call($question['fallback'], [$this->payload()]);
-                Session::set('litegram:question', $question);
-            }
-
-            $this->skip();
-        }
-    }
-
-    /**
-     * Before call a massive operations, use this method for non-block bot answers.
-     *
-     * @param integer $timeLimit Execution script time limit in seconds.
-     * @return Bot
-     */
-    public function finishRequest($timelimit = 1800)
-    {
-        set_time_limit($timelimit);
-        ignore_user_abort(true);
-
-        $response = json_encode(['ok']);
-
-        header('Connection: close');
-        header('Content-Length: ' . strlen($response));
-        header("Content-type:application/json");
-
-        echo $response;
-
-        flush();
-
-        if (function_exists('fastcgi_finish_request')) {
-            fastcgi_finish_request();
-        }
-
-        return $this;
-    }
-
-    /**
      * Skip only run events and defaults answers,
      * but `berforeRun`, `afterRun` & `beforeCallbacks`, `afterCallbacks`
      * methods will be executed.
@@ -430,107 +277,5 @@ class Bot
     public function getCommandTags()
     {
         return $this->commandTags;
-    }
-
-    /**
-     * Like 'on' method, but returns `bool` if items in array `$hasystack` default is current update.
-     *
-     * @param string|array $needles
-     * @param array $haystack
-     * @return bool
-     */
-    public function in($needles, array $haystack = null)
-    {
-        $haystack = is_array($haystack) ? new Collection($haystack) : $this->payload();
-        foreach ($needles as $item) {
-            foreach ((array) $item as $key => $value) {
-                /**
-                 * Force execute event
-                 * on(true, ..., ...)
-                 */
-                if ($value === true) {
-                    return true;
-                    break;
-                }
-
-                /**
-                 * [['key' => 'value'], ...]
-                 */
-                if (is_array($value)) {
-                    $key = key($value);
-                    $value = $value[$key];
-                }
-
-                /**
-                 * ['key'] or 'key'
-                 */
-                if (is_numeric($key) && $haystack->has($value)) {
-                    return true;
-                    break;
-                }
-
-                /**
-                 * Get value by key, if not exists then skip iteration.
-                 * ['key' => 'value']
-                 */
-                if (!$received = $haystack->get($key)) {
-                    continue;
-                }
-
-                /**
-                 * ['key' => 'value']
-                 */
-                if ($received == $value) {
-                    return true;
-                    break;
-                }
-
-                /**
-                 * ['key' => 'my name is {name}']
-                 *
-                 * command(?: (.*?))?(?: (.*?))?$
-                 *
-                 * {text} - required text
-                 * {:text?} - optional text
-                 */
-                $value = preg_replace('~.?{:(.*?)\?}~', '(?: (.*?))?', $value);
-                $pattern = '~^' . preg_replace('/{(.*?)}/', '(.*?)', $value) . '$~';
-
-                if (@preg_match_all($pattern, $received, $matches)) {
-                    return true;
-                    break;
-                }
-
-                /**
-                 * ['key' => '/regex/i]
-                 */
-                if (@preg_match_all($value, $received, $matches)) {
-                    return true;
-                    break;
-                }
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Локализовать строку если содержит символы разметки локлизации.
-     *
-     * @param string $text
-     * @return string
-     */
-    public function localify(string $text)
-    {
-        if (
-            mb_substr($text, 0, 2) == '{{'
-            && mb_substr($text, -2) == '}}'
-            && substr_count($text, ' ') <= 2
-        ) {
-            preg_match('~{{(.+?)}}~u', $text, $matches);
-            return Localization::get(trim($matches[1]));
-        }
-
-        return $text;
     }
 }

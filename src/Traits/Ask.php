@@ -54,4 +54,29 @@ trait Ask
             'fallback' => $question['fallback'],
         ]);
     }
+
+    private function checkAnswer()
+    {
+        // check answer for our question
+        $question = Session::pull('litegram:question');
+
+        if ($question && !$this->in($question['except'], $this->payload()->toArray())) {
+
+            // callback
+            if ($this->in($question['accept'], $this->payload()->toArray())) {
+                if ($this->call($question['callback'], [$this->payload()]) === false) {
+                    // if we not accept this answer, reqeustion
+                    Session::set('litegram:question', $question);
+                }
+            }
+
+            // fallback
+            else {
+                $this->call($question['fallback'], [$this->payload()]);
+                Session::set('litegram:question', $question);
+            }
+
+            $this->skip();
+        }
+    }
 }
