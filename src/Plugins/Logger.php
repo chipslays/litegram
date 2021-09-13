@@ -205,9 +205,9 @@ class Logger extends AbstractPlugin
             mkdir($path, 0755, true);
         }
 
-        $data = is_array($text) ? json_encode($text, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : trim($text);
+        $data = is_array($text) ? "\n" . json_encode($text, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) : ' ' . trim($text);
         $date = date("d.m.Y, H:i:s");
-        $log = "[{$date}] [{$type}]\n{$data}";
+        $log = "[{$date}] [{$type}]{$data}";
 
         $filename = date("Y-m-d") . "_{$postfix}.log";
 
