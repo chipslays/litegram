@@ -77,6 +77,8 @@ $bot->command('start', 'BotController@startConversation');
 $bot->run();
 ```
 
+> **Note:** Method `ask` work correctly only if `storage` driver set as `file`.
+
 More examples you can see [`here`](https://github.com/chipslays/litegram/tree/v3.x.x/examples).
 
 ## 📖 Documentation
