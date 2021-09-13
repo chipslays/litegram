@@ -138,6 +138,7 @@ class Bot
             'logger' => [
                 'path' => '/path/to/logs',
                 'payload_log' => false,
+                'errors_log' => false,
                 'pastly' => [
                     'token' => '1627406735:rO0jr-wMn5ZleI6hiKfKQ4aJZyYFaKN5TDoWmj-5V2',
                     'title' => 'Litegram Log',
@@ -191,6 +192,12 @@ class Bot
         }
 
         date_default_timezone_set($this->config('bot.timezone'));
+
+        if ($this->config('plugins.logger.errors_log') && $logPath = $this->config('plugins.logger.path')) {
+            $logPath = rtrim($logPath, '/\\');
+            ini_set("log_errors", true);
+            ini_set("error_log", "{$logPath}/errors.log");
+        }
 
         $this->cli = new Cli;
 
