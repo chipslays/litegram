@@ -33,7 +33,7 @@ Install via Composer:
 $ composer require chipslays/litegram
 ```
 
-### Litegram Project
+### [Litegram Project](https://github.com/chipslays/litegram-project)
 
 You can use a ready-made and configured [project](https://github.com/chipslays/litegram-project) for a quick start.
 
