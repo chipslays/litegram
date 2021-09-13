@@ -87,4 +87,4 @@ Documentation can be found [`here`](https://github.com/chipslays/litegram/tree/v
 Install [Litegram Snippets](https://marketplace.visualstudio.com/items?itemName=chipslays.litegram-snippets) extension for VS Code to increase productivity.
 
 ## 🔑 License
-Released under the MIT public license. See the enclosed [`LICENSE`](https://github.com/chipslays/litegram/tree/v3.x.x/LICENSE.md) for details.
+Released under the MIT public license. See the enclosed [`LICENSE`](https://github.com/chipslays/litegram/tree/v3.x.x/LICENSE) for details.
