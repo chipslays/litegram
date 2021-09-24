@@ -43,7 +43,6 @@ abstract class AbstractPlugin
         self::$config = self::$bot->config();
     }
 
-
     /**
      * Check enabled or disabled plugin.
      *
