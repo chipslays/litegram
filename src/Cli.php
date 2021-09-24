@@ -106,7 +106,8 @@ class Cli
         $time = date('d.m.Y H:i:s');
 
         $backtrace = debug_backtrace();
-        $class = class_basename(end($backtrace)['class'] ?? 'Unknown');
+
+        $class = class_basename(str_replace('.php', '', basename(end($backtrace)['file'] ?? 'Unknown')));
 
         self::line("[{$time}] [{$class}] {$color}[$type] {$text}");
     }
