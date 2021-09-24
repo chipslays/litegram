@@ -457,4 +457,10 @@ if (!function_exists('validate')) {
     }
 }
 
+if (!function_exists('cli')) {
+    function cli() {
+        return Bot::getInstance()->cli;
+    }
+}
+
 
