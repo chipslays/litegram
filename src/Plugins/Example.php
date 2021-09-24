@@ -30,4 +30,20 @@ class Example extends AbstractPlugin
 
         // Do something awesome here...
     }
+
+    /**
+     * @return void
+     */
+    public static function beforeRun(): void
+    {
+        // do something
+    }
+
+    /**
+     * @return void
+     */
+    public static function afterRun(): void
+    {
+        // do something
+    }
 }
