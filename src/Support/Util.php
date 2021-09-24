@@ -357,11 +357,13 @@ class Util
     /**
      * Раскодирует inline-клавиатуру (safe_calback)
      *
-     * @param array $keyboard
-     * @return void
+     * @param array $keyboard Если null, возьмет клавиатуру из апдейта.
+     * @return array Inline keyboard
      */
-    public static function decodeInlineKeyboard($keyboard)
+    public static function decodeInlineKeyboard($keyboard = null)
     {
+        $keyboard = $keyboard ?? Payload::get('callback_query.message.reply_markup.inline_keyboard');
+
         foreach ($keyboard as &$item) {
             $item = array_map(function ($value) {
                 if (isset($value['callback_data'])) {
@@ -484,11 +486,7 @@ class Util
     public static function changeInlineButton(array $old, array $new, ?array $inline = null)
     {
         if (!$inline) {
-            if (Bot::getInstance()->config('telegram.safe_callback')) {
-                $inline = self::decodeInlineKeyboard(Payload::get('callback_query.message.reply_markup.inline_keyboard'));
-            } else {
-                $inline = Payload::get('callback_query.message.reply_markup.inline_keyboard');
-            }
+            $inline = self::getKeyboardFromCallback();
         }
 
         $needleKey = key($old);
@@ -538,5 +536,14 @@ class Util
     public static function mention($name, $id)
     {
         return '<a href="tg://user?id=' . $id . '">' . $name . '</a>';
+    }
+
+    public static function getKeyboardFromCallback()
+    {
+        if (Bot::getInstance()->config('telegram.safe_callback')) {
+            return self::decodeInlineKeyboard();
+        }
+
+        return Payload::get('callback_query.message.reply_markup.inline_keyboard');
     }
 }
