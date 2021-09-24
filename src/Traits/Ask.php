@@ -12,10 +12,10 @@ trait Ask
      *       'text' => 'Are you sure to delete this post?',
      *       'accept' => [['message.text' => '/yes|no/i']],
      *       'except' => [['message.text' => '/stop']],
-     *       'callback' => function ($answer, $bot) {
+     *       'callback' => function ($answer) {
      *           $bot->reply('Post was deleted.');
      *       },
-     *       'fallback' => function ($answer, $bot) {
+     *       'fallback' => function ($answer) {
      *           $bot->say('Please, say YES or NO.');
      *       },
      *    ]
@@ -46,7 +46,6 @@ trait Ask
             $this->call($question['text']);
         }
 
-        print_r((array) $question['accept']);
         Session::set('litegram:question', [
             'accept' => (array) $question['accept'],
             'except' => (array) $question['except'],
@@ -55,17 +54,28 @@ trait Ask
         ]);
     }
 
+    public function resetAsk()
+    {
+        Session::delete('litegram:question');
+    }
+
     private function checkAnswer()
     {
         // check answer for our question
         $question = Session::pull('litegram:question');
 
-        if ($question && !$this->in($question['except'], $this->payload()->toArray())) {
+        if (!$question) {
+            return;
+        }
+
+        $payloadArray = $this->payload()->toArray();
+
+        if (!$this->in($question['except'], $payloadArray)) {
 
             // callback
-            if ($this->in($question['accept'], $this->payload()->toArray())) {
+            if ($this->in($question['accept'], $payloadArray)) {
                 if ($this->call($question['callback'], [$this->payload()]) === false) {
-                    // if we not accept this answer, reqeustion
+                    // if we not accept this answer, we ask again
                     Session::set('litegram:question', $question);
                 }
             }
