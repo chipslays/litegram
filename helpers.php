@@ -77,7 +77,7 @@ if (!function_exists('keyboard')) {
             return new Keyboard;
         }
 
-        return Keyboard::show($keyboard, $oneTime, $resize, $selective);
+        return Keyboard::show($keyboard, $placeholder, $oneTime, $resize, $selective);
     }
 }
 

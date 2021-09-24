@@ -278,6 +278,11 @@ class Bot
         $this->commandTags = $tags;
     }
 
+    /**
+     * Returns an array with command prefixes.
+     *
+     * @return array
+     */
     public function getCommandTags()
     {
         return $this->commandTags;
