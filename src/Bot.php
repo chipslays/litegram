@@ -24,10 +24,6 @@ use Sauce\Traits\Call;
 use Sauce\Traits\Mappable;
 use Sauce\Traits\Singleton;
 
-
-/**
- * @property Cli $cli
- */
 class Bot
 {
     use Ask;
@@ -174,6 +170,11 @@ class Bot
      */
     private $commandTags = ['/', '.', '!'];
 
+    /**
+     * @var Cli
+     */
+    public $cli;
+
     final protected function __construct()
     {
     }
@@ -203,7 +204,7 @@ class Bot
         if ($this->config('plugins.logger.errors_log') && $logPath = $this->config('plugins.logger.path')) {
             $logPath = rtrim($logPath, '/\\');
             ini_set("log_errors", true);
-            ini_set("error_log", "{$logPath}/errors.log");
+            ini_set("error_log", "{$logPath}/php_errors.log");
         }
 
         $this->cli = new Cli;

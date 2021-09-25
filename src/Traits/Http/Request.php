@@ -33,7 +33,32 @@ trait Request
             throw new Exception('Litegram: ' . curl_errno($this->curl) . ' - ' . curl_error($this->curl));
         }
 
-        return new Collection(json_decode($response, true));
+        $response = new Collection(json_decode($response, true));
+
+        // request errors logging
+        if (
+            $response->get('ok', false) === false
+            && $this->config('plugins.logger.errors_log')
+            && $logPath = $this->config('plugins.logger.path')
+        ) {
+            $logPath = rtrim($logPath, '/\\');
+
+            $backtrace = debug_backtrace();
+            $stack = end($backtrace);
+
+            $erorrMessage = var_export([
+                'line' => $stack['file'] . ':' . $stack['line'],
+                'function' => $stack['function'],
+                'api' => $method,
+                'parameters' => (array) $parameters,
+                'response' => $response->toArray(),
+            ], true);
+
+            file_put_contents("{$logPath}/telegram_errors.log",  "[".date('d.m.Y H:i:s')."] {$erorrMessage}" . PHP_EOL, FILE_APPEND);
+            $this->cli->log($erorrMessage, 'error');
+        }
+
+        return $response;
     }
 
     /**
