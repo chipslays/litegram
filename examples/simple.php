@@ -9,7 +9,7 @@ $bot = bot('1234567890:BOT_TOKEN')->webhook();
 
 $bot->on('message.text', function () use ($bot) {
     // Universal executor for all Telegram methods
-    $bot->method('sendMessage', [
+    $bot->api('sendMessage', [
         'chat_id' => payload('message.from.id'),
         'text' => 'Hello!',
     ]);
