@@ -72,6 +72,12 @@ class Bot
                 '436432850' => 'password',
             ],
         ],
+        'errors' => [
+            'path' => '/logs/errors',
+            'telegram' => false,
+            'php' => false,
+            'php_level' => E_ALL,
+        ],
         'plugins' => [
             'storage' => [
                 'driver' => null, // null - store data in RAM (useful for long-poll)
@@ -141,7 +147,6 @@ class Bot
             'logger' => [
                 'path' => '/path/to/logs',
                 'payload_log' => false,
-                'errors_log' => false,
                 'pastly' => [
                     'token' => '1627406735:rO0jr-wMn5ZleI6hiKfKQ4aJZyYFaKN5TDoWmj-5V2',
                     'title' => 'Litegram Log',
@@ -201,8 +206,9 @@ class Bot
 
         date_default_timezone_set($this->config('bot.timezone'));
 
-        if ($this->config('plugins.logger.errors_log') && $logPath = $this->config('plugins.logger.path')) {
+        if ($this->config('errors.php') && $logPath = $this->config('errors.path')) {
             $logPath = rtrim($logPath, '/\\');
+            error_reporting($this->config('errors.php_level', E_ALL));
             ini_set("log_errors", true);
             ini_set("error_log", "{$logPath}/php_errors.log");
         }

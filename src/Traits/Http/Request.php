@@ -38,8 +38,8 @@ trait Request
         // request errors logging
         if (
             $response->get('ok', false) === false
-            && $this->config('plugins.logger.errors_log')
-            && $logPath = $this->config('plugins.logger.path')
+            && $this->config('errors.telegram')
+            && $logPath = $this->config('errors.path')
         ) {
             $logPath = rtrim($logPath, '/\\');
 
