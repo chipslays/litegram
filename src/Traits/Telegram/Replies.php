@@ -125,7 +125,7 @@ trait Replies
      * @TODO
      * @return Collection
      */
-    public function replyWithMediaGroup($media, $extra = [])
+    public function replyWithMediaGroup(array $media, $extra = [])
     {
         return $this->sendMediaGroup($this->defaultIdForReply, $media, $extra);
     }

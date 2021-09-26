@@ -144,7 +144,7 @@ trait Utility
     /**
      * Локализовать строку если содержит символы разметки локализации.
      *
-     * @param string $text
+     * @param string $text {{ locale_message_text }}
      * @return string
      */
     public function localify(string $text)

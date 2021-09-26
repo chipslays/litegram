@@ -815,7 +815,7 @@ trait Methods
      * @TODO
      * @return Collection
      */
-    public function setMyCommands($commands)
+    public function setMyCommands(array $commands)
     {
         return $this->api(__FUNCTION__, [
             'commands' => json_encode($commands),
