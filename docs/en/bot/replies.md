@@ -4,6 +4,8 @@ These methods send a message to the chat where the message came from.
 
 First of all, this is `*.chat.id`, if it is not there, then this `*.from.id`.
 
+The `chat_id` is taken from `*.chat.id`, if not, then from `*.from.id`.
+
 ```php
 $bot->replyWithChatAction($action = 'typing', $extra = []);
 ```
