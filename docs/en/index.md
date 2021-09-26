@@ -3,6 +3,7 @@
 ## Table of contents
 
 * Bot
+  * Config
   * Events
   * [Telegram methods](bot/telegram-methods.md)
   * [Replies Methods](bot/replies.md)
