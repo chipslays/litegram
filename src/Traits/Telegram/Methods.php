@@ -794,6 +794,29 @@ trait Methods
      * @TODO
      * @return Collection
      */
+    public function setGameScore($userId, int $score, $extra = [])
+    {
+        return $this->api(__FUNCTION__, $this->buildRequestParams([
+            'user_id' => $userId,
+            'score' => $score,
+        ], null, $extra));
+    }
+
+    /**
+     * @TODO
+     * @return Collection
+     */
+    public function getGameHighScores($userId, $extra = [])
+    {
+        return $this->api(__FUNCTION__, $this->buildRequestParams([
+            'user_id' => $userId,
+        ], null, $extra));
+    }
+
+    /**
+     * @TODO
+     * @return Collection
+     */
     public function answerCallbackQuery($extra = [])
     {
         return $this->api(__FUNCTION__, $extra);

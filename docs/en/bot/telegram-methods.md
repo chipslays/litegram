@@ -243,6 +243,14 @@ $bot->sendGame($chatId, $gameShortName, $keyboard = null, $extra = []);
 ```
 
 ```php
+$bot->setGameScore($userId, int $score, $extra = []);
+```
+
+```php
+$bot->getGameHighScores($userId, $extra = []);
+```
+
+```php
 $bot->answerCallbackQuery($extra = []);
 ```
 
