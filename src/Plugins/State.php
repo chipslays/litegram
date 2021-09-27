@@ -31,7 +31,7 @@ class State extends AbstractPlugin
     public static function boot(): void
     {
         if (self::$bot->isPluginExists('user')) {
-            self::$userId = User::get('user_id');
+            self::$userId = User::get('id');
         } else {
             self::$userId = self::$payload->get('*.from.id');
         }
