@@ -2,11 +2,9 @@
 
 namespace Litegram;
 
-use Litegram\Plugins\Session;
-use Litegram\Plugins\Database;
-use Litegram\Plugins\Localization;
 use Litegram\Traits\Ask;
 use Litegram\Traits\Chain;
+use Litegram\Traits\State;
 use Litegram\Traits\Filter;
 use Litegram\Traits\Events;
 use Litegram\Traits\Plugins;
@@ -18,7 +16,6 @@ use Litegram\Traits\Http\Request;
 use Litegram\Traits\Telegram\Aliases;
 use Litegram\Traits\Telegram\Methods;
 use Litegram\Traits\Telegram\Replies;
-use Litegram\Exceptions\LitegramException;
 use Litegram\Support\Collection;
 use Sauce\Traits\Call;
 use Sauce\Traits\Mappable;
@@ -27,6 +24,8 @@ use Sauce\Traits\Singleton;
 class Bot
 {
     use Ask;
+    use State;
+    use Chain;
     use Filter;
     use Utility;
     use Events;
