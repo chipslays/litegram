@@ -14,6 +14,7 @@ use Litegram\Plugins\Logger;
 use Litegram\Plugins\Session;
 use Litegram\Plugins\Database;
 use Litegram\Plugins\Localization;
+use Litegram\Plugins\State;
 
 if (!function_exists('bot')) {
     /**
@@ -254,6 +255,16 @@ if (!function_exists('storage')) {
     function storage()
     {
         return new Storage;
+    }
+}
+
+if (!function_exists('state')) {
+    /**
+     * @return State
+     */
+    function state()
+    {
+        return new State;
     }
 }
 
