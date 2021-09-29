@@ -60,7 +60,7 @@ trait Aliases
             $this->defaultIdForReply,
             $text,
             $keyboard,
-            array_merge($extra, ['reply_to_message_id' => $this->payload('*.message_id')])
+            array_merge($extra, ['reply_to_message_id' => $this->payload('*.message_id', $this->payload('*.*.message_id'))])
         );
     }
 
@@ -308,5 +308,14 @@ trait Aliases
             'text' => '<code>' . json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</code>',
             'parse_mode' => 'html',
         ]);
+    }
+
+    /**
+     * @param string|int|null (Optional) chat_id
+     * @return Collection
+     */
+    public function deleteMessageFromCallback($chatId = null)
+    {
+        return $this->deleteMessage($this->payload('callback_query.message.message_id'), $chatId ?? $this->payload('*.from.id'));
     }
 }
