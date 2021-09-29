@@ -38,7 +38,7 @@ trait Handlers
 
         Payload::make($this->payload()->toArray());
 
-        $this->defaultIdForReply = $this->payload('*.chat.id', $this->payload('*.from.id'));
+        $this->defaultIdForReply = $this->defaultIdForReply = $this->payload('*.chat.id', $this->payload('*.from.id', $this->payload('*.*.chat.id', $this->payload('*.*.from.id'))));
 
         return $this;
     }
@@ -72,7 +72,7 @@ trait Handlers
 
                 Payload::make($this->payload()->toArray());
 
-                $this->defaultIdForReply = $this->payload('*.chat.id', $this->payload('*.from.id'));
+                $this->defaultIdForReply = $this->defaultIdForReply = $this->payload('*.chat.id', $this->payload('*.from.id', $this->payload('*.*.chat.id', $this->payload('*.*.from.id'))));
 
                 if ($callback) {
                     $this->call($callback, [$this->payload(), $this]);
