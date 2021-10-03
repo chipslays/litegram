@@ -17,7 +17,7 @@
     "require": {
         "php": ">=7.4",
         "ext-curl": "*",
-        "chipslays/event": "^1.0",
+        "chipslays/event": "1.0.*",
         "chipslays/sauce": "^1.0",
         "chipslays/phrase": "^1.0",
         "chipslays/collection": "^1.0",
