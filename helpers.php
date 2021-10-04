@@ -230,7 +230,7 @@ if (!function_exists('lang')) {
 
 if (!function_exists('util')) {
     /**
-     * @return \Telegram\Support\Util
+     * @return Util
      */
     function util()
     {

@@ -26,7 +26,7 @@ $bot->close();
 $bot->getUpdates($offset = 0, $limit = 100, $extra = []);
 ```
 
-> **List:** `typing` for tex    t messages, `upload_photo` for photos, `record_video` or `upload_video` for videos, `record_voice` or `upload_voice` for voice notes, `upload_document` for general files, `find_location` for location data, `record_video_note` or `upload_video_note` for video notes.
+> **List:** `typing` for text messages, `upload_photo` for photos, `record_video` or `upload_video` for videos, `record_voice` or `upload_voice` for voice notes, `upload_document` for general files, `find_location` for location data, `record_video_note` or `upload_video_note` for video notes.
 
 ```php
 $bot->sendChatAction($chatId, $action = 'typing');
