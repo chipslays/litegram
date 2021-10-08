@@ -21,11 +21,12 @@
         "chipslays/sauce": "^1.0",
         "chipslays/phrase": "^1.0",
         "chipslays/collection": "^1.0",
+        "chipslays/pastly-api": "^1.1",
         "illuminate/database": "^8.29",
+        "illuminate/pagination": "^8.63",
         "wamania/php-stemmer": "2.0",
         "respect/validation": "^2.2",
-        "opis/closure": "^3.6",
-        "chipslays/pastly-api": "^1.1"
+        "opis/closure": "^3.6"
     },
     "autoload": {
         "psr-4": {
