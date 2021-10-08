@@ -530,7 +530,7 @@ class Util
      */
     public static function mentionByUser($user)
     {
-        return '<a href="tg://user?id=' . $user->user_id . '">' . $user->fullname . '</a>';
+        return self::mention($user->fullname, $user->id);
     }
 
     public static function mention($name, $id)
