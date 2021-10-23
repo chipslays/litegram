@@ -392,7 +392,7 @@ class Util
 
         preg_match('/<meta property="og:image" content="(.*?)">/', $html, $image);
         preg_match('/<meta property="og:title" content="(.*?)">/', $html, $title);
-        preg_match('/<div class="tgme_page_description" dir="auto">(.*?)<\/div>/', $html, $description);
+        preg_match('/"og:description" content="(.*?)">/', $html, $description);
         preg_match('/<div class="tgme_page_extra">(.*?)<\/div>/', $html, $membersInfo);
         preg_match('/<title>Telegram: Contact @(.*?)<\/title>/', $html, $username);
         preg_match('/<a class="tgme_action_button_new" href="(.*?)">/', $html, $action);
