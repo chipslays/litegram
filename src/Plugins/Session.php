@@ -29,10 +29,6 @@ class Session extends AbstractPlugin
      */
     public static function boot(): void
     {
-        if (!self::enabled()) {
-            return;
-        }
-
         if (self::$bot->isPluginExists('user')) {
             self::$userId = User::get('user_id');
         } else {
