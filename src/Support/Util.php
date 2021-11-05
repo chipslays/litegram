@@ -494,7 +494,7 @@ class Util
 
         foreach ($inline as &$row) {
             foreach ($row as &$btn) {
-                if (strpos($btn[$needleKey], $needleValue) !== false) {
+                if (isset($btn[$needleKey]) && strpos($btn[$needleKey], $needleValue) !== false) {
                     $btn = $new;
                     break;
                 }
