@@ -33,7 +33,7 @@ if (!function_exists('bot')) {
     }
 }
 
-if (!function_exists('method')) {
+if (!function_exists('api')) {
     /**
      * A universal executor of Telegram methods.
      *
@@ -42,9 +42,9 @@ if (!function_exists('method')) {
      * @return Collection
      * @throws \Exception
      */
-    function method(string $method, ?array $parameters = [])
+    function api(string $method, ?array $parameters = [])
     {
-        return Bot::getInstance()->method($method, $parameters);
+        return Bot::getInstance()->api($method, $parameters);
     }
 }
 
