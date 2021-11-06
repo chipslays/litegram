@@ -74,6 +74,7 @@ class Bot
         'errors' => [
             'path' => '/logs/errors',
             'telegram' => false,
+            'telegram_output' => true,
             'php' => false,
             'php_level' => E_ALL,
         ],
@@ -146,6 +147,7 @@ class Bot
             'logger' => [
                 'path' => '/path/to/logs',
                 'payload_log' => false,
+                'collect_messages' => false,
                 'pastly' => [
                     'token' => '1627406735:rO0jr-wMn5ZleI6hiKfKQ4aJZyYFaKN5TDoWmj-5V2',
                     'title' => 'Litegram Log',

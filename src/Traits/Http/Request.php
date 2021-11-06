@@ -44,10 +44,18 @@ trait Request
             $logPath = rtrim($logPath, '/\\');
 
             $backtrace = debug_backtrace();
-            $stack = end($backtrace);
+            // $stack = end($backtrace);
+            $stack = $backtrace[0];
+
+            $stacks = [];
+            foreach ($backtrace as $key => $value) {
+                if (isset($value['file'])) {
+                    $stacks[] = $value['file'] . ':' . $value['line'];
+                }
+            }
 
             $erorrMessage = var_export([
-                'line' => $stack['file'] . ':' . $stack['line'],
+                'stack' => $stacks,
                 'function' => $stack['function'],
                 'api' => $method,
                 'parameters' => (array) $parameters,
@@ -55,7 +63,10 @@ trait Request
             ], true);
 
             file_put_contents("{$logPath}/telegram_errors.log",  "[".date('d.m.Y H:i:s')."] {$erorrMessage}" . PHP_EOL, FILE_APPEND);
-            $this->cli->log($erorrMessage, 'error');
+
+            if ($this->config('errors.telegram_output')) {
+                $this->cli->log($erorrMessage, 'error');
+            }
         }
 
         return $response;

@@ -63,7 +63,7 @@ $bot->command('form', function () {
     // or bot()->setChain('name')
 });
 
-// we wait `name`, after set `email`
+// we wait `name`, after set `phone`
 $bot->chain('name', 'phone', function () {
     $validator = is()->alnum()->noWhitespace()->length(1, 15);
     if (!$validator->validate($name = payload('message.text'))) {
