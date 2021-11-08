@@ -274,7 +274,7 @@ if (!function_exists('user')) {
      */
     function user($userId = null)
     {
-        return $userId ? User::getDataById($userId) : new User;
+        return $userId ? User::find($userId) : new User;
     }
 }
 
