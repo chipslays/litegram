@@ -38,6 +38,10 @@ class User extends AbstractPlugin
      */
     public static function boot(): void
     {
+        self::$firstTime = false;
+        self::$newVersion = false;
+        self::$floodTime = null;
+        
         self::$currentUserId = self::$payload->get('*.from.id');
 
         self::$user = UserModel::find(self::$currentUserId);
