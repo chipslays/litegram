@@ -117,10 +117,14 @@ trait Request
 
         if (!empty($parameters['text'])) {
             $parameters['text'] = implode("\n", array_map('trim', explode("\n", $parameters['text'])));
+            $parameters['text'] = str_replace('<<<', '«', $parameters['text']);
+            $parameters['text'] = str_replace('>>>', '»', $parameters['text']);
         }
 
         if (!empty($parameters['caption'])) {
             $parameters['caption'] = implode("\n", array_map('trim', explode("\n", $parameters['caption'])));
+            $parameters['caption'] = str_replace('<<<', '«', $parameters['caption']);
+            $parameters['caption'] = str_replace('>>>', '»', $parameters['caption']);
         }
 
         return array_merge($parameters, (array) $extra);
