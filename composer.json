@@ -22,8 +22,8 @@
         "chipslays/phrase": "^1.0",
         "chipslays/collection": "^1.0",
         "chipslays/pastly-api": "^1.1",
-        "illuminate/database": "^8.29",
-        "illuminate/pagination": "^8.63",
+        "illuminate/database": "^8||^9||^10",
+        "illuminate/pagination": "^8||^9||^10",
         "wamania/php-stemmer": "2.0",
         "respect/validation": "^2.2",
         "opis/closure": "^3.6"
